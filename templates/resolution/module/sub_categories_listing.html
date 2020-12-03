@@ -1,0 +1,40 @@
+{strip}
+{smarty tpl_var="box_SUBNAVI" return="not_empty" assign="has_leftnav"}
+{config_load file="$language/lang_$language.conf" section="categorie_listing"}
+
+  {if $categories_content !=''}
+    <h3>{#heading_more_categories#}</h3>
+
+    {*<!-- list settings --------------->*}
+    {if $has_leftnav}
+      {assign var=items_per_row value=$smarty.const.category_listing_categories_per_row}
+    {else}
+      {assign var=items_per_row value=$smarty.const.category_listing_categories_per_row+1}
+    {/if}
+
+    <div class="categorylist category_grid_{$items_per_row}">
+      <div class="category_row equalize">
+        {foreach name=aussen item=module_data from=$categories_content}
+          <div class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-6 col-xs-6 category_container helper_equalize">
+            <a href="{$module_data.CATEGORIES_LINK}" title="{$module_data.CATEGORIES_NAME}">
+              <div class="thumbnail category">
+                {if $smarty.const.category_listing_show_image == 'true'}
+                  <span class="img">
+                    {if $module_data.CATEGORIES_IMAGE != ''}
+                      <img class="resize" src="{$module_data.CATEGORIES_IMAGE}" alt="{$module_data.CATEGORIES_NAME|onlytext}" />
+                    {else}
+                      <span class="icon-camera icon-4x"></span>
+                    {/if}
+                  </span>
+                {/if}
+                <strong class="caption">{$module_data.CATEGORIES_NAME}</strong>
+              </div>
+            </a>
+          </div>
+          {if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}</div><div class="clb"></div><div class="category_row equalize">{/if}
+        {/foreach}
+      </div>
+    </div>
+    <div class="clb"></div>
+  {/if}
+{/strip}

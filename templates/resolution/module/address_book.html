@@ -1,0 +1,53 @@
+{config_load file="$language/lang_$language.conf" section="address_book"}
+
+<div class="col-lg-12 col-md-12">
+  <div class="profile">
+    <div class="profile_header">
+      <div class="profile_name">{$smarty.session.customer_first_name} {$smarty.session.customer_last_name}</div>
+      <div class="profile_title"><span class="icon-chevron-right"></span> {#heading_address#}</div>
+    </div>
+    <div class="contents row">
+      <div class="profile_navi col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/accountnavi.html"}
+      </div>
+      <div class="profile_body col-lg-9 col-md-9 col-sm-9 col-xs-12 borderleft">
+        
+        <h3>{#title_standard#}</h3>
+        {if $error}<div class="profile_content"><div class="alert">{$error}</div></div>{/if}
+        
+        <div class="profile_content">
+          <div class="alert alert-info"><span class="icon-info-sign icon-4x pull-left"></span>{#text_standard#|replace:'<br />':' '}</div>
+          <div class="paddingbox alc"><h4>{$ADDRESS_DEFAULT|replace:'<br />':', '}</h4></div>
+        </div>
+        
+        <h3>{#title_addresses#}</h3>
+        <div class="profile_content">
+          <div class="alert alert-warning clearfix">{$ADDRESS_COUNT}</div>
+          <div class="row">
+            {assign var=items_per_row value=2}
+            {foreach name=aussen item=addresses from=$addresses_data}
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 paddingbox {cycle values="borderright,"}">
+                <div class="helper_equalize">
+                  <h5>{$addresses.NAME} {if $addresses.PRIMARY=='1'}<small>({#title_standard#})</small>{/if}</h5>
+                  {$addresses.ADDRESS}
+                  <div class="clb"></div>
+                  <div class="divider normal trans"></div>
+                  {$addresses.BUTTON_EDIT|btn:'btn btn-default':'icon-pencil'}
+                   {if $addresses.PRIMARY!='1'}{$addresses.BUTTON_DELETE|btn:'btn btn-danger':'icon-trash'}{/if}
+                </div>
+              </div>
+              {if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}</div><div class="row">{/if}
+            {/foreach}
+          </div>
+        </div>
+        <div class="clb"></div>
+        <div class="profile_content">
+          <div class="divider large"></div>
+          {$BUTTON_NEW|btn:'btn btn-primary flr':'icon-user'} 
+          {$BUTTON_BACK|btn:'btn btn-default btn-lg':'icon-chevron-left'}
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>

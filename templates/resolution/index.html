@@ -1,0 +1,331 @@
+{strip}
+{hook key=index_html_page_top}
+<div id="page_{$page}" class="squidio_template body_wrap {$page_settings} {hook key=index_html_page_container_class}"{if $smarty.const.page_background_color!=''} style="background: {$smarty.const.page_background_color};"{/if}>
+{config_load file="$language/lang_$language.conf" section="index"}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+
+{$box_ADMIN}
+<div class="container page_container {$smarty.const.page_boxed}{if $smarty.const.page_background_color!=''} page_container_white{/if}">
+
+  {*<!--  ------------------------  ---->*}
+  {*<!--  		H E A D E R 				  ---->*}
+  {*<!--  ------------------------  ---->*}
+  <div id="header" class="row clearfix">
+    {hook key=index_html_header_before}
+    <div id="logo" class="col-lg-5 col-md-4 col-sm-12 col-xs-12"><a href="{$index}" title="{$store_name}"><img class="img-responsive" src="{$tpl_path}img/logo.png" alt="{$store_name}" /></a></div>
+    <div id="tools" class="col-lg-7 col-md-8 col-sm-12 col-xs-12">
+      {if $section != 'checkout'}
+        <div class="row clearfix">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="custom_linkbar">
+            {hook key=index_html_custom_linkbar_inside_before}
+            
+            {*<!-- _shopnavi: standard -->*}
+            {assign var=current_path value=$smarty.server.PHP_SELF}
+
+            {$box_CURRENCIES}
+            {$box_LANGUAGES}
+            {if $smarty.session.customer_id}
+              <a class="{if $section == 'account'} active{/if}" href="{$account}" title="{#link_account#}"><span class="icon-user"></span>{#link_account#}</a>
+            {/if}
+            <a class="{if $smarty.get.coID == '7'}active{/if}" href="{link page=FILENAME_CONTENT parameters="coID=7" connection="SSL"}" title="{$smarty.const.text_link_contact}">
+              <span class="icon-envelope"></span> {$smarty.const.text_link_contact}
+            </a>
+            <a class="hidden_small {if $current_path == $checkout}active{/if}" href="{$checkout}" title="{#link_checkout#}"><span class="icon-shopping-cart"></span> {#link_checkout#}</a>
+            {if $smarty.session.customers_status.customers_status_id == '1'}
+              <a class="hidden_small {if strstr($current_path,FILENAME_CREATE_ACCOUNT)}active{/if}" href="{link page=FILENAME_CREATE_ACCOUNT connection="SSL"}" title="{#new_customer#}">
+                <span class="icon-user"></span> {#new_customer#}
+              </a>
+            {/if}
+            {if $smarty.session.customer_id}
+              <a class="{if $current_path == $logoff}active{/if}" href="{$logoff}" title="{#link_logoff#}"><span class="icon-off"></span> {#link_logoff#}</a>
+            {else}
+              <a href="#box_login" data-toggle="modal" data-target="#box_login" title="{#link_login#}"><span class="icon-lock"></span> {#link_login#}</a>
+            {/if}
+            {hook key=index_html_custom_linkbar_inside_after}
+          </div>
+        </div>
+        <div class="row clearfix">
+          {if isset($box_WISHLIST)}
+            <div class="box_search col-lg-6 col-md-6 col-sm-7 col-xs-8"><div id="search">{$box_SEARCH}</div></div>
+            <div class="col-lg-6 col-md-6 col-sm-5 col-xs-4">
+              <div class="row">
+                <div class="box_wishlist text-center col-md-3 col-sm-3 col-xs-6">{$box_WISHLIST}</div>
+                <div class="box_cart col-md-9 col-sm-9 col-xs-6">{$box_CART}</div>
+              </div>
+            </div>
+          {else}
+            <div class="box_search col-lg-8 col-md-7 col-sm-11 col-xs-10">{$box_SEARCH}</div>
+            <div class="box_cart col-lg-4 col-md-5 col-sm-1 col-xs-2">{$box_CART}</div>
+          {/if}
+        </div>
+      {/if}
+    </div>
+    {hook key=index_html_header_after}
+  </div>
+  
+  
+  {*<!--  ------------------------  ---->*}
+  {*<!--  	N A V I G A T I O N 	  ---->*}
+  {*<!--  ------------------------  ---->*}
+  {if $section == 'checkout'}
+    {if $device != 'mobile'}
+      <div id="checkoutnavi" class="navbar navbar-inverse clearfix" role="navigation">
+      	<div class="navbar-inner">{include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/checkoutnavi.html"}</div>
+      </div>
+    {else}
+      <div class="divider large nomrg-top"></div>
+    {/if}
+  {else}
+    <section id="topmenu_container">
+      {if $device == 'mobile' || $device == 'tablet'}
+        <div class="mobile_menu_container"><a class="btn btn-inverse btn-lg btn-block mobile_menu_toggle active"><span class="icon-chevron-up"></span> {#heading_categories#}:</a>
+      {/if}
+      <nav id="topmenu" class="navbar navbar-inverse clearfix" role="navigation">
+        {hook key=index_html_topnavi_before}
+        {$box_TOPNAVI}
+  			{hook key=index_html_topnavi_after}
+      </nav>
+      {if $device == 'mobile' || $device == 'tablet'}
+        </div>
+      {/if}
+    </section>
+    {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/shopnavi.html"}
+
+    {if $page == 'product_info'}
+      <a class="{if $device == 'mobile'} btn btn-lg btn-block btn-link product_button_back{else}product_button_back{/if}" href="javascript:history.back();"><span class="icon-chevron-left"></span> {$smarty.const.text_back_to_last_page}</a>
+    {/if}
+    
+    {*<!--  ------------------------  ---->*}
+    {*<!--  	B R E A D C R U M B 	  ---->*}
+    {*<!--  ------------------------  ---->*}
+    {hook key=index_html_breadcrumb_before}
+    {if $device != 'mobile'}
+      {breadcrumb listmode="true" class="breadcrumb" id="breadcrumb" linkcurrent=false}
+    {/if}
+    {hook key=index_html_breadcrumb_after}
+  {/if}
+  <div class="clb"></div>
+
+  {*<!--  ------------------------  ---->*}
+  {*<!--  		 S E C T I O N S			---->*}
+  {*<!--  ------------------------  ---->*}
+  {hook key=index_html_main_content_before}
+  
+  {*<!-- _section: standard -->*}
+  {if $section == 'default'}
+    {hook key=index_html_main_content_section_default_before}
+  	<div id="content_{$section}" class="row main_content clearfix">{$main_content}</div>
+    {hook key=index_html_main_content_section_default_after}
+  {/if}
+  
+  {*<!-- _section: landing (Startseite) -->*}
+  {if $section == 'start'}
+    <div id="content" class="main_content clearfix">
+      {if isset($SLIDER) && $page == 'index'}
+        <div class="content_banner cf">
+          <ul class="bxcarousel_slider">
+            {foreach name=outer item=slider from=$SLIDER}
+              <li>{$slider.IMAGE|replace:'src':'class="img-responsive" src'}</li>
+            {/foreach}
+          </ul>
+        </div>
+      {/if}
+
+      {*
+      <!--
+      |--------------------------------------------------------------------------
+      | Haupt-Slider
+      |--------------------------------------------------------------------------
+      |
+      | Hier können Sie das Template Tag fuer das Plugin SQ-Teaser einfuegen.
+      |
+      -->
+      *}
+
+      <div id="maincontent" class="clearfix">{$main_content}</div>
+    </div>
+  {/if}
+  
+  {*<!-- _section: produktlisten -->*}
+  {if $section == 'product_list'}
+  	<div id="content_{$section}" class="row main_content clearfix">
+      {if $has_subcategories}
+        <div id="leftnav" class="col-lg-3 col-md-3 col-sm-12 col-xs-12 affix-top clearfix hidden-xs" role="complementary">
+          {hook key=index_html_leftcol_top}
+          {$box_SUBNAVI}
+          {if isset($box_HISTORY) && !empty($box_HISTORY)}<div class="history">{$box_HISTORY}</div>{/if}
+          {if isset($box_TRUSTEDSHOPS) && !empty($box_TRUSTEDSHOPS)}{$box_TRUSTEDSHOPS}{/if}
+          {hook key=index_html_leftcol_bottom}
+        </div>
+      {/if}
+
+      <div id="content" class="{if $has_subcategories}col-lg-9 col-md-9 col-sm-12 col-xs-12{else}col-lg-12 col-md-12 col-sm-12 col-xs-12{/if} clearfix">
+        {if isset($SLIDER) && $page == 'index'}
+          <div class="content_banner cf">
+            <ul class="bxcarousel_slider">
+              {foreach name=outer item=slider from=$SLIDER}
+                <li>{$slider.IMAGE|replace:'src':'class="img-responsive" src'}</li>
+              {/foreach}
+            </ul>
+          </div>
+        {/if}
+        {if isset($BANNER) && $page == 'index'}<div class="content_banner cf">{$BANNER|replace:'src':'class="img-responsive" src'}</div>{/if}
+
+        <div id="maincontent" class="row clearfix">{$main_content}</div>
+      </div>
+    </div>
+  {/if}
+  
+  {*<!-- _section: inhalte -->*}
+  {if $section == 'cms'}
+  	<div id="content_{$section}" class="row main_content clearfix">
+    	{$main_content}
+    </div>
+  {/if}
+  
+  {*<!-- _section: k1 hauptrubriken -->*}
+  {if $section == 'start'}
+  	<div id="content_kategorien" class="row main_content clearfix">
+   		<a href="/Oberflaechenprodukte-Leime:::1.html">
+	    	<div class="k1_kategorien">
+	    		<img alt="" src="templates/{$smarty.const.CURRENT_TEMPLATE}/img/k1_kategorien/farben.jpg">
+    			<p>Oberfl&auml;chenprodukte</p>
+	    	</div>
+   		</a>
+   		<a href="/Schellack-Produkte:::108.html">
+	    	<div class="k1_kategorien">
+    			<img alt="" src="templates/{$smarty.const.CURRENT_TEMPLATE}/img/k1_kategorien/lacke.jpg">
+    			<p>Schellack</p>
+	    	</div>
+   		</a>
+   		<a href="/Beschlaege:::47.html">
+	    	<div class="k1_kategorien">
+	    		<img alt="" src="templates/{$smarty.const.CURRENT_TEMPLATE}/img/k1_kategorien/beschlaege.jpg">
+    			<p>Beschl&auml;ge</p>
+	    	</div>
+   		</a>
+   		<a href="/Oberflaechenprodukte-Leime/Leime:::1_26.html">
+	    	<div class="k1_kategorien">
+	    		<img alt="" src="templates/{$smarty.const.CURRENT_TEMPLATE}/img/k1_kategorien/holzteile.jpg">
+    			<p>Leime</p>
+	    	</div>
+   		</a>
+    </div>
+  {/if}
+  
+  {*<!-- _section: k1 Katalogdownload -->*}
+  {if $section == 'start'}
+  	<div id="content_katalogdownload" class="row main_content clearfix">
+   		<div id="katalog_icons">
+	   		<a href="/katalog/lamee-katalog-2018.pdf" target="_blank">
+		    	<div>
+		    		<img alt="" src="templates/{$smarty.const.CURRENT_TEMPLATE}/img/k1_katalog/katalogstartseite-2018.jpg">
+		    		<p>Der Lamee-Katalog mit Bestellnummern zum Download [14MB]</p>
+		    	</div>
+	   		</a>
+	   	</div>
+	   	<div id="katalog_hinweis">
+	   		<h2>Der Lamee-Katalog zum Download</h2>
+	   		<p>
+	   			<ol>
+	   				<li>
+						<a href="/katalog/lamee-katalog-2018.pdf" target="_blank">Laden Sie hier den Lamee-Katalog herunter [14MB].</a>
+					</li>
+					<li>
+						Bl&auml;ttern Sie in Ruhe auf den Seiten und informieren Sie sich &uuml;ber unser umfangreiches Profiangebot.
+					</li>
+					<li>
+						Geben Sie die Bestellnummer ihres gew&uuml;schten Artikels im Suchfeld oben auf der Seite ein und dr&uuml;cken Sie die Enter- bzw. Return-Taste.
+					</li>
+	   			</ol>
+	   		</p>
+	   	</div>
+    </div>
+  {/if}
+  
+  {*<!-- _section: mein konto bereich -->*}
+  {if $section == 'account'}
+  	<div id="content_{$section}" class="row main_content clearfix">
+    	{$main_content}
+    </div>
+  {/if}
+	
+  {*<!-- _section: kaufprozess -->*}
+  {if $section == 'checkout'}
+  	<div id="content_{$section}" class="row main_content clearfix">
+    	{$main_content}
+    </div>
+  {/if}
+  
+  {hook key=index_html_content_after}
+  {if $smarty.const.page_boxed == 'boxed'}
+    {*<!--  ------------------------  ---->*}
+    {*<!--  			 F O O T E R  			---->*}
+    {*<!--  ------------------------  ---->*}
+    {if $section != 'checkout'}{$box_NEWSLETTER}{/if}
+
+    <footer id="footer" class="footer clearfix">
+      <div class="row">
+        {hook key=index_html_footer_before}
+        {if $section != 'checkout'}
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_CONTENT)}{$box_CONTENT}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_INFORMATION)}{$box_INFORMATION}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_MISCELLANEOUS)}{$box_MISCELLANEOUS}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_MANUFACTURERS)}{$box_MANUFACTURERS}{/if}</div>
+        {else}
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_CONTENT)}{$box_CONTENT}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_INFORMATION)}{$box_INFORMATION}{/if}</div>
+        {/if}
+        {hook key=index_html_footer_after}
+      </div>
+    </footer>
+  {/if}
+  {hook key=index_html_content_bottom}
+</div>
+
+{if $smarty.const.page_boxed != 'boxed'}
+  {*<!--  ------------------------  ---->*}
+  {*<!--  			 F O O T E R  			---->*}
+  {*<!--  ------------------------  ---->*}
+  {if $section != 'checkout'}{$box_NEWSLETTER}{/if}
+  
+  <footer id="footer" class="footer clearfix">
+    <div class="container">
+      <div class="row">
+        {hook key=index_html_footer_before}
+        {if $section != 'checkout'}
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_CONTENT)}{$box_CONTENT}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_INFORMATION)}{$box_INFORMATION}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_MISCELLANEOUS)}{$box_MISCELLANEOUS}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_MANUFACTURERS)}{$box_MANUFACTURERS}{/if}</div>
+        {else}
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_CONTENT)}{$box_CONTENT}{/if}</div>
+          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 all">{if isset($box_INFORMATION)}{$box_INFORMATION}{/if}</div>
+        {/if}
+        {hook key=index_html_footer_after}
+      </div>
+    </div>
+  </footer>
+{/if}
+
+{if ($smarty.const.TRACKING_COUNT_ADMIN_ACTIVE == 'true' && $smarty.session.customers_status.customers_status_id == '0') || $smarty.session.customers_status.customers_status_id != '0'}
+  {if $smarty.const.TRACKING_PIWIK_ACTIVE == 'true'}
+    {piwik url=$smarty.const.TRACKING_PIWIK_LOCAL_PATH id=$smarty.const.TRACKING_PIWIK_ID goal=$smarty.const.TRACKING_PIWIK_GOAL}
+  {/if}
+  {if $smarty.const.TRACKING_GOOGLEANALYTICS_ACTIVE == 'true'}
+    {googleanalytics account=$smarty.const.TRACKING_GOOGLEANALYTICS_ID}
+  {/if}
+  {if $smarty.const.TRACKING_FACEBOOK_ACTIVE == 'true'}
+    {facebook id=$smarty.const.TRACKING_FACEBOOK_ID}
+  {/if}
+{/if}
+{if $smarty.const.GOOGLE_CERTIFIED_SHOPS_MERCHANT_ACTIVE == 'true'}
+  {googlecertificate subaccount=$smarty.const.GOOGLE_SHOPPING_ID account=$smarty.const.GOOGLE_TRUSTED_ID}
+{/if}
+{hook key=index_html_page_bottom}
+</div>
+{$box_LOGIN}
+{hook key=index_html_bottom}
+<div class="container alc"><a class="designlink" href="https://www.squidio.de/template-shop/modified-templates/" title="Modified E Commerce und Shop Templates">Modified-Design-Template erstellt von www.squidio.de</a></div>
+<div class="container alc"><a class="designlink" href="https://www.k1-mediendesign.de" title="Informationsdesign und Programmierung">Informationsdesign &amp; Programmierung k1&nbsp;mediendesign</a></div>
+{/strip}

@@ -1,0 +1,11 @@
+{strip}
+{hook key=box_subnavi_html_box_top}
+  {if $BOX_CONTENT}
+    {config_load file="$language/lang_$language.conf" section="categorie_listing"}
+    <h3 class="hidden-lg hidden-md visible-sm hidden-xs">{#heading_more_categories#}</h3>
+    {hook key=box_subnavi_html_box_heading_after}
+    {$BOX_CONTENT}
+    {hook key=box_subnavi_html_box_content_after}
+  {/if}
+{hook key=box_subnavi_html_box_bottom}
+{/strip}

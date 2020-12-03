@@ -1,0 +1,8 @@
+{if $plugin_messages}
+  <div class="container">
+    {if $plugin_messages.success}<div class="alert alert-success">{$plugin_messages.success}</div>{/if}
+    {if $plugin_messages.error}<div class="alert alert-danger">{$plugin_messages.error}</div>{/if}
+    {if $plugin_messages.info}<div class="alert alert-info">{$plugin_messages.info}</div>{/if}
+    {if $plugin_messages.warning}<div class="alert alert-warning">{$plugin_messages.warning}</div>{/if}
+  </div>
+{/if}

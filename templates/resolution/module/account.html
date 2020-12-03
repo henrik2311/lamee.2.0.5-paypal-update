@@ -1,0 +1,124 @@
+{config_load file="$language/lang_$language.conf" section="account"}
+{config_load file="$language/lang_$language.conf" section="index"}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="profile">
+    <div class="profile_header">
+      <div class="profile_name">{$smarty.session.customer_first_name} {$smarty.session.customer_last_name}</div>
+      <div class="profile_title"><span class="icon-chevron-right"></span> {#heading_account#}</div>
+    </div>
+    <div class="row">
+      <div class="profile_navi col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/accountnavi.html"}
+      </div>
+      <div class="profile_body col-lg-9 col-md-9 col-sm-9 col-xs-12 borderleft">
+        {if !$products_history || !isset($smarty.session.customer_id)}
+          <h2>{#title_welcome#}</h2>
+          <h3>{#title_welcome#}</h3>
+          {if $error_message}<div class="profile_content"><div class="alert alert-warning">{$error_message}</div></div>{/if}
+
+          <div class="profile_content">
+            {if #text_welcome#}
+              <p>{#text_welcome#}</p>
+              {if $LINK_LOGIN}
+                <p><a href="{$LINK_LOGIN}" style="font-size:13px;"><strong>{#text_login#}</strong></a></p>
+              {/if}
+            {/if}
+          </div>
+        {/if}
+        
+        {if $order_content}
+          <h3 class="clearfix"><a class="btn btn-default flr" href="{$LINK_ALL}"><span class="icon-th-list"></span>{#text_all#}</a>{#title_orders#}</h3>
+          <div class="profile_content">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>{#order_nr#}</th>
+                  <th>{#text_date#}</th>
+                  <th>{#order_status#}</th>
+                  <th>{#order_total#}</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {foreach name=aussen item=order_data from=$order_content}
+                  <tr>
+                    <td class="valm"><strong>{$order_data.ORDER_ID}</strong></td>
+                    <td class="valm">{$order_data.ORDER_DATE}</td>
+                    <td class="valm">{$order_data.ORDER_STATUS}</td>
+                    <td class="valm">{$order_data.ORDER_TOTAL}</td>
+                    <td class="valm alr nowrap" style="width: 10%;">{$order_data.ORDER_BUTTON|btn:'btn btn-default flr':'icon-eye-open'}</td>
+                  </tr>
+                {/foreach}
+              </tbody>
+            </table>
+          </div>
+        {/if}
+        
+        {if $products_history}
+          <h3>{#title_viewed_products#}</h3>
+          <div class="profile_content">
+            {*<!-- list settings --------------->*}
+            {*<!-- possible values: 1,2,3,4,6 -->*}
+            {assign var=items_per_row value=3}
+            <div class="productlist product_grid_{$items_per_row}">
+              <div class="product_row equalize row">
+                {foreach name=aussen item=module_data from=$products_history}
+                  
+                  {*<!-- check for special-price -->*}
+                  {productData pid=$module_data.PRODUCTS_ID function=isSpecial assign=is_special}
+            
+                  <div class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-6 col-xs-12">
+                    <div class="thumbnail product{if $is_special && $smarty.const.product_listing_mark_specials=='true'} product_special{/if}">
+                      
+                      {if $is_special && $smarty.const.product_listing_mark_specials=='true'}<span class="badge badge-warning specials_marker">%</span>{/if}
+                      
+                      <div class="helper_equalize">
+                        {if $module_data.PRODUCTS_IMAGE!=''}
+                          <a class="product_image" href="{$module_data.PRODUCTS_LINK}">
+                            <img src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME}" class="productImageBorder" />
+                          </a>
+                        {/if}
+                        <div class="caption product_text">
+                          <h4 class="product_name"><a href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a></h4>
+                        </div>
+                      </div>
+                      
+                      {if $smarty.const.product_listing_show_reviews!='false' || $smarty.const.product_listing_show_deliverytime=='true'}
+                        <div class="clb"></div>
+                        <div class="caption product_module">
+                          {if $smarty.const.product_listing_show_deliverytime!='false'}
+                            <span class="icon-time"></span><span class="product_shippingtime_text"> {#text_shippingtime#}</span> {$module_data.PRODUCTS_SHIPPING_NAME}
+                          {/if}
+                          {if $smarty.const.product_listing_show_reviews!='false'}
+                            <div class="product_rating_stars">
+                              <div class="product_rating_percentage" style="width: {productData pid=$module_data.PRODUCTS_ID function=getReviews}%;"></div>
+                            </div>
+                          {/if}
+                          <div class="clb"></div>
+                        </div>
+                      {/if}
+                      
+                    </div>
+                  </div>
+                  {if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}</div><div class="clb"></div><div class="product_row equalize row">{/if}
+                {/foreach} 
+                <div class="clb"></div>
+              </div>
+            </div>
+          </div>
+        {/if}
+
+
+        {if $LINK_NEWSLETTER}
+          <div class="subheading">
+            <h3>{#title_notification#}</h3>
+          </div>
+          <div class="profile_content">
+            <a class="btn btn-default" href="{$link_account_newsletter}">{#text_newsletter#}</a>
+          </div>
+        {/if}
+      </div>
+    </div>
+  </div>
+</div>

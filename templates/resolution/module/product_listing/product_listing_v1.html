@@ -1,0 +1,113 @@
+{strip}
+{smarty tpl_var="box_SUBNAVI" return="not_empty" assign="has_leftnav"}
+{hook key=product_listing_html_page_top}
+{config_load file="$language/lang_$language.conf" section="index"}
+
+<div class="col-lg-12 col-md-12 col-lg-sm col-xs-12">
+  {if $CATEGORIES_HEADING_TITLE || $CATEGORIES_NAME}
+    <div class="page-heade clearfix">
+      {hook key=product_info_html_header_top}
+      {if $CATEGORIES_IMAGE}<img src="{$CATEGORIES_IMAGE}" alt="{$CATEGORIES_NAME}" class="img-responsive {if strstr($CATEGORIES_IMAGE,'manufacturers')}flr manufacturers_image{else}categories_image{/if}" />{/if}
+      <h1>{$LIST_TITLE}</h1>
+      {if $CATEGORIES_DESCRIPTION}{$CATEGORIES_DESCRIPTION}{/if}
+      {hook key=product_info_html_header_bottom}
+    </div>
+  {/if}
+
+  {if $CATEGORIES_LISTING}
+    {hook key=product_listing_html_categories_listing_before}
+    {$CATEGORIES_LISTING}
+  {/if}
+
+  {if $LISTING_FILTER}
+    {hook key=product_listing_html_listing_filter_before}
+    {$LISTING_FILTER}
+  {/if}
+
+
+  {*<!-- list settings --------------->*}
+  {*<!-- possible values: 1,2,3,4,6 -->*}
+  {if !$items_per_row && $has_leftnav}
+    {assign var=items_per_row value=$smarty.const.product_listing_products_per_row}
+  {else}
+    {if $smarty.const.product_listing_products_per_row==1}
+      {assign var=items_per_row value=$smarty.const.product_listing_products_per_row}
+    {else}
+      {assign var=items_per_row value=$smarty.const.product_listing_products_per_row+1}
+    {/if}
+  {/if}
+  
+  {hook key=product_listing_html_productlist_before}
+  <div class="productlist product_grid_{$items_per_row}">
+    <div class="product_row equalize row">
+      {foreach name=aussen item=module_data from=$module_content}
+        
+        {*<!-- check for special-price -->*}
+        {productData pid=$module_data.PRODUCTS_ID function=isSpecial assign=is_special}
+        
+        <div class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-4 col-xs-12"
+          data-pid="{$module_data.PRODUCTS_ID}" 
+          data-price="{productData pid=$module_data.PRODUCTS_ID function=getRawCurrentPrice}}" 
+          data-name="{$module_data.PRODUCTS_NAME|strip_tags}" 
+          data-rated="{productData pid=$module_data.PRODUCTS_ID function=getReviews}" 
+          data-special="{$is_special}"
+        >
+          <div class="thumbnail product{if $is_special && $smarty.const.product_listing_mark_specials=='true'} product_special{/if} clearfix">
+            
+            {if $is_special && $smarty.const.product_listing_mark_specials=='true'}<span class="badge badge-warning specials_marker">%</span>{/if}
+            
+            <div class="helper_equalize">
+              {if $module_data.PRODUCTS_IMAGE!=''}
+                <a class="product_image" href="{$module_data.PRODUCTS_LINK}">
+                  <img src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME}" class="productImageBorder" />
+                </a>
+              {/if}
+              <div class="caption product_text">
+                <h3 class="product_name"><a href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a></h3>
+                {if $smarty.const.product_listing_show_descripion!='false' && $module_data.PRODUCTS_SHORT_DESCRIPTION != ''}
+                  <p class="product_description hidden-xs">{$module_data.PRODUCTS_SHORT_DESCRIPTION|truncate:'80':''|strip_tags}</p>
+                {/if} 
+              </div>
+              <div class="caption product_buy">
+                <div class="product_price">{$module_data.PRODUCTS_PRICE}</div>
+                {if $module_data.PRODUCTS_BUTTON_BUY_NOW}
+                  <div class="product_buynow hidden-xs">
+                    {$module_data.PRODUCTS_BUTTON_BUY_NOW|btn:'btn btn-primary btn-block ':'icon-shopping-cart':IMAGE_BUTTON_IN_CART}
+                  </div>
+                {/if}
+                {if $module_data.PRODUCTS_VPE}<small class="product_vpe hidden-phone">{$module_data.PRODUCTS_VPE}</small>{/if}
+                <div class="product_tax_info hidden-xs">{$module_data.PRODUCTS_TAX_INFO}{$module_data.PRODUCTS_SHIPPING_LINK}</div>
+              </div>
+            </div>
+            {if $smarty.const.product_listing_show_reviews!='false' || $smarty.const.product_listing_show_deliverytime!='false'}
+              <div class="clb"></div>
+              <div class="caption product_module">
+                {if $smarty.const.product_listing_show_deliverytime!='false'}
+                  <span class="icon-time"></span><span class="product_shippingtime_text"> {#text_shippingtime#}</span> {$module_data.PRODUCTS_SHIPPING_NAME_LINK}
+                {/if}
+                {if $smarty.const.product_listing_show_reviews!='false'}
+                  <div class="product_rating_stars">
+                    <div class="product_rating_percentage" style="width: {productData pid=$module_data.PRODUCTS_ID function=getReviews}%;"></div>
+                  </div>
+                {/if}
+                <div class="clb"></div>
+              </div>
+            {/if}
+            
+          </div>
+        </div>
+        {*<!-- {if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}</div><div class="product_row equalize row">{/if} -->*}
+      {/foreach} 
+      <div class="clb"></div>
+    </div>
+  </div>
+
+  {$PAGINATION|replace:$smarty.const.PREVNEXT_BUTTON_NEXT:$smarty.const.PREVNEXT_TITLE_NEXT_PAGE|replace:$smarty.const.PREVNEXT_BUTTON_PREV:$smarty.const.PREVNEXT_TITLE_PREVIOUS_PAGE|replace:$smarty.const.TEXT_RESULT_PAGE:''}
+  {*
+  {hook key=product_listing_html_pagination_before}
+  <div class="make_pagination">{$NAVIGATION|replace:$smarty.const.PREVNEXT_BUTTON_NEXT:$smarty.const.PREVNEXT_TITLE_NEXT_PAGE|replace:$smarty.const.PREVNEXT_BUTTON_PREV:$smarty.const.PREVNEXT_TITLE_PREVIOUS_PAGE|replace:$smarty.const.TEXT_RESULT_PAGE:''}</div>
+  {hook key=product_listing_html_pagination_after}
+  *}
+</div>
+{hook key=product_listing_html_page_top}
+{/strip}

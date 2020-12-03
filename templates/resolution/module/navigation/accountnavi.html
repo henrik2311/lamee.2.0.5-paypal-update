@@ -1,0 +1,58 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="index"}
+{config_load file="$language/lang_$language.conf" section="account"}
+{config_load file="$language/lang_$language.conf" section="address_book"}
+{config_load file="$language/lang_$language.conf" section="account_delete"}
+{config_load file="$language/lang_$language.conf" section="newsletter"}
+
+{*<!-- _shopnavi: assign links -->*}
+{link page=FILENAME_ACCOUNT connection="SSL" assign="link_account"}
+{link page=FILENAME_ACCOUNT_HISTORY connection="SSL" assign="link_account_history"}
+{link page=FILENAME_ACCOUNT_EDIT connection="SSL" assign="link_account_edit"}
+{link page=FILENAME_ADDRESS_BOOK connection="SSL" assign="link_account_address_book"}
+{link page=FILENAME_ACCOUNT_PASSWORD connection="SSL" assign="link_account_password"}
+{link page=FILENAME_ACCOUNT_DELETE connection="SSL" assign="link_account_delete"}
+{link page=FILENAME_NEWSLETTER parameters="type=account" connection="SSL" assign="link_account_newsletter"}
+{link page=FILENAME_LOGOFF connection="NOSSL" assign="link_account_logoff"}
+{link page=FILENAME_ACCOUNT_CHECKOUT_EXPRESS connection="SSL" assign="link_express"}
+
+{hook key=accountnavi_html_assign}
+
+{*<!-- _shopnavi: account -->*}
+{assign var=current_path value=$smarty.server.PHP_SELF}
+
+{hook key=accountnavi_html_list_top}
+
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account)} current{/if}" href="{$link_account}" title="{#heading_account#}">
+  <span class="icon-home"></span>{#heading_account#}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account_history)} current{/if}" href="{$link_account_history}" title="{#text_all#}">
+  <span class="icon-shopping-cart"></span>{#text_all#}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account_edit)} current{/if}" href="{$link_account_edit}" title="{#text_edit#}">
+  <span class="icon-user"></span>{#text_edit#}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account_address_book)} current{/if}" href="{$link_account_address_book}" title="{#text_address#}">
+  <span class="icon-book"></span>{#text_address#}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_express)} current{/if}" href="{$link_express}" title="{#text_express_checkout#}">
+  <span class="icon-credit-card"></span>{#text_express_checkout#|replace:'Mein '}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account_password)} current{/if}" href="{$link_account_password}" title="{#text_password#}">
+  <span class="icon-pencil"></span>{#text_password#}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account_newsletter)} current{/if}" href="{$link_account_newsletter}" title="{#text_newsletter#}">
+  <span class="icon-envelope"></span>{#heading_title#}
+</a>
+<a class="btn btn-link btn-block all{if strstr($current_path,$link_account_logoff)} current{/if}" href="{$link_account_logoff}" title="{#text_newsletter#}">
+  <span class="icon-off"></span>{#link_logoff#}
+</a>
+{if $smarty.session.customer_id &&  $smarty.session.customer_id != 1}
+  <div class="divider large"></div>
+  <a class="btn btn-danger btn-block all{if strstr($current_path,$link_account_delete)} current{/if}" href="{$link_account_delete}" title="{#text_delete#}">
+    <span class="icon-trash"></span>{#text_delete#}
+  </a>
+{/if}
+
+{hook key=accountnavi_html_list_bottom}
+{/strip}

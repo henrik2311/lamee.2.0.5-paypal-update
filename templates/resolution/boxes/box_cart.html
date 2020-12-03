@@ -1,0 +1,56 @@
+{strip}
+{hook key=box_cart_html_box_top}
+  {config_load file="$language/lang_$language.conf" section="boxes"}
+  {if $deny_cart neq 'true'}
+    {if $smarty.session.device != 'mobile'}
+      {hook key=box_cart_html_box_mobile_top}
+      <div id="box_cart" class="hidden-xs">
+        <a class="btn btn-lg{if $empty=='false'} cart_full btn-primary{else} cart_empty btn-default{/if} notextshadow radius-4x" href="{$LINK_CART}" title="{#heading_cart#}">
+          <span class="icon_cart" aria-hidden="true"><span class="{if $empty != 'true'}icon-white {/if}icon-white icon-shopping-cart"></span></span>
+          <span class="cart_contents radius-3x">
+            {if $empty == 'true'}
+              {hook key=box_cart_html_box_mobile_empty_before}
+              {#text_empty_cart#}
+              {hook key=box_cart_html_box_mobile_empty_after}
+            {else}
+              {hook key=box_cart_html_box_mobile_filled_before}
+              {*<!-- @ screen-lg -->*}
+              <span class="hidden-sm hidden-md visible-lg">
+                {#heading_cart#}: 
+                {hook key=box_cart_html_box_mobile_filled_heading_after}
+                
+                <strong>({$PRODUCTS})</strong> 
+                {hook key=box_cart_html_box_mobile_filled_products_after}
+                
+                <span class="mini-cart-total">
+                  <span class="amount">
+                    {hook key=box_cart_html_box_mobile_filled_total_before}
+                    {$TOTAL}
+                    {hook key=box_cart_html_box_mobile_filled_total_after}
+                  </span>
+                </span>
+              </span>
+              {*<!-- @ screen-md & screen-sm & screen-xs -->*}
+              <span class="visible-sm visible-md hidden-lg">{$PRODUCTS} &times; <span class="mini-cart-total"><span class="amount">{$TOTAL}</span></span></span>
+              {hook key=box_cart_html_box_mobile_filled_after}
+            {/if}
+          </span>
+          <span class="icon_arrow" aria-hidden="true"><span class="icon-chevron-right"></span></span>
+        </a>
+      </div>
+      {hook key=box_cart_html_box_mobile_bottom}
+    {else}
+      {hook key=box_cart_html_box_desktop_top}
+      <div id="box_cart" class="cart_mobile">
+        <a class="btn btn-{if $empty != 'true'}default{else}default{/if} btn-block btn-lg btn-icon" href="{$LINK_CART}">
+          <span class="icon-shopping-cart"></span>
+          {hook key=box_cart_html_box_desktop_cartlink_inside_top}
+          {if $empty != 'true'}<span class="badge">{$PRODUCTS}</span>{/if}
+          {hook key=box_cart_html_box_desktop_cartlink_inside_bottom}
+        </a>
+      </div>
+      {hook key=box_cart_html_box_desktop_bottom}
+    {/if}
+  {/if}
+{hook key=box_cart_html_box_bottom}
+{/strip}

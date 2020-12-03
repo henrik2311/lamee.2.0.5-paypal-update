@@ -1,0 +1,32 @@
+
+<div class="payment_methods">
+  <table class="table method_selector">
+    {foreach name=aussen item=module_data from=$module_content}
+      <tr class="selectable">
+        <td width="5%" valign="top" class="alc selector_select"{if $smarty.session.device == 'mobile'} style="display: none;"{/if}>{$module_data.selection}</td>
+        <td  valign="top" width="1">
+          <h5 class="selector_name nomrg"><strong>{$module_data.module}{if $smarty.session.device == 'mobile' && $module_data.module_cost} ({$module_data.module_cost} ){/if}</strong></h5>
+          {if $module_data.error!=''}
+            <div class="alert alert-danger">
+              <h4>{$module_data.module}</h4>
+              <p>{$module_data.error}</p>
+            </div>
+            {if $module_data.description!=''}<div class="method_description">{$module_data.description}</div>{/if}
+          {elseif $module_data.fields}
+            <div class="method_description">
+              {if $module_data.description!=''}{$module_data.description}<div class="divider normal"></div>{/if}
+              {foreach name=aussen item=method_data from=$module_data.fields}
+                <div class="divider small trans"></div>
+                {if $method_data.title}<strong>{$method_data.title}</strong>{/if} {$method_data.field}
+              {/foreach}
+            </div>
+          {else}
+            {if $module_data.description!=''}<div class="method_description">{$module_data.description}</div>{/if}
+          {/if}
+        </td>
+        {if $method_data.module_cost && $smarty.session.device != 'mobile'}<td valign="top" class="selector_price nowrap" width="1"><strong>{$method_data.module_cost}</strong></td>{/if}
+      </tr>
+    {/foreach}
+    
+  </table>
+</div>

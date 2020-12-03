@@ -1,0 +1,98 @@
+{config_load file="$language/lang_$language.conf" section="account_checkout_express"}
+<style type="text/css">
+  {literal}
+  .alert-xs {
+    padding: 3px 10px !important;
+    margin-bottom: 10px !important;
+    font-size: 90%;
+  }
+  {/literal}
+</style>
+<div class="col-lg-12 col-md-12">
+  <div class="profile">
+    <div class="profile_header">
+      <div class="profile_name">{$smarty.session.customer_first_name} {$smarty.session.customer_last_name}</div>
+      <div class="profile_title"><span class="icon-chevron-right"></span> {#heading_checkout_express#}</div>
+    </div>
+    <div class="contents row">
+      <div class="profile_navi col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/accountnavi.html"}
+      </div>
+      <div class="profile_body col-lg-9 col-md-9 col-sm-9 col-xs-12 borderleft">
+        <h3>{#heading_checkout_express#}</h3>
+        <div class="profile_content">
+          <p>{#text_checkout_express_info#}</p>
+        </div>
+
+        {$FORM_ACTION}
+
+        <h3>{#heading_shipping#}</h3>
+        <div class="profile_content">
+          {if isset($module_shipping_error)}<div class="alert alert-danger alert-xs">{$module_shipping_error}</div>{/if}
+          {foreach name=aussen item=shipping from=$module_shipping}
+            <div class="radio">
+              <label>
+                {$shipping.FIELD}
+                <strong>{$shipping.NAME}</strong><br />
+              </label>
+            </div>
+          {/foreach}
+        </div>
+
+        <h3>{#heading_payment#}</h3>
+        <div class="profile_content">
+          {if isset($module_payment_error)}<div class="alert alert-danger alert-xs">{$module_payment_error}</div>{/if}
+          {foreach name=aussen item=payment from=$module_payment}
+            <div class="radio">
+              <label>
+                {$payment.FIELD}
+                <strong>{$payment.NAME}</strong><br />
+              </label>
+            </div>
+          {/foreach}
+        </div>
+
+        <h3>{#heading_shipping_address#}</h3>
+        <div class="profile_content">
+          <p>{#text_choose_shipping_address#}</p>
+
+          {if isset($module_shipping_address_error)}<div class="alert alert-danger alert-xs">{$module_shipping_address_error}</div>{/if}
+          {foreach name=aussen item=shipping_address from=$module_shipping_address}
+            <div class="radio">
+              <label>
+                {$shipping_address.FIELD}
+                <strong>{$shipping_address.NAME}</strong><br />
+                <address>{$shipping_address.ADDRESS}</address>
+              </label>
+            </div>
+          {/foreach}
+        </div>
+
+        <h3>{#heading_payment_address#}</h3>
+        <div class="profile_content">
+          <p>{#text_choose_payment_address#}</p>
+
+          {if isset($module_payment_address_error)}<div class="alert alert-danger alert-xs">{$module_payment_address_error}</div>{/if}
+          {foreach name=aussen item=payment_address from=$module_payment_address}
+            <div class="radio">
+              <label>
+                {$payment_address.FIELD}
+                <strong>{$payment_address.NAME}</strong><br />
+                <address>{$payment_address.ADDRESS}</address>
+              </label>
+            </div>
+          {/foreach}
+        </div>
+        {btn btntype="btn btn-lg btn-success" icontype="icon-chevron-right" value=IMAGE_BUTTON_CONTINUE}
+
+        {$FORM_END}
+        <div class="clb"></div>
+        <div class="profile_content">
+          <div class="divider large"></div>
+          {$BUTTON_BACK|btn:'btn btn-default btn-lg':'icon-chevron-left'}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

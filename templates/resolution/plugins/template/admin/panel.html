@@ -1,0 +1,248 @@
+<form method="post" action="{$form_action}" class="form-horizontal">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3>{$smarty.const.text_plugin_config}:<br /><small>Template-Name: <strong>{$smarty.const.THEME_NAME}</strong> Template-Version: <strong>{$smarty.const.THEME_VERSION}</strong></small></h3></div>
+    <div class="panel-body">
+      <input type="hidden" name="plugin_update" value="1" />
+      
+      <div id="lang_tabs">
+        <ul class="nav nav-tabs nav-justified">
+          <li class="active"><a data-toggle="tab" href="#tabs-template">Template</a></li>
+          <li><a data-toggle="tab" href="#tabs-subcategories_list">Unterkategorie-Listen</a></li>
+          <li><a data-toggle="tab" href="#tabs-product_list">Produkt-Listen</a></li>
+          <li><a data-toggle="tab" href="#tabs-boxes">Boxen</a></li>
+        </ul>
+        <div class="tab-content tabcontents">
+          
+          <div class="tab-pane active" id="tabs-template">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Titel</th>
+                  <th>Einstellung</th>
+                  <th class="alc">Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="40%"><strong>Begrenzung des Seiten-Containers</strong></td>
+                  <td>
+                    <select name="page_boxed" class="form-control">
+                      <option value="normal"{if $panel_data.page_boxed=="normal"} selected{/if}>Normale Darstellung</option>
+                      <option value="boxed"{if $panel_data.page_boxed=="boxed"} selected{/if}>Boxed Darstellung</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Seitenbegrenzung f&uuml;r die Shopseite"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Seiten-Hintergundfarbe</strong></td>
+                  <td>
+                    <input name="page_background_color" type="text" class="form-control" id="page_background_color" value="{$panel_data.page_background_color}" placeholder="Format: #ff00dd" />
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Hintergrundfarbe f&uuml;r die Shopseite"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Kategorie-Men&uuml;</strong></td>
+                  <td>
+                    <select name="navtype" class="form-control">
+                      <option value="default"{if $panel_data.navtype=="default"} selected{/if}>Normales Men&uuml;</option>
+                      <option value="dropdown"{if $panel_data.navtype=="dropdown"} selected{/if}>Dropdown Men&uuml;</option>
+                      <option value="mega"{if $panel_data.navtype=="mega"} selected{/if}>Mega Men&uuml;</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Kategorie-Navigations Typ ausw&auml;hlen"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          
+          
+          <div class="tab-pane" id="tabs-subcategories_list">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Titel</th> <th>Einstellung</th> <th class="alc">Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="40%"><strong>Kategorien pro Reihe</strong></td>
+                  <td>
+                    <select name="category_listing_categories_per_row" class="form-control">
+                      <option value="2"{if $panel_data.category_listing_categories_per_row=="2"} selected{/if}>2</option>
+                      <option value="3"{if $panel_data.category_listing_categories_per_row=="3"} selected{/if}>3</option>
+                      <option value="4"{if $panel_data.category_listing_categories_per_row=="4"} selected{/if}>4</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Anzahl der Unterkategorien pro Reihe (Standard: 4)"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Kategorie-Bilder anzeigen</strong></td>
+                  <td>
+                    <select name="category_listing_show_image" class="form-control">
+                      <option value="true"{if $panel_data.category_listing_show_image=="true"} selected{/if}>Bilder anzeigen</option>
+                      <option value="false"{if $panel_data.category_listing_show_image=="false"} selected{/if}>Bilder nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Bilder in der Unterkategorien-Liste anzeigen"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          
+          
+          <div class="tab-pane" id="tabs-product_list">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Titel</th> <th>Einstellung</th> <th class="alc">Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="40%"><strong>Anzahl der Produkte pro Reihe</strong></td>
+                  <td>
+                    <select name="product_listing_products_per_row" class="form-control">
+                      <option value="1"{if $panel_data.product_listing_products_per_row=="1"} selected{/if}>1</option>
+                      <option value="2"{if $panel_data.product_listing_products_per_row=="2"} selected{/if}>2</option>
+                      <option value="3"{if $panel_data.product_listing_products_per_row=="3"} selected{/if}>3</option>
+                      <option value="4"{if $panel_data.product_listing_products_per_row=="4"} selected{/if}>4</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Legen Sie die Anzahl der Produkte fest die auf einer Reihe angezeigt werden soll. (Standard: 3)"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Kurzbeschreibung anzeigen</strong></td>
+                  <td>
+                    <select name="product_listing_show_descripion" class="form-control">
+                      <option value="true"{if $panel_data.product_listing_show_descripion=="true"} selected{/if}>Kurzbeschreibung anzeigen</option>
+                      <option value="false"{if $panel_data.product_listing_show_descripion=="false"} selected{/if}>Kurzbeschreibung nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Text der Kurzbeschreibung zum Produkt ausgeben"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Produktbewertungen anzeigen</strong></td>
+                  <td>
+                  <select name="product_listing_show_reviews" class="form-control">
+                    <option value="true"{if $panel_data.product_listing_show_reviews=="true"} selected{/if}>Durchschnittliche Bewertung anzeigen</option>
+                    <option value="false"{if $panel_data.product_listing_show_reviews=="false"} selected{/if}>Durchschnittliche Bewertung nicht anzeigen</option>
+                  </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Durchschnittliche Bewertung zum Produkt ausgeben"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Lieferzeit anzeigen</strong></td>
+                  <td>
+                    <select name="product_listing_show_deliverytime" class="form-control">
+                      <option value="true"{if $panel_data.product_listing_show_deliverytime=="true"} selected{/if}>Lieferzeit anzeigen</option>
+                      <option value="false"{if $panel_data.product_listing_show_deliverytime=="false"} selected{/if}>Lieferzeit nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Die Lieferzeit zum Produkt ausgeben"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Angebots-Produkte markieren</strong></td>
+                  <td>
+                    <select name="product_listing_mark_specials" class="form-control">
+                      <option value="true"{if $panel_data.product_listing_mark_specials=="true"} selected{/if}>Angebote Markieren</option>
+                      <option value="false"{if $panel_data.product_listing_mark_specials=="false"} selected{/if}>Angebote nicht Markieren</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Markieren der Sonderangebote in allen Produkt-Listen"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          
+          
+          <div class="tab-pane" id="tabs-boxes">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Titel</th> <th>Einstellung</th> <th class="alc">Info</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="40%"><strong>Box-Newsletter</strong></td>
+                  <td>
+                    <select name="show_box_newsletter" id="show_box_newsletter" class="form-control">
+                      <option value="true"{if $panel_data.show_box_newsletter=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_newsletter=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Box-Suche</strong></td>
+                  <td>
+                    <select name="show_box_search" class="form-control">
+                      <option value="true"{if $panel_data.show_box_search=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_search=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Box-Hersteller</strong></td>
+                  <td>
+                    <select name="show_box_manufacturers" class="form-control">
+                      <option value="true"{if $panel_data.show_box_manufacturers=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_manufacturers=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Box-Information</strong></td>
+                  <td>
+                    <select name="show_box_information" class="form-control">
+                      <option value="true"{if $panel_data.show_box_information=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_information=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Box-Content</strong></td>
+                  <td>
+                    <select name="show_box_content" class="form-control">
+                      <option value="true"{if $panel_data.show_box_content=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_content=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Box-W&auml;hrungen</strong></td>
+                  <td>
+                    <select name="show_box_currencies" class="form-control">
+                      <option value="true"{if $panel_data.show_box_currencies=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_currencies=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+                <tr>
+                  <td width="40%"><strong>Box-Sprachen</strong></td>
+                  <td>
+                    <select name="show_box_languages" class="form-control">
+                      <option value="true"{if $panel_data.show_box_languages=="true"} selected{/if}>Box anzeigen</option>
+                      <option value="false"{if $panel_data.show_box_languages=="false"} selected{/if}>Box nicht anzeigen</option>
+                    </select>
+                  </td>
+                  <td width="10%"><a class="add_popover btn btn-block btn-link" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Gew&auml;hlte Box anzeigen?"><span class="icon-info-sign icon-2x"></span></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+     	</div>
+    </div>
+    <div class="panel-footer"><button type="submit" class="btn btn-lg btn-success"><span class="icon-ok"></span>&nbsp;&nbsp;&Auml;nderungen speichern</button></div>
+  </div>
+</form>

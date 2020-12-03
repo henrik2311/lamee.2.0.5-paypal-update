@@ -1,0 +1,94 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="create_account"}
+{config_load file="$language/lang_$language.conf" section="newsletter"} 
+{config_load file="$language/lang_$language.conf" section="contact_us"}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="page_contact_us">
+  <div class="page-header">
+    <h1>{$CONTACT_HEADING}&nbsp;&nbsp;&nbsp;&nbsp;<small>{#text_hint#}</small></h1>
+  </div>
+  {if $error_message!=''}<div class="alert alert-danger">{$error_message}</div>{/if}
+  
+  <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 contact_form">
+    {if $success!='1'}
+      {$FORM_ACTION}
+
+        <div class="row">
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_name#}</label>
+            <div class="controls">{$INPUT_NAME}</div>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_company#}</label>
+            <div class="controls">{$INPUT_COMPANY}</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label"><span class="inputRequirement">*</span> {#text_email#}</label>
+            <div class="controls">{$INPUT_EMAIL}</div>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_street#}</label>
+            <div class="controls">{$INPUT_STREET}</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_postcode#}</label>
+            <div class="controls">{$INPUT_POSTCODE}</div>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_city#}</label>
+            <div class="controls">{$INPUT_CITY}</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_phone#}</label>
+            <div class="controls">{$INPUT_PHONE}</div>
+          </div>
+          <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <label class="control-label">{#text_fax#}</label>
+            <div class="controls">{$INPUT_FAX}</div>
+          </div>
+        </div>
+
+        <label class="control-label"><span class="inputRequirement">*</span> {#text_message#}</label>
+        <div class="controls">{$INPUT_TEXT}</div>
+        <div class="divider normal trans"></div>
+
+        {if $INPUT_CODE}
+          <div class="row">
+            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <label class="control-label"><span class="inputRequirement">*</span> {#text_sec_code#}</label>
+              <div class="controls">{$INPUT_CODE}</div>
+            </div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <label class="control-label">&nbsp;</label>
+              <div class="controls">{$VVIMG}</div>
+            </div>
+          </div>
+        {/if}
+
+        {if $PRIVACY_CHECKBOX}
+          <div class="form-group">
+            <label class="checkbox nomrg">{$PRIVACY_CHECKBOX} {#text_privacy_accept#} {$PRIVACY_LINK}</label>
+          </div>
+        {/if}
+
+        <label class="control-label">&nbsp;</label>
+        <div class="controls">{btn btntype="btn btn-lg btn-success" icontype="icon-envelope" value=IMAGE_BUTTON_SEND}</div>
+
+      {$FORM_END}
+    {else}
+      <div class="alert alert-success">{#text_success#}</div>
+      <p>{$BUTTON_CONTINUE|btn:'btn btn-lg':'icon-chevron-left'}</p>
+    {/if}
+  </div>
+  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 contact_content">{$CONTACT_CONTENT}</div>
+</div>
+{/strip}

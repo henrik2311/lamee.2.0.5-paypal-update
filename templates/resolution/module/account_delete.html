@@ -1,0 +1,41 @@
+{config_load file="$language/lang_$language.conf" section="account_delete"}
+
+<div class="row">
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="profile">
+      <div class="profile_header">
+        <div class="profile_name">{$smarty.session.customer_first_name} {$smarty.session.customer_last_name}</div>
+        <div class="profile_title">
+          <span class="icon-chevron-right"></span> {if $BUTTON_CONTINUE}{#heading_account_deleted#}{else}{#heading_delete_account#}{/if}
+        </div>
+      </div>
+      <div class="contents row">
+        <div class="profile_navi col-lg-3 col-md-3 col-sm-3 col-xs-12">
+          {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/accountnavi.html"}
+        </div>
+        <div class="profile_body col-lg-9 col-md-9 col-sm-9 col-xs-12 borderleft">
+          {if $error != ''}<div class="errormessage">{$error}</div>{/if}
+          {if $BUTTON_CONTINUE}
+            <h3>{#heading_account_deleted#}</h3>
+            <div class="profile_content">
+              <p>{#account_deleted#}</p>
+              <p class="textRight button">{$BUTTON_CONTINUE|btn:'btn btn-large':'icon-chevron-right'}</p>
+            </div>
+          {else}
+            <h3>{#heading_delete_account#}</h3>
+            <div class="profile_content">
+              <p>{#delete_account#}</p>
+              {$FORM_ACTION}
+                <div class="divider large trans"></div>
+                <div class="input-group">{$INPUT_PASSWORD}<span class="input-group-btn">{btn btntype="btn btn-danger" icontype="icon-trash" value=IMAGE_BUTTON_DELETE}</span></div>
+              {$FORM_END}
+
+              <div class="divider large"></div>
+              {$BUTTON_BACK|btn:'btn btn-large':'icon-chevron-left'}
+            </div>
+          {/if}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+{hook key=plugin_manager_header_html_top}
+
+<meta http-equiv="Content-Type" content="text/html; charset={$smarty.session.language_charset}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{$smarty.const.THEME_NAME} {$smarty.const.THEME_VERSION} | {$smarty.const.global_linktext_plugin_manager}</title>
+
+{*<!-- Reset -->*}
+{hook key=plugin_manager_app_css_top}
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css' />
+<link rel="stylesheet" type="text/css" href="{$plg.ws_app}template/css/fw.min.css" />
+<link rel="stylesheet" type="text/css" href="{$plg.ws_app}template/css/fw.icons.min.css" />
+<link rel="stylesheet" type="text/css" href="{$plg.ws_app}template/css/styles.css" />
+<!--[if IE 7]><link rel="stylesheet" type="text/css" href="style/ie7-style.css" /><![endif]-->
+
+
+{*<!-- <link href="{$plg.ws_app}editor/editor.css" type="text/css" rel="stylesheet" /> -->*}
+{hook key=plugin_manager_app_css_bottom}
+
+{*<!-- jquery base -->*}
+<!--[if lt IE 9]>
+  <script src="{$plg.ws_app}template/js/html5shiv.js"></script>
+  <script src="{$plg.ws_app}template/js/respond.min.js"></script>
+<![endif]-->
+
+{hook key=plugin_manager_header_html_bottom}

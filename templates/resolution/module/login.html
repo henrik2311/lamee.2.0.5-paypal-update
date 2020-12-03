@@ -1,0 +1,76 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="login"}
+{config_load file="$language/lang_$language.conf" section="newsletter"}
+
+<div class="col-lg-12 col-md-12">
+  <div class="page-header">
+  	<h1>{#heading_login#}!</h1>
+  </div>
+
+  {if $info_message != ''}<div class="alert alert-danger">{$info_message}</div>{/if}
+  {if $success_message != ''}<div class="alert alert-success">{$success_message}</div>{/if}
+  
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      <div class="paddingbox xlarge well">
+        {$FORM_ACTION}
+          <h3 class="alc nomrg">{#title_returning#}</h3>
+          <div class="divider large trans"></div>
+          {*<!-- <p><small>{#text_returning#}</small></p> -->*}
+          
+          <div role="form">
+            <div class="form-group">
+              <label class="control-label" for="email_address">{#text_email#}:</label>
+              <div class="controls">{$INPUT_MAIL}</div>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="password">{#text_password#}:</label>
+              <div class="controls">{$INPUT_PASSWORD}</div>
+            </div>
+            {if $INPUT_CODE}
+              <div class="row">
+                <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <label class="control-label">{#text_sec_code#}</label>
+                  <div class="controls">{$INPUT_CODE}</div>
+                </div>
+                <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <label class="control-label">&nbsp;</label>
+                  <div class="controls">{$VVIMG}</div>
+                </div>
+              </div>
+              <div class="clb"></div>
+            {/if}
+            <div class="form-group">
+              <div class="controls">
+                <a class="flr" href="{$LINK_LOST_PASSWORD}">{#text_lost_password#}</a>
+                {btn btntype="btn btn-lg btn-success" icontype="icon-lock" value=IMAGE_BUTTON_LOGIN}
+              </div>
+            </div>
+          </div>
+        {$FORM_END}
+      </div>
+    </div>
+    
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+      {if $account_option == 'account' or $account_option == 'both'}
+        <div class="alert paddingbox large" style="padding-right: 14px;">
+          <p>{#text_new#}</p>
+          <div class="divider normal trans"></div>
+          {if $smarty.session.device == 'desktop'}
+            {$BUTTON_NEW_ACCOUNT|btn:'btn btn-block btn-lg btn-primary':'icon-user':#title_new#}
+          {else}
+            {$BUTTON_NEW_ACCOUNT|btn:'btn btn-block btn-lg btn-primary':'icon-user':$smarty.const.NAVBAR_TITLE_CREATE_ACCOUNT}
+          {/if}
+        </div>
+      {/if}
+
+      {if $account_option=='both' or $account_option=='guest'}
+        <div class="divider normal"></div>
+        <div class="paddingbox large">
+          {$BUTTON_GUEST|btn:'btn btn-default btn-lg btn-block':'icon-angle-right icon-large':#title_guest#}
+        </div>
+      {/if}
+    </div>
+  </div>
+</div>
+{/strip}

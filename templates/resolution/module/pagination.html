@@ -1,0 +1,21 @@
+<div class="page_pagination clearfix">
+  <nav class="pull-right">
+    {$smarty.const.TEXT_RESULT_PAGE}&nbsp;
+    {if $DISPLAY_LINKS.pages|@count > 1}
+      <ul class="pagination">
+        {if isset($DISPLAY_LINKS.previous)}<li>{$DISPLAY_LINKS.previous|replace:'">':'"><i class="icon-long-arrow-left"></i> '}</li>{/if}
+        {if isset($DISPLAY_LINKS.previouspages)}<li>{$DISPLAY_LINKS.previouspages}</li>{/if}
+
+        {foreach key="keys" name="outer" item="pages" from=$DISPLAY_LINKS.pages}
+          <li class="{$keys|replace:'current':'active'}">{$pages}</li>
+        {/foreach}
+
+        {if isset($DISPLAY_LINKS.nextpages)}<li>{$DISPLAY_LINKS.nextpages}</li>{/if}
+        {if isset($DISPLAY_LINKS.next)}<li>{$DISPLAY_LINKS.next|replace:'</a>':' <i class="icon-long-arrow-right"></i></a>'}</li>{/if}
+      </ul>
+    {/if}
+  </nav>
+  <span class="text-muted">
+    {$DISPLAY_COUNT}
+  </span>
+</div>

@@ -1,0 +1,31 @@
+{config_load file="$language/lang_$language.conf" section="checkout_shipping"} 
+{config_load file="$language/lang_$language.conf" section="checkout_navigation"} 
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="page-header alc">
+    <h1>{#heading_shipping#}<br /> <small>{#desc_shipping#}</small></h1>
+  </div>
+  {if $error != ''}<div class="alert alert-danger">{$error}</div>{/if}
+  
+  {$FORM_ACTION}
+    <div class="row">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 paddingbox large borderright">
+        <h3>{#title_shipping#}:</h3>
+        <p><strong>{#text_shipping#}</strong></p>
+        <div class="divider normal trans"></div>
+        {$SHIPPING_BLOCK}
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 paddingbox large">
+        <h3>{#title_address#}:</h3>
+        {$BUTTON_ADDRESS|btn:'btn btn-default flr':'icon-pencil'}
+        {$ADDRESS_LABEL}
+      </div>
+    </div>
+    <div class="divider xlarge"></div>
+    {if $smarty.session.device != 'mobile'}
+      {btn btntype="btn btn-lg btn-primary" icontype="icon-chevron-right icon-large" value=button_goto_payment}
+    {else}
+      {btn btntype="btn btn-lg btn-block btn-primary" icontype="icon-chevron-right icon-large" value=button_goto_payment}
+    {/if}
+  {$FORM_END}
+</div>

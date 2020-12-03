@@ -1,0 +1,18 @@
+{if $options!=''}
+{strip}
+  {foreach name=aussen item=options_data from=$options}
+    <strong>{$options_data.NAME}:</strong>
+    <div class="divider small"></div>
+    
+    {foreach key=key_data name=key_data item=item_data from=$options_data.DATA}
+      <label class="radio">
+        <input type="radio" name="id[{$options_data.ID}]" value="{$item_data.ID}"{if $item_data.CHECKED == '1'} checked="checked"{/if} />
+        {$item_data.TEXT} {if $item_data.PRICE!=''}( {$item_data.PREFIX}{$item_data.PRICE} ){/if}
+      </label>
+
+      {if $smarty.foreach.key_data.last}<div class="divider normal trans"></div>{/if}
+    {/foreach}
+    
+  {/foreach}
+{/strip}
+{/if}

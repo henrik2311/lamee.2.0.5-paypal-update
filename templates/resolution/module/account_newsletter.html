@@ -1,0 +1,55 @@
+{config_load file="$language/lang_$language.conf" section="account_newsletter"}
+{config_load file="$language/lang_$language.conf" section="newsletter"}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="profile">
+    <div class="profile_header">
+      <div class="profile_name">{$smarty.session.customer_first_name} {$smarty.session.customer_last_name}</div>
+      <div class="profile_title"><span class="icon-chevron-right"></span> {#heading_title#}</div>
+    </div>
+    <div class="contents row">
+      <div class="profile_navi col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/accountnavi.html"}
+      </div>
+      <div class="profile_body col-lg-9 col-md-9 col-sm-9 col-xs-12 borderleft">
+        {$FORM_ACTION}
+          <h3>{#heading_title#}</h3>
+          {if $info_message}<div class="profile_content"><div class="alert alert-{if $message_class}{$message_class|replace:'error':'danger'|replace:'info':'success'}{else}warning{/if}">{$info_message|replace:'<p>':''|replace:'</p>':'<br />'}</div></div>{/if}
+          
+          <div class="profile_content form-horizontal">
+            {if $INPUT_CODE}
+              <div class="control-group">
+                <label class="control-label">{#text_sec_code#}</label>
+                <div class="controls">{$VVIMG}</div>
+              </div>
+
+              <div class="control-group">
+                <label class="control-label">{#text_sec_code#}</label>
+                <div class="controls">{$INPUT_CODE|replace:'type':'autocomplete="off" type'}</div>
+              </div>
+            {/if}
+
+            <div class="control-group">
+              <label class="control-label">{#text_email#}</label>
+              <div class="controls">{$INPUT_EMAIL}</div>
+            </div>
+            
+            <div class="control-group">
+              <label class="control-label">&nbsp;</label>
+              <div class="controls">
+                <label class="checkbox inline">{$CHECK_INP} {#text_in#}</label>
+                <label class="checkbox inline">{$CHECK_DEL} {#text_out#}</label>
+              </div>
+            </div>
+            
+            <div class="control-group">
+              <label class="control-label">&nbsp;</label>
+              <div class="controls">{btn btntype="btn btn-lg btn-success" icontype="icon-chevron-right" value=IMAGE_BUTTON_SEND}</div>
+            </div>
+          </div>
+          
+        {$FORM_END}
+      </div>
+    </div>
+  </div>
+</div>

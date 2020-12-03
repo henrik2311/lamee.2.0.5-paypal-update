@@ -1,0 +1,31 @@
+{if $FREE_SHIPPING}
+  <div class="alert alert-success clearfix">
+    <span class="icon-ok-sign icon-3x pull-left"></span>
+    <strong>{$FREE_SHIPPING_TITLE}</strong>
+    <p>{$FREE_SHIPPING_DESCRIPTION}</p>
+  </div>
+{else}
+  <div class="shipping_methods">
+    <table class="table method_selector">
+      {foreach name=aussen item=module_data from=$module_content}
+        
+        {if $module_data.error != ''}
+          <tr class="error">
+            <td colspan="2"><strong>{$module_data.module}</strong></td>
+            <td colspan="2">{$module_data.error}</td>
+          </tr>
+        {else}
+          {foreach name=aussen item=method_data from=$module_data.methods}
+            <tr class="selectable"{if $smarty.session.device != 'mobile'} data-toggle="tooltip"{/if} data-placement="top" title="{$method_data.title}">
+              <td width="5%" class="alc selector_select"{if $smarty.session.device == 'mobile'} style="display: none;"{/if}>{$method_data.radio_field}</td>
+              <td class="selector_name nowrap" width="1"><h5 class="nomrg"><strong>{$module_data.module}{if $smarty.session.device == 'mobile' && $method_data.price} ({$method_data.price} ){/if}</strong></h5></td>
+              {*<!-- <td class="selector_title"><small>{$method_data.title}</small></td> -->*}
+              {if $smarty.session.device != 'mobile'}<td class="alr nowrap selector_price" width="5%"><strong>{$method_data.price}</strong></td>{/if}
+            </tr>
+          {/foreach}
+        {/if}
+      {/foreach}
+    </table>
+  </div>
+  
+{/if}

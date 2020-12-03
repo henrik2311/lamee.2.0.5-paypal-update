@@ -1,0 +1,40 @@
+{config_load file="$language/lang_$language.conf" section="reviews"}
+{strip}
+{*<!-- _review-lists: pinfo -->*}
+{$BUTTON_WRITE|btn:'btn btn-default flr':'icon-pencil'}
+<h4>{#heading_reviews#}</h4>
+<div class="divider normal trans"></div>
+
+<div class="reviwslist" itemprop="review" itemscope itemtype="http://schema.org/Review">
+  {foreach name=aussen item=module_data from=$module_content} 
+    <div class="reviw clearfix">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="reviws_data">
+          <strong>{#text_author#}</strong><br class="hidden-xs" />
+          <span itemprop="author">{$module_data.AUTHOR}</span>
+          <div class="divider small trans"></div>
+          <strong>{#text_rating#}</strong><br class="hidden-xs" />
+          {$module_data.RATING}
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 reviws_text">
+        <strong>
+          <meta itemprop="datePublished" content="{$module_data.DATE|date_format:"%Y-%m-%d"}" />
+          {$module_data.DATE}
+        </strong>
+        <br /> 
+        <span itemprop="description">{$module_data.TEXT}</span>
+      </div>
+    </div>
+    <div class="divider normal trans"></div>
+  {/foreach}
+  
+  {*<!-- RICH SNIPPET RATING AVERAGE -->*}
+  {productData pid=$smarty.get.products_id function=getReviewsData assign=reviews_data}
+  <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+    <meta itemprop="worstRating" content = "1">
+    <meta itemprop="ratingValue" content = "{$reviews_data.average}">
+    <meta itemprop="bestRating" content = "5">
+  </div>
+</div>
+{/strip}

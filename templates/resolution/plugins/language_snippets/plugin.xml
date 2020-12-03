@@ -1,0 +1,418 @@
+<plugin>
+	<title>Language Snippets</title>
+	<description>Definiert Sprachkonstanten zur Verwendung im Template</description>
+	<version>1.0</version>
+	<status>true</status>
+	<id>language_snippets</id>
+	<required>1</required>
+	<copyright>Christian Riedl</copyright>
+	
+	<plugin_code>
+		<code>
+			<hook>hook_boxes_php_top</hook>
+			<phpcode>
+      	$data = $plugin->getPluginDbData( 'language_snippets' );
+      	$lang = $_SESSION['language_code'];
+        if ( is_array( $data ) ) {
+          foreach($data['plugin_language_snippets_data'] as $constant ) {
+            if ( $constant['language_code'] == $lang ) {
+              define( ( string )$constant['config_key'], $constant['language_content'] );
+              $snippet[$constant['config_key']] = $constant['language_content'];
+            }
+          }
+        }
+      </phpcode>
+		</code>
+		
+		<code>
+			<hook>global_tpl</hook>
+			<phpcode>
+      	global $snippet;
+        if ( is_array( $snippet ) )
+          $smarty->assign( 'txt',$snippet );
+      </phpcode>
+		</code>
+	</plugin_code> 
+
+  <installer>
+    
+    <registry>
+    	<status>1</status>
+    	<title>Language Snippets</title>
+    	<description>Definiert Sprachkonstanten zur Verwendung im Template</description>
+    	<version>1.0</version>
+    	<id>language_snippets</id>
+    	<required>1</required>
+    	<copyright>Christian Riedl</copyright>
+    </registry>
+    
+    <tables>
+      <data>
+        <table_config>
+          <unique_key>INT NOT NULL AUTO_INCREMENT</unique_key>
+          <config_key>VARCHAR(255) NOT NULL</config_key>
+          <config_group>VARCHAR(64)</config_group>
+          <config_notes>TEXT NOT NULL</config_notes>
+          <language_code>VARCHAR(32) NOT NULL</language_code>
+          <language_content>TEXT NOT NULL</language_content>
+          <primary>unique_key</primary>
+        </table_config>
+        
+        
+        <insert>
+          <config_key>text_link_startpage</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Link zur Startseite</config_notes>
+          <language_code>de</language_code>
+          <language_content>Startseite</language_content>
+        </insert>
+        <insert>
+          <config_key>text_link_startpage</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Link zur Startseite</config_notes>
+          <language_code>en</language_code>
+          <language_content>Startpage</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_link_go_to_startpage</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Link: zur Startseite gehen</config_notes>
+          <language_code>de</language_code>
+          <language_content>Zur Startseite</language_content>
+        </insert>
+        <insert>
+          <config_key>text_link_go_to_startpage</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Link: zur Startseite gehen</config_notes>
+          <language_code>en</language_code>
+          <language_content>Go to Startpage</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_link_contact</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Link; Kontakt</config_notes>
+          <language_code>de</language_code>
+          <language_content>Kontakt</language_content>
+        </insert>
+        <insert>
+          <config_key>text_link_contact</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Link; Kontakt</config_notes>
+          <language_code>en</language_code>
+          <language_content>Contact</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_qty</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für das Mengenfeld</config_notes>
+          <language_code>de</language_code>
+          <language_content>Menge eingeben</language_content>
+        </insert>
+        <insert>
+          <config_key>text_qty</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für das Mengenfeld</config_notes>
+          <language_code>en</language_code>
+          <language_content>Insert Quantity</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_print</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Button: Drucken</config_notes>
+          <language_code>de</language_code>
+          <language_content>drucken</language_content>
+        </insert>
+        <insert>
+          <config_key>text_print</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Button: Drucken</config_notes>
+          <language_code>en</language_code>
+          <language_content>print</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_details</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Button: Details</config_notes>
+          <language_code>de</language_code>
+          <language_content>Details</language_content>
+        </insert>
+        <insert>
+          <config_key>text_details</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Button: Details</config_notes>
+          <language_code>en</language_code>
+          <language_content>Details</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>heading_bestsellers</config_key>
+          <config_group>system</config_group>
+          <config_notes>Überschrift für das Modul: Bestsellers</config_notes>
+          <language_code>de</language_code>
+          <language_content>Unsere beliebtesten Produkte</language_content>
+        </insert>
+        <insert>
+          <config_key>heading_bestsellers</config_key>
+          <config_group>system</config_group>
+          <config_notes>Überschrift für das Modul: Bestsellers</config_notes>
+          <language_code>en</language_code>
+          <language_content>Our Popular Products</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>product_navigator_first</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>de</language_code>
+          <language_content>erstes Produkt</language_content>
+        </insert>
+        <insert>
+          <config_key>product_navigator_first</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>en</language_code>
+          <language_content>first Product</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>product_navigator_previous</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>de</language_code>
+          <language_content>vorheriges Produkt</language_content>
+        </insert>
+        <insert>
+          <config_key>product_navigator_previous</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>en</language_code>
+          <language_content>previous Product</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>product_navigator_next</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>de</language_code>
+          <language_content>nächstes Produkt</language_content>
+        </insert>
+        <insert>
+          <config_key>product_navigator_next</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>en</language_code>
+          <language_content>next Product</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>product_navigator_last</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>de</language_code>
+          <language_content>letztes produkt</language_content>
+        </insert>
+        <insert>
+          <config_key>product_navigator_last</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text für den Produkt-Navigator</config_notes>
+          <language_code>en</language_code>
+          <language_content>last Product</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>checkout_step_shipping</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Versandart</language_content>
+        </insert>
+        <insert>
+          <config_key>checkout_step_shipping</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Shipping Method</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>checkout_step_payment</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Zahlungsweise</language_content>
+        </insert>
+        <insert>
+          <config_key>checkout_step_payment</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Payment Method</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>checkout_step_confirm</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Bestätigen</language_content>
+        </insert>
+        <insert>
+          <config_key>checkout_step_confirm</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Confirm Order</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>checkout_step_success</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Fertig!</language_content>
+        </insert>
+        <insert>
+          <config_key>checkout_step_success</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung der Fortschrittsanzeige im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Success!</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_whats_next</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text auf der Bestätigungsseite im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Was möchten Sie als nächstes tun?</language_content>
+        </insert>
+        <insert>
+          <config_key>text_whats_next</config_key>
+          <config_group>system</config_group>
+          <config_notes>Text auf der Bestätigungsseite im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>What you want to do next?</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_print_order</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung des Buttons: Bestellung ausdrucken, auf der Bestätigungsseite im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Bestellung ausdrucken</language_content>
+        </insert>
+        <insert>
+          <config_key>text_print_order</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung des Buttons: Bestellung ausdrucken, auf der Bestätigungsseite im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Printout Order</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>button_goto_checkout</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Link: zur Kasse</config_notes>
+          <language_code>de</language_code>
+          <language_content>zur Kasse</language_content>
+        </insert>
+        <insert>
+          <config_key>button_goto_checkout</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Link: zur Kasse</config_notes>
+          <language_code>en</language_code>
+          <language_content>go to Checkout</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>button_goto_shipping</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Button: Weiter zur Versandart im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Weiter zur Versandart</language_content>
+        </insert>
+        <insert>
+          <config_key>button_goto_shipping</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Button: Weiter zur Versandart im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Go to Shipping-Type</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>button_goto_payment</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Button: Weiter zur Zahlungsweise im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Weiter zur Zahlungsweise</language_content>
+        </insert>
+        <insert>
+          <config_key>button_goto_payment</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Button: Weiter zur Zahlungsweise im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Go to Payment-Method</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>button_goto_confirmation</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Button: Weiter zur Bestätigungsseite im Kaufprozess</config_notes>
+          <language_code>de</language_code>
+          <language_content>Bestell-Daten überprüfen</language_content>
+        </insert>
+        <insert>
+          <config_key>button_goto_confirmation</config_key>
+          <config_group>system</config_group>
+          <config_notes>Beschriftung für den Button: Weiter zur Bestätigungsseite im Kaufprozess</config_notes>
+          <language_code>en</language_code>
+          <language_content>Confirm Order</language_content>
+        </insert>
+        
+        
+        <insert>
+          <config_key>text_back_to_last_page</config_key>
+          <config_group>system</config_group>
+          <config_notes>Verwendet u.a. für Button Beschriftungen</config_notes>
+          <language_code>de</language_code>
+          <language_content>zurück zur letzten Seite</language_content>
+        </insert>
+        <insert>
+          <config_key>text_back_to_last_page</config_key>
+          <config_group>system</config_group>
+          <config_notes>Verwendet u.a. für Button Beschriftungen</config_notes>
+          <language_code>en</language_code>
+          <language_content>back to previous Page</language_content>
+        </insert>
+        
+        
+      </data>
+      
+    </tables>
+  </installer>
+</plugin>

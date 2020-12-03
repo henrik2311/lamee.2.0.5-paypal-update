@@ -1,0 +1,79 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="shopping_cart"}
+{config_load file="$language/lang_$language.conf" section="account_checkout_express"}
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="page-header">
+      {if $smarty.session.device != 'mobile'}{$BUTTON_CHECKOUT|btn:'btn btn-lg btn-primary flr':'icon-ok':button_goto_checkout}{/if}
+      <h1>{#heading_cart#}</h1>
+    </div>
+
+    {if $error_max_prod}
+      <div class="alert alert-danger">
+        {foreach item=err_max_data from=$error_max_prod}
+          <p>{$err_max_data.E_MSG}</p>
+        {/foreach}
+      </div>
+    {/if}
+
+    {if $info_message != ''}<div class="alert alert-danger">{$info_message}</div>{/if}
+    {if $coupon_message != ''}<div class="alert alert-danger">{$coupon_message}</div>{/if}
+    {if $coupon_message_success != ''}<div class="alert alert-success">{$coupon_message_success}</div>{/if}
+
+    {if $cart_empty==true}
+      <div class="alert alert-warning"><h4 class="nomrg"><strong>{#text_empty#}</strong></h4></div>
+      {if $smarty.session.device != 'mobile'}
+        <p>{$BUTTON_CONTINUE|btn:'btn btn-default btn-lg':'icon-chevron-left':IMAGE_BUTTON_BACK}</p>
+      {else}
+        <p>{$BUTTON_CONTINUE|btn:'btn btn-default btn-block btn-lg':'icon-chevron-left':IMAGE_BUTTON_BACK}</p>
+      {/if}
+    {else}
+      {if $info_message_3 != ''}<div class="alert alert-danger">{$info_message_3}</div>{/if}
+
+      {$FORM_ACTION}{$HIDDEN_OPTIONS}
+          
+        {if $smarty.session.device != 'mobile'}
+          <table class="table table-bordered table-products">
+            {$MODULE_order_details}
+            <tr>
+              <td colspan="3" class="paddingbox large">
+                <div class="divider normal trans"></div>
+                {if $CONTINUE_LINK}<a class="btn btn-lg btn-default" href="{$CONTINUE_LINK}"><span class="icon-chevron-left"></span>{$smarty.const.IMAGE_BUTTON_CONTINUE_SHOPPING}</a>{/if}
+                {btn btntype="btn btn-default btn-lg" icontype="icon-refresh" value=IMAGE_BUTTON_UPDATE_CART}
+              </td>
+              <td colspan="3" class="product_subtotal paddingbox large" style="border-top: 0;">
+                <div class="divider normal trans"></div>
+                {if $BUTTON_PAYPAL!=''}
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><span class="fll button_paypal">{$BUTTON_PAYPAL}</span></div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">{$BUTTON_CHECKOUT|btn:'btn btn-lg btn-primary flr':'icon-ok':button_goto_checkout}</div>
+                  </div>
+                {else}
+                  {$BUTTON_CHECKOUT|btn:'btn btn-lg btn-primary flr':'icon-ok':button_goto_checkout}
+                {/if}
+
+                {if isset($BUTTON_CHECKOUT_EXPRESS)}
+                  <div class="divider large"></div>
+                  <a class="btn btn-default btn-block" href="{link page=FILENAME_CHECKOUT_SHIPPING parameters="express=on" connection="SSL"}"><i class="icon-chevron-right"></i>{#heading_checkout_express#}</a>
+                {/if}
+                {if isset($ACTIVATE_EXPRESS_LINK)}
+                  <div class="divider normal trans"></div>
+                  <a class="btn btn-link btn-sm btn-block" href="{$ACTIVATE_EXPRESS_LINK}"><i class="icon-chevron-right"></i>{#checkout_express_activate#}</a>
+                {/if}
+              </td>
+            </tr>
+          </table>
+        {else}
+          {$MODULE_order_details}
+            <div class="divider large"></div>
+            <p>{$BUTTON_CHECKOUT|btn:'btn btn-lg btn-block btn-primary flr':'icon-ok':button_goto_checkout}</p>
+          </div>
+        {/if}
+      {$FORM_END}
+
+      {$MODULE_gift_cart}
+      {if $MODULE_wishlist}{$MODULE_wishlist}{/if}
+      <div class="divider xlarge trans"></div>
+    {/if}
+  </div>
+{/strip}

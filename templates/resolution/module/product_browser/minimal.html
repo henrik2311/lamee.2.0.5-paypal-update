@@ -1,0 +1,50 @@
+{strip}
+{*<!-- Startseite > Neue Artikel -->*}
+{if $content.status}
+	{if $content.error}{$content.error}{/if}
+  
+  {if $content.heading}<h3>{$content.heading}</h3>{/if}
+  
+  {*<!-- list settings --------------->*}
+  {*<!-- possible values: 1,2,3,4,6 -->*}
+  {assign var=items_per_row value=$items_per_row}
+  
+  <div class="productlist product_grid_{$items_per_row}">
+    <div class="product_row equalize row">
+      {foreach name=aussen item=module_data from=$content.data}
+        
+        {*<!-- check for special-price -->*}
+        {productData pid=$module_data.PRODUCTS_ID function=isSpecial assign=is_special}
+
+        <div class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-4  col-xs-12 item">
+          <div class="thumbnail product{if $is_special && $smarty.const.product_listing_mark_specials} product_special{/if}">
+            
+            {if $is_special && $smarty.const.product_listing_mark_specials}<span class="badge badge-warning specials_marker">%</span>{/if}
+            
+            <div class="helper_equalize">
+              {if $module_data.PRODUCTS_IMAGE!=''}
+                <a class="product_image" href="{$module_data.PRODUCTS_LINK}">
+                  <img src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME|onlytext}" class="productImageBorder" />
+                </a>
+              {/if}
+              
+              <div class="caption product_text">
+                <h3 class="product_name"><a href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a></h3>
+              </div>
+            </div>
+            
+            <div class="clb"></div>
+            <div class="caption product_module">
+              <div class="product_price">{$module_data.PRODUCTS_PRICE}</div>
+              {if $module_data.PRODUCTS_VPE}<small class="product_vpe">{$module_data.PRODUCTS_VPE}</small>{/if}
+              <div class="product_tax_info">{$module_data.PRODUCTS_TAX_INFO}{$module_data.PRODUCTS_SHIPPING_LINK}</div>
+            </div>
+          </div>
+        </div>
+        {*if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}</div><div class="clb"></div><div class="product_row equalize row">{/if*}
+      {/foreach} 
+      <div class="clb"></div>
+    </div>
+  </div>
+{/if}
+{/strip}

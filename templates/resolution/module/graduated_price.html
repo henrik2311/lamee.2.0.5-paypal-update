@@ -1,0 +1,21 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="graduated_price"}
+
+<div class="panel panel-default">
+  <div class="panel-heading">{#heading_text#}:</div>
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <td class="nowrap" style="width:100px;"><strong>{#unit#}</strong></td>
+        <td><strong>{#pieces#} {#unit#}</strong></td>
+      </tr>
+    </thead>
+    {foreach name=aussen item=module_data from=$module_content} 
+      <tr> 
+        <td>{$module_data.QUANTITY}</td>
+        <td>{$module_data.PRICE}{if $module_data.VPE}&nbsp;&nbsp;<small>{$module_data.VPE}</small>{/if}</td>
+      </tr>
+    {/foreach}
+  </table>
+</div>
+{/strip}

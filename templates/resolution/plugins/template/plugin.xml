@@ -1,0 +1,172 @@
+<plugin>
+	<title>Template Settings</title>
+	<description>Wichtige Einstellungen für das Template selbst bearbeiten.</description>
+	<version>0.1</version>
+	<status>true</status>
+	<id>template</id>
+	<required>1</required>
+	<copyright>Christian Riedl</copyright>
+	
+	<plugin_code>
+	  
+		<code>
+			<hook>hook_boxes_php_top</hook>
+			<phpcode>
+        global $plugin;
+        
+        $tables = $plugin->getPluginDbData('template');
+        if (is_array($tables)) {
+          foreach($tables as $table=>$contents) {
+            foreach($contents as $content) {
+              define($content['config_key'],$content['config_value']);
+            }
+          }
+        }
+			</phpcode>
+		</code>
+	</plugin_code>
+  
+  
+  <installer>
+    
+    <registry>
+    	<status>1</status>
+    	<title>Template Settings</title>
+    	<description>Wichtige Einstellungen für das Template selbst bearbeiten.</description>
+    	<version>0.4</version>
+    	<id>template</id>
+    	<required>1</required>
+    	<copyright>Christian Riedl</copyright>
+    </registry>
+    
+    <tables>
+    
+      <data>
+        <table_config>
+          <unique_key>INT NOT NULL AUTO_INCREMENT</unique_key>
+          <config_key>VARCHAR(255) NOT NULL</config_key>
+          <config_value>VARCHAR(64) NOT NULL</config_value>
+          <config_group>VARCHAR(64) NOT NULL</config_group>
+          <primary>unique_key</primary>
+        </table_config>
+        
+        <insert>
+          <config_key>template_name</config_key>
+          <config_value>resolution_1</config_value>
+          <config_group>template_data</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>template_version</config_key>
+          <config_value>1.0</config_value>
+          <config_group>template_data</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>category_listing_categories_per_row</config_key>
+          <config_value>4</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>category_listing_show_image</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>product_listing_show_descripion</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>product_listing_products_per_row</config_key>
+          <config_value>3</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>product_listing_show_reviews</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>product_listing_show_deliverytime</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>product_listing_mark_specials</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>page_boxed</config_key>
+          <config_value>normal</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>page_background_color</config_key>
+          <config_value></config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>navtype</config_key>
+          <config_value>mega</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_newsletter</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_search</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_manufacturers</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_information</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_content</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_currencies</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+        <insert>
+          <config_key>show_box_languages</config_key>
+          <config_value>true</config_value>
+          <config_group>template</config_group>
+        </insert>
+        
+      </data>
+      
+    </tables>
+  </installer>
+  
+</plugin>

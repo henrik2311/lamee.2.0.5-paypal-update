@@ -1,0 +1,19 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="checkout_navigation"}
+{checkoutNavi}
+
+<ul id="checkout" class="nomrg">
+  {hook key=checkoutnavi_html_top}
+  
+  {foreach name=aussen item=data from=$steps}
+    {if $data.solved}
+      <li><a href="{$data.link}" class="{if $data.last} last{/if}"><span class="icon-ok"></span>{$data.text}</a></li>
+    {else}
+      <li><div class="{if $data.current} active{/if}{if $data.last} last{/if}">{$data.text}</div></li>
+    {/if}
+    {if !$data.last}<li class="divide"><span class="icon-angle-right"></span></li>{/if}
+  {/foreach}
+  
+  {hook key=checkoutnavi_html_top}
+</ul>
+{/strip}

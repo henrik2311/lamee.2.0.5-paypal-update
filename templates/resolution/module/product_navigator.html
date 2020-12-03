@@ -1,0 +1,9 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="product_navigator"}
+<ul class="pagination pagination-lg flr nomrg hidden-xs">
+  {if $FIRST!=''}<li><a href="{$FIRST}" data-toggle="tooltip" data-placement="top" title="{$smarty.const.product_navigator_first}">&lsaquo;&lsaquo;</a></li>{/if}
+  {if $PREVIOUS!=''}<li><a href="{$PREVIOUS}" data-toggle="tooltip" data-placement="top" title="{$smarty.const.product_navigator_previous}">&lsaquo;</a></li>{/if}
+  {if $NEXT!=''}<li><a href="{$NEXT}" data-toggle="tooltip" data-placement="top" title="{$smarty.const.product_navigator_next}">&rsaquo;</a></li>{/if}
+  {if $LAST!=''}<li><a href="{$LAST}" data-toggle="tooltip" data-placement="top" title="{$smarty.const.product_navigator_last}">&rsaquo;&rsaquo;</a></li>{/if}
+</ul>
+{/strip}

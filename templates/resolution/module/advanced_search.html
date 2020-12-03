@@ -1,0 +1,40 @@
+{config_load file="$language/lang_$language.conf" section="advanced_search"}
+
+<div class="col-lg-12 col-md-12">
+  <div class="page-header">
+    <a href="{$HELP_LINK}" title="Information" class="btn btn-default flr thickbox"><span class="icon-question-sign"></span>{#text_help#}</a>
+    <h1>{#heading_search#}</h1>
+  </div>
+  {if $error!=''}<div class="alert alert-danger">{$error}</div>{/if}
+  
+  {$FORM_ACTION}
+    <div class="alert alert-warning paddingbox xlarge">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 input-group large">
+          {$INPUT_KEYWORDS|placeholder:$smarty.config.title_keywords|replace:'type':'class="input-height-large form-control" type'}
+          <span class="input-group-btn">{btn btntype="btn btn-lg btn-primary" icontype="icon-search" value=IMAGE_BUTTON_SEARCH}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="well">
+      <div class="row">
+        <div class="col-lg-3 col-md-3 form-gloup">
+          <label>{#text_min#}</label> {$SELECT_PFROM}
+        </div>
+        <div class="col-lg-3 col-md-3 form-gloup">
+          <label>{#text_max#}</label> {$SELECT_PTO}
+        </div>
+        
+        <div class="col-lg-3 col-md-3 form-gloup">
+          <label>{#text_categories#}</label> {$SELECT_CATEGORIES}
+          <label class="checkbox">{$ENTRY_SUBCAT}{#text_subkategories#}</label>
+        </div>
+        <div class="col-lg-3 col-md-3 form-gloup">
+          <label>{#text_manufacturer#}</label>
+          {$SELECT_MANUFACTURERS}
+        </div>
+      </div>
+    </div>
+  {$FORM_END}
+</div>

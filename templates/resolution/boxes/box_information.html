@@ -1,0 +1,12 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+{config_load file="lang_`$language`.custom"}
+{if isset($BOX_CONTENT) && $BOX_CONTENT != ''}
+  {hook key=box_information_html_top}
+  <div id="box_information" class="box">
+    <h4>{#heading_infobox#}</h4>
+    <ul>{$BOX_CONTENT}</ul>
+  </div>
+  {hook key=box_information_html_bottom}
+{/if}
+{/strip}

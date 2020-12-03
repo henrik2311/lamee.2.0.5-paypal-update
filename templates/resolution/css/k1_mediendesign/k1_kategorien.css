@@ -1,0 +1,48 @@
+/**
+ * 	Kategorienbilder auf der Startseite
+ * 
+ */
+.k1_kategorien {
+		  width:20%;
+		  float:left;
+		  margin:2.5%;
+		  text-align:center;
+		  background-color:#FFFFFF;
+		  border:1px solid #CCCCCC;
+		  padding:1em 0 1em 0;
+}
+.k1_kategorien img {
+		  border:1px solid #EEEEEE;
+}
+.k1_kategorien a:link {
+	  background-color:#FFFFFF;
+}
+	.k1_kategorien a:hover {
+	  background-color:#EEEEEE;
+}
+		
+/**
+ * 	Katalog-Download
+ * 
+ */
+#content_katalogdownload {
+	  width:100%;
+		  border-top:1px dashed #CCCCCC;
+}
+#katalog_icons {
+	  width:30%;
+	  min-width:190px;
+		  border:1px solid #CCCCCC;
+	  margin:5%;
+	  text-align:center;
+	  float:left;
+}
+#katalog_icons img {
+	  border:1px solid #EEEEEE;
+	  margin:1em;
+}
+#katalog_hinweis {
+		  width:40%;
+	  margin:5%;
+	  float:left;
+}

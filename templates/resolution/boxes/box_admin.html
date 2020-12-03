@@ -1,0 +1,18 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+{hook key=box_admin_html_top}
+<div id="box_admin">
+  <div class="container">
+    {hook key=box_admin_html_links_before}
+    
+    {if $product_edit.link}<a class="btn btn-lg btn-primary pull-right" href="{$product_edit.link}"{$product_edit.linkparams}><span class="icon-white icon-cog"></span>{$product_edit.linktext}</a>{/if}
+    <a class="btn btn-lg btn-primary" href="{$admin_link}"><span class="icon-white icon-user"></span>{#heading_admin#}</a>
+    {hook key=box_admin_html_links_middle}
+    <a class="btn btn-lg btn-default" href="{$plugin_link}"><span class="icon-white icon-tasks"></span>Plugin-Manager{if $plugin_count > 0} <span class="badge badge-warning">{$plugin_count}</span>{/if}</a>
+    
+    {hook key=box_admin_html_links_after}
+  </div>
+</div>
+{if $plugin_count > 0}{/if}
+{hook key=box_admin_html_bottom}
+{/strip}

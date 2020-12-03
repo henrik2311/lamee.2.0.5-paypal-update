@@ -1,0 +1,16 @@
+{strip}
+{hook key=box_newsletter_html_top}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+<div id="box_newsletter">
+  <div class="container">
+    <h4 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">{#heading_guestnewsletter#}:</h4>
+    {$FORM_ACTION}
+      <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12 input-group large">
+        {$FIELD_EMAIL|placeholder:#text_email#}
+      	<span class="input-group-btn">{btn btntype="btn btn-lg btn-inverse btn-icon" icontype="icon-envelope"}</span>
+      </div>
+    {$FORM_END}
+  </div>
+</div>
+{hook key=box_newsletter_html_bottom}
+{/strip}

@@ -1,0 +1,20 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="products_media"} 
+
+<div class="media">
+  {foreach name=aussen item=module_data from=$module_content}
+    {if $smarty.foreach.aussen.iteration != 1}<div class="divider large"></div>{/if}
+    <div class="media-body">
+      <span class="flr">
+        {$module_data.BUTTON|btn:'btn btn-default flr':'icon-download'|replace:'&nbsp;':''}
+        {if $module_data.BUTTON}<small class="flr text-muted" style="margin-right: 15px; line-height: 34px;">{$module_data.FILESIZE}</small>{/if}
+      </span>
+      <h4>{$module_data.FILENAME}</h4>
+      <div class="divider normal trans"></div>
+      
+      {$module_data.DESCRIPTION}
+    </div>
+    <div class="clb"></div>
+  {/foreach}
+</div>
+{/strip}

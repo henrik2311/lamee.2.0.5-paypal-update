@@ -1,0 +1,107 @@
+{if $missing_languages}
+  <div class="alert alert-warning"><strong>Es werden Sprachen in Ihrem Shop verwendet die nicht im Template vorhanden sind!</strong> <a href="#" data-toggle="modal" data-target="#missing_languages">fehlende Sprachen Installieren</a></div>
+  
+  <div class="modal fade" id="missing_languages" tabindex="-1" role="dialog" aria-labelledby="missing_languages_label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="post" action="{$form_action}" class="form-horizontal">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Fehlende Sprachen Installieren</h4>
+          </div>
+          <div class="modal-body">
+            {foreach name=missing_lang item=missing_lang_data from=$missing_languages}
+              <div class="checkbox clearfix">
+                <label>
+                  <input type="checkbox" name="install_missing_lang[{$missing_lang_data.language_code}]" value="install">
+                  {if $missing_lang_data.language_icon!=''}{$missing_lang_data.language_icon} {/if}{$missing_lang_data.language_name}
+                </label>
+              </div>
+            {/foreach}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{$smarty.const.text_cancel}</button>
+            <button type="submit" class="btn btn-success"><span class="icon-ok"></span>fehlende Sprachen installieren</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{/if}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <a href="{$link_add_new_snippet}" class="btn btn-success pull-right" title="{$smarty.const.text_add_new_entry}"><span class="icon-plus"></span>{$smarty.const.button_new_snippet}</a>
+    <h3>{$smarty.const.text_plugin_heading}:</h3>
+  </div>
+  <div class="panel-body">
+    <script type="text/javascript">
+      $('#plugin_tabs a').click(function (e) {literal}{{/literal}
+        e.preventDefault()
+        $(this).tab('show')
+      {literal}}{/literal})
+    </script>
+    
+    <ul class="nav nav-tabs nav-justified" id="plugin_tabs">
+      <li class="active"><a href="#system-snippets" data-toggle="tab">{$smarty.const.text_system_snippets}</a></li>
+      <li><a href="#my-snippets" data-toggle="tab">{$smarty.const.text_my_snippets}</a></li>
+    </ul>
+    
+    <div class="tab-content tabcontents">
+    
+      <div class="tab-pane active" id="system-snippets">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th style="width: 35%;">{$smarty.const.text_key}</th>
+              <th style="width: auto;">{$smarty.const.text_template_tag}</th>
+              <th style="width: 11%;">{$smarty.const.text_edit}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {foreach name=snippets item=snippets_data from=$panel_data[$panel_language]}
+              {if $snippets_data.config_group != $smarty.const.system_snippet_group}
+                {assign var=has_own_items value=true}
+              {/if}
+              {if $snippets_data.config_group == $smarty.const.system_snippet_group}
+                <tr>
+                  <td nowrap="nowrap"><strong>{$snippets_data.config_key}</strong></td>
+                  <td><span class="label label-default label-lg">{literal}{$smarty.const.{/literal}{$snippets_data.config_key}{literal}}{/literal}</span></td>
+                  <td><a class="btn btn-sm btn-default" href="{$snippets_data.link_edit}" title="{$smarty.const.text_edit}"><span class="icon-cog"></span> {$smarty.const.text_edit}</a></td>
+                </tr>
+              {/if}
+            {/foreach}
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="tab-pane" id="my-snippets">
+        {if $has_own_items}
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th style="width: 35%;">{$smarty.const.text_key}</th>
+                <th style="width: auto;">{$smarty.const.text_template_tag}</th>
+                <th style="width: 11%;">{$smarty.const.text_edit}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {foreach name=snippets item=snippets_data from=$panel_data[$panel_language]}
+                {if $snippets_data.config_group != $smarty.const.system_snippet_group}
+                  <tr>
+                    <td nowrap="nowrap"><strong>{$snippets_data.config_key}</strong></td>
+                    <td><span class="label label-default label-lg">{literal}{$smarty.const.{/literal}{$snippets_data.config_key}{literal}}{/literal}</span></td>
+                    <td><a class="btn btn-sm btn-default" href="{$snippets_data.link_edit}" title="{$smarty.const.text_edit}"><span class="icon-cog"></span> {$smarty.const.text_edit}</a></td>
+                  </tr>
+                {/if}
+              {/foreach}
+            </tbody>
+          </table>
+        {else}
+          <div class="alert alert-warning nomrg"><strong>{$smarty.const.text_no_own_items}</strong></div>
+        {/if}
+      </div>
+      
+    </div>
+  </div>
+</div>

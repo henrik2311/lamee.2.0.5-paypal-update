@@ -1,0 +1,115 @@
+{*<!--[[[[[[[[[[[[[     ]]]]]]]]]]]]]]]]]]]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[::::::[[[[[[[[[[[[     ]]]]]]]]]]]]::::::]
+[:::::[                             ]:::::]
+[:::::[          SQUIDIO.DE         ]:::::]
+[:::::[      http://squidio.de      ]:::::]
+[:::::[                             ]:::::]
+[::::::[[[[[[[[[[[[     ]]]]]]]]]]]]::::::]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[[[[[[[[[[[[[[[[[[[     ]]]]]]]]]]]]]]-->*}
+
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>{$app_header}</head>
+  <body>
+    {*<!--  ------------------------  ---->*}
+    {*<!--  	N A V I G A T I O N 	  ---->*}
+    {*<!--  ------------------------  ---->*}
+    <header id="main_navigation" class="navbar navbar-fixed-top" role="banner">
+      <div class="container">
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav">
+            {hook key=plugin_manager_application_html_main_mavigation_first}
+            {foreach name=main_menu item=main_menu from=$main_menu_data}
+              <li{if $main_menu.current} class="active"{/if}><a href="{$main_menu.link}"><span class="{$main_menu.icon}"></span> {$main_menu.link_text}</a></li>
+            {/foreach}
+            {hook key=plugin_manager_application_html_main_mavigation_last}
+          </ul>
+          <ul class="nav navbar-nav navbar-right "><li><a href="{link page=FILENAME_DEFAULT}"><span class="icon-share-alt"></span> {$smarty.const.global_linktext_back_to_store}</a></li></ul>
+        </nav>
+      </div>
+    </header>
+    
+    {*<!--  ----------------  ---->*}
+    {*<!--  	T O P B A R  	  ---->*}
+    {*<!--  ----------------  ---->*}
+    {if $app_page == 'plugin_manager'}
+      {if $page_type == 'dashboard'}
+        {*<!-- STARTSEITE ---->*}
+        <section id="plugin_topbar" class="jumbotron topbar">
+          <div class="container">
+            <h1 class="plugin_name">{$smarty.const.page_dashbord_title}</h1>
+            <div class="divider trans"></div>
+            <p class="plugin_description text-muted">{$smarty.const.page_dashbord_description}</p>
+          </div>
+        </section>
+      {else}
+        {*<!-- PLUGIN-MANAGER ---->*}
+        <section id="plugin_topbar" class="well well-lg topbar">
+          <div class="container">
+            <div class="btn-group pull-left" style="margin-right: 15px;">
+              <button type="button" class="btn btn-default btn-icon dropdown-toggle" data-toggle="dropdown"><span class="icon-list"></span></button>
+              <ul class="dropdown-menu plugin-menu" role="menu">
+                {foreach name=menu item=menu_item from=$menu_data}
+                  <li{if $menu_item.id == $plugin_data.id} class="active"{/if}>
+                    <a href="{$menu_item.link}" title="{$menu_item.description|strip_tags}">{if $menu_item.id == $plugin_data.id} <span class="icon-angle-right"></span> {/if}{$menu_item.title}</a>
+                  </li>
+                {/foreach}
+                <li class="divider"></li>
+                <li><a href="{$link_plugin_overview}" title="{$smarty.const.text_back_to_overview}"><span class="icon-angle-left"></span>&nbsp;&nbsp;{$smarty.const.text_back_to_overview}</a></li>
+              </ul>
+            </div>
+            {if $plugin_data.status == '0'}
+              <span class="pull-right">
+                <a class="btn btn-danger" href="{$plugin_data.link_uninstall}" title="{$smarty.const.text_plugin_uninstall} &amp; {$smarty.const.text_delete_data}"><span class="icon-trash"></span> {$smarty.const.text_delete_data}</a>
+              </span>
+            {/if}
+            {if $plugin_data.installed}
+              <div class="pull-right" style="margin-right: 15px;">
+                <strong>{$smarty.const.text_plugin_status}:</strong>
+                <div class="btn-group" id="plugin_status_switch" style="margin-left: 5px;">
+                  <a class="btn btn-default{if $plugin_data.status == '1'} active{/if} plugin_status_switch_on" href="{$plugin_data.link_status_on}"><span>{$smarty.const.text_status_on}</span></a>
+                  <a class="btn btn-default{if $plugin_data.status == '0'} active{/if} plugin_status_switch_off" href="{$plugin_data.link_status_off}"><span>{$smarty.const.text_status_off}</span></a>
+                </div>
+              </div>
+            {/if}
+            <h1 class="plugin_name">{$plugin_data.title}</h1>
+          </div>
+        </section>
+        
+      {/if}
+      
+    {elseif $app_page == 'template_helpcenter'}
+      
+      {*<!-- HILFECENTER ---->*}
+      <section id="plugin_topbar" class="well well-lg topbar">
+        <div class="container">
+          <h1 class="plugin_name"><span class="icon-question-sign"></span> {$smarty.const.global_linktext_template_helpcenter}</h1>
+          {hook key=plugin_manager_application_html_helpcenter_head}
+        </div>
+      </section>
+      
+    {elseif $app_page == 'plugin_store'}
+      
+      {*<!-- HILFECENTER ---->*}
+      <section id="plugin_topbar" class="well well-lg topbar">
+        <div class="container">
+          <h1 class="plugin_name"><span class="icon-question-sign"></span> {$smarty.const.global_linktext_plugin_store}</h1>
+          {hook key=plugin_manager_application_html_plugin_store_head}
+        </div>
+      </section>
+      
+    {/if}
+    
+    {if $plugin_messages}{$plugin_messages}{/if}
+    
+    {$app_content}
+    {$app_footer}
+  </body>
+</html>

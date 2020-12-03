@@ -1,0 +1,25 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+{config_load file="lang_`$language`.custom"}
+
+{hook key=box_search_html_box_top}
+<div id="box_search">
+  {$FORM_ACTION}
+    {hook key=box_search_html_form_inside}
+    <div class="input-group large">
+      {hook key=box_search_html_keywords_before}
+      {$INPUT_SEARCH} 
+      {hook key=box_search_html_keywords_after}
+      <span class="input-group-btn">
+        {hook key=box_search_html_button_before}
+        {btn btntype="btn btn-lg btn-inverse btn-icon" icontype="icon-search"}
+        {hook key=box_search_html_button_after}
+      </span>
+    </div>
+  {$FORM_END}
+  <div class="suggestionsBox" id="suggestions" style="display:none;">
+    <div class="suggestionList" id="autoSuggestionsList">&nbsp;</div>
+  </div>
+</div>
+{hook key=box_search_html_box_bottom}
+{/strip}

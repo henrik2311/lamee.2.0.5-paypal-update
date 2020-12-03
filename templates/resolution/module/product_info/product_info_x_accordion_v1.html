@@ -1,0 +1,278 @@
+{strip}
+  {hook key=product_info_html_page_top}
+{config_load file="$language/lang_$language.conf" section="product_info"}
+{config_load file="$language/lang_$language.conf" section="product_navigator"}
+{config_load file="$language/lang_$language.conf" section="account_checkout_express"}
+  {productData pid=$PRODUCTS_ID function=isSpecial assign=is_special}
+
+  {if $PRODUCTS_DISCOUNT != ''}{$PRODUCTS_DISCOUNT}{/if}
+  {if $PRODUCTS_EXPIRES}{$PRODUCTS_EXPIRES}{/if}
+  {if $EXPRESS_LINK}
+    <div class="hrlightgrey"></div>{$EXPRESS_LINK}
+  {/if}
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix" itemscope itemtype="http://schema.org/Product">
+
+    {if $XTB_REDIRECT_USER_TO=='product'}
+      {*<!-- Included xs:booster -->*}
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 style="margin: 10px 0;">Sie haben die eBay Auktion gewonnen!</h4>
+        <p>Bitte w&auml;hlen Sie nun noch die gew&uuml;nschten Produkteigenschaften und legen Sie den Artikel danach in den Warenkorb, um mit der Zahlung fortzufahren und das Produkt versandfertig zu machen!</p>
+      </div>
+      {*<!--// Included xs:booster -->*}
+    {/if}
+
+    <header class="page-header clearfix">
+      {hook key=product_info_html_header_top}
+      {$PRODUCT_NAVIGATOR}
+      {if $PRODUCTS_FSK18=='true'}<img class="fll" src="{$tpl_path}img/fsk18.gif" alt="fsk18" style="cursor:default" />{/if}
+      <h1 itemprop="name">{$PRODUCTS_NAME}</h1>
+      {hook key=product_info_html_header_bottom}
+    </header>
+
+    {if $PRODUCTS_DATE_AVIABLE != ''}<div class="alert alert-info"><span class="icon-info-sign icon-large pull-left"></span>{$PRODUCTS_DATE_AVIABLE|replace:'color="#ff0000"':''}</div>{/if}
+
+    <div class="row product_info_tabs{if $is_special} product_special{/if}">
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 product_media">
+        {if $more_images|@count == 0}
+
+          {*<!-- _product: image -->*}
+          <div class="product_image">
+            {if $PRODUCTS_IMAGE}
+              <a title="{$PRODUCTS_NAME}" href="{$PRODUCTS_IMAGE|replace:"info_images":"popup_images"}" class="thickbox" rel="cbimages">
+                <img src="{$PRODUCTS_IMAGE}" alt="{$PRODUCTS_NAME|onlytext}" class="img-responsive" itemprop="image" />
+              </a>
+            {/if}
+          </div>
+
+        {else}
+
+          {*<!-- _product: image-slider -->*}
+          <div id="pimage_slider" class="product_image thumbnails slide carousel">
+            <div class="thumbnail product_image clearfix">
+              <div class="carousel-inner">
+                <div class="item active">
+                  <a class="thickbox" rel="cbimages" title="{$PRODUCTS_NAME}" href="{$PRODUCTS_IMAGE|replace:"info_images":"popup_images"}" itemprop="image">
+                    <img class="product_main_image img-responsive" src="{$PRODUCTS_IMAGE}" alt="{$PRODUCTS_NAME|onlytext}" />
+                  </a>
+                </div>
+                {foreach name=aussen item=more_images_data from=$more_images}
+                  <div class="item">
+                    <a class="thickbox" rel="cbimages" title="{$PRODUCTS_NAME}" href="{$more_images_data.PRODUCTS_IMAGE|replace:"info_images":"popup_images"}">
+                      <img class="product_main_image img-responsive" src="{$more_images_data.PRODUCTS_IMAGE}" alt="{$PRODUCTS_NAME|onlytext}" />
+                    </a>
+                  </div>
+                {/foreach}
+              </div>
+              {if $smarty.session.device != 'desktop'}
+                {*<!-- _product: image-slider > navigation arrows -->*}
+                <a class="carousel-control left" href="#pimage_slider" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#pimage_slider" data-slide="next">&rsaquo;</a>
+              {/if}
+            </div>
+            <div class="clb"></div>
+
+            {*<!-- thumbnail settings ---------->*}
+            {*<!-- possible values: 1,2,3,4,6 -->*}
+            {assign var=items_per_row value=4}
+            <ol class="carousel-indicators pimage_slider_gallery row hidden-md hidden-sm hidden-xs">
+              <li data-target="#pimage_slider" data-slide-to="0" class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-4 col-xs-4 thumbnail active">
+                <img class="_resize" src="{$PRODUCTS_IMAGE|replace:"info_images":"thumbnail_images"}" alt="{$PRODUCTS_NAME|onlytext}" />
+              </li>
+              {hook key=product_info_html_more_images_before}
+              {assign var=counter value=2}
+              {foreach name=indicators item=indicators_data from=$more_images}
+                {assign var=count value=$counter++}
+                <li data-target="#pimage_slider" data-slide-to="{$smarty.foreach.indicators.iteration}" class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-4 col-xs-4 thumbnail">
+                  <img class="_resize" src="{$indicators_data.PRODUCTS_IMAGE|replace:"info_images":"thumbnail_images"}" alt="{$PRODUCTS_NAME|onlytext}" />
+                </li>
+              {/foreach}
+              {hook key=product_info_html_more_images_after}
+            </ol>
+            <div class="alc text-muted hidden-lg"><span class="icon-angle-left"></span> <span class="icon-hand-up"></span> <span class="icon-angle-right"></span></div>
+          </div>
+
+        {/if}
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 product_data">
+        {$FORM_ACTION}
+        {hook key=product_info_html_product_data_top}
+        <div class="nowrap flr alr hidden-sm hidden-xs">
+          {productData pid=$PRODUCTS_ID function=getReviewsData assign=reviews_data}
+          {if $reviews_data.status_write && $MODULE_products_reviews != ''}
+            <div class="btn-group">
+              <a class="btn btn-small btn-default ext-tab scroll-to" href="#product_reviews" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" title="{#products_reviews#} ({$reviews_data.count})">
+                <meta itemprop="ratingValue" content="{$reviews_data.average}">
+                <meta itemprop="reviewCount" content="{$reviews_data.count}">
+                <span class="product_rating_stars" title="({$reviews_data.count})">
+                  <span class="product_rating_percentage" style="width: {productData pid=$PRODUCTS_ID function=getReviews}%;"></span>
+                </span>
+              </a>
+              <a class="btn btn-small btn-default btn-icon" href="{$reviews_data.write_link}" data-toggle="tooltip" data-placement="top" title="{$reviews_data.write_text}">
+                <span class="icon-pencil flr" style="margin: 1px;"></span>
+              </a>
+            </div>
+          {elseif $MODULE_products_reviews != ''}
+            <a class="btn btn-small btn-default flr ext-tab scroll-to" href="#product_reviews" title="{#products_reviews#} ({$reviews_data.count})">
+              <span class="product_rating_stars" title="({$reviews_data.count})">
+                <span class="product_rating_percentage" style="width: {productData pid=$PRODUCTS_ID function=getReviews}%;"></span>
+              </span>
+            </a>
+          {/if}
+        </div>
+        <div class="divider large hidden-lg hidden-md hidden-sm visible-xs"></div>
+
+        {hook key=product_info_html_price_section_before}
+        <section class="product_price_section" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <div class="product_price" itemprop="price">{$PRODUCTS_PRICE}</div>
+          <div class="product_tax_info">{$PRODUCTS_TAX_INFO}{if $PRODUCTS_SHIPPING_LINK}{$PRODUCTS_SHIPPING_LINK}{/if}</div>
+          {if $PRODUCTS_VPE}<div class="product_vpe">{$PRODUCTS_VPE}</div>{/if}
+        </section>
+
+        {if $MODULE_product_options !=''}
+          {hook key=product_info_html_options_section_before}
+          <section class="product_options_section">
+            {$MODULE_product_options}
+          </section>
+        {/if}
+
+        {hook key=product_info_html_buy_section_before}
+        <section class="product_buy_section">
+          {hook key=product_info_html_print_button_before}
+          {if $ADD_CART_BUTTON_PAYPAL}
+            <div class="paypal_express_button">{$ADD_CART_BUTTON_PAYPAL}</div>
+          {/if}
+          {hook key=product_info_html_buy_now_button_before}
+          {if $ADD_CART_BUTTON}
+            <div class="control-group input-group">
+              <span class="product_qty btn btn-lg btn-primary" data-toggle="tooltip" data-placement="top" title="{$smarty.const.text_qty}">{$ADD_QTY}</span>
+              {btn btntype="btn btn-lg btn-primary product_buynow_button" icontype="icon-shopping-cart icon-large" value=IMAGE_BUTTON_IN_CART}
+            </div>
+          {/if}
+
+          <div class="divider normal trans"></div>
+          {if isset($ADD_CART_BUTTON_EXPRESS)}
+            <button type="submit" formaction="{productData function=expressBuyFormaction params=""}" class="btn btn-primary">
+              <i class="icon-chevron-right"></i> {#heading_checkout_express#}
+            </button>&nbsp;&nbsp;
+          {elseif $ACTIVATE_EXPRESS_LINK}
+            <a class="btn btn-default" href="{$ACTIVATE_EXPRESS_LINK}">{#checkout_express_activate#}</a>&nbsp;&nbsp;
+          {/if}
+          {if $ADD_CART_BUTTON_WISHLIST_TEXT||$ADD_CART_BUTTON_WISHLIST}
+            <button type="submit" formaction="{productData function=wishlistFormaction}" class="btn btn-default">
+              <i class="icon-heart"></i> {$smarty.const.IMAGE_BUTTON_TO_WISHLIST}
+            </button>&nbsp;&nbsp;
+          {/if}
+          {*<!-- {if $ADD_CART_BUTTON_WISHLIST}{$ADD_CART_BUTTON_WISHLIST}{/if} -->*}
+          {$PRODUCTS_PRINT|btn:'btn btn-default hidden-phone flr':'icon-print':text_print}
+
+          {if $ADD_CART_BUTTON == '' && $PRODUCTS_GIFT_FORBIDDEN == 'true'}<p>{#products_gift_forbidden#}</p>{/if}
+
+          {if $PAYPAL_INSTALLMENT}
+            <br class="clb" />
+            {$PAYPAL_INSTALLMENT}
+          {/if}
+
+          {hook key=product_info_html_buy_now_button_after}
+        </section>
+
+        {hook key=product_info_html_price_graduated_section_before}
+        {if $MODULE_graduated_price !=''}<section class="product_graduated">{$MODULE_graduated_price}</section>{/if}
+
+        <div id="socialshareprivacy"></div>
+
+        {hook key=product_info_html_meta_section_before}
+        <div class="product_meta_section clearfix">
+          <div class="product_meta row">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+              <strong>{#text_shippingtime#}</strong>
+              {if $SHIPPING_IMAGE}<img src="{$SHIPPING_IMAGE}" alt="{$SHIPPING_NAME|onlytext}" />{/if} {$SHIPPING_NAME_LINK}
+            </div>
+            {if $PRODUCTS_MODEL}
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                <strong>{#model#}</strong> {$PRODUCTS_MODEL}
+              </div>
+            {/if}
+            {if $PRODUCTS_MODEL}<div class="clb hidden-lg hidden-md"></div><div class="divider normal trans hidden-lg hidden-md"></div>{/if}
+            {*hk 2018-01-24 Herstellerfilter per Pluginmanager ausblendbar machen: if $MANUFACTURER != ''*}
+            {if $MANUFACTURER != '' && $smarty.const.show_box_manufacturers!='false'}
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                <strong>{#manufacturer#}</strong>
+                {if $MANUFACTURER_LINK != ''}
+                  <a class="manufacturers_link text-center" href="{$MANUFACTURER_LINK}" data-toggle="tooltip" data-placement="top" title="{#manufacturer_more_of#} {$MANUFACTURER|onlytext}">
+                    {if $MANUFACTURER_IMAGE != ''}
+                      <img class="img-responsive" style="max-height: 30px; margin: 0 auto" src="{$MANUFACTURER_IMAGE}" alt="{$MANUFACTURER|onlytext}" />
+                    {else}
+                      {$MANUFACTURER}
+                    {/if}
+                  </a>
+                {else}
+                  {if $MANUFACTURER_IMAGE != ''}
+                    <img class="img-responsive" src="{$MANUFACTURER_IMAGE}" alt="{$MANUFACTURER|onlytext}" />
+                  {else}
+                    {$MANUFACTURER}
+                  {/if}
+                {/if}
+              </div>
+            {/if}
+            <div class="clb visible-lg visible-md"></div>
+            <div class="divider normal trans visible-lg visible-md"></div>
+            {if $PRODUCTS_WEIGHT}
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                <strong>{#weight#}</strong> {$PRODUCTS_WEIGHT} Kg.
+              </div>
+            {/if}
+            {if $PRODUCTS_EAN != ''}
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                <strong>{#ean#}</strong> {$PRODUCTS_EAN}
+              </div>
+            {/if}
+            {if $PRODUCTS_MANUFACTURERS_MODEL != ''}
+              <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                <strong>{#manufacturer_model#}</strong> {$PRODUCTS_MANUFACTURERS_MODEL}
+              </div>
+            {/if}
+
+          </div>
+        </div>
+
+        {$FORM_END}
+      </div>
+      <div class="clb"></div>
+
+      {hook key=product_info_html_tabs_section_before}
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 product_tabs_section">
+        <a id="#product_reviews"></a>
+        <ul class="nav nav-tabs" id="product_tabs">
+          {hook key=product_info_html_tabs_section_inside_tab_before}
+          {if $PRODUCTS_DESCRIPTION !=''}<li><a href="#product_description">{#description#}</a></li>{/if}
+          {if $MODULE_reverse_cross_selling != '' && $smarty.session.device != 'mobile'}<li><a href="#product_cross_selling">{#cross_selling#}</a></li>{/if}
+          {if $MODULE_also_purchased != ''}<li><a href="#product_also_purchased">{#also_purchased#}</a></li>{/if}
+          {if $MODULE_products_reviews != ''}<li><a href="#product_reviews">{#products_reviews#}</a></li>{/if}
+          {if $MODULE_product_tags != ''}<li><a href="#product_tags">{#products_tags#}</a></li>{/if}
+          {if $MODULE_products_media != ''}<li><a href="#product_media">{#products_media#}</a></li>{/if}
+          {if $MODULE_products_category != ''}<li><a href="#products_category">{#products_category#}</a></li>{/if}
+          {hook key=product_info_html_tabs_section_inside_tab_after}
+        </ul>
+        <div class="tabs_inner row">
+          <div class="tab-content {if $MODULE_cross_selling != ''}col-lg-9 col-md-8 col-sm-8 col-xs-12{else}col-lg-12 col-md-12 col-sm-12 col-xs-12{/if}">
+            {hook key=product_info_html_tabs_section_inside_tab_panes_before}
+            {if $PRODUCTS_DESCRIPTION !=''}<div class="tab-pane" id="product_description" itemprop="description">{$PRODUCTS_DESCRIPTION}</div>{/if}
+            {if $MODULE_products_media != ''}<div class="tab-pane" id="product_media">{$MODULE_products_media}</div>{/if}
+            {if $MODULE_products_reviews != ''}<div class="tab-pane" id="product_reviews">{$MODULE_products_reviews}</div>{/if}
+            {if $MODULE_product_tags != ''}<div class="tab-pane" id="product_tags">{$MODULE_product_tags}</div>{/if}
+            {if $MODULE_reverse_cross_selling != '' && $smarty.session.device != 'mobile'}<div class="tab-pane" id="product_cross_selling">{$MODULE_reverse_cross_selling}</div>{/if}
+            {if $MODULE_also_purchased != ''}<div class="tab-pane" id="product_also_purchased">{$MODULE_also_purchased}</div>{/if}
+            {if $MODULE_products_category != ''}<div class="tab-pane" id="products_category">{$MODULE_products_category}</div>{/if}
+            {hook key=product_info_html_tabs_section_inside_tab_panes_after}
+          </div>
+          {if $MODULE_cross_selling != '' && $smarty.session.device != 'mobile'}<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 hidden-xs product_cross_selling_container">{$MODULE_cross_selling}</div>{/if}
+        </div>
+      </div>
+    </div>
+    {hook key=product_info_html_products_added_section_before}
+    {if $PRODUCTS_ADDED != ''}<div class="divider normal trans"></div><p class="well text-muted alc">{$PRODUCTS_ADDED}</p>{/if}
+  </div>
+  {hook key=product_info_html_page_bottom}
+{/strip}

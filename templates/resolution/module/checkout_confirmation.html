@@ -1,0 +1,210 @@
+{config_load file="$language/lang_$language.conf" section="checkout_confirmation"} 
+{config_load file="$language/lang_$language.conf" section="checkout_navigation"}
+{config_load file="$language/lang_$language.conf" section="duty_info"} 
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="page-header alc">
+    <h1>{if #desc_confirmation#}{#desc_confirmation#}{else}{#title_confirmation#}{/if}</h1>
+  </div>
+
+  {if $IP_LOG=='true'}<p>{#text_ip#}&nbsp;<strong>{$CUSTOMERS_IP}</strong></p>{/if}
+  
+  {if $REVOCATION}<div class="alert alert-warning clearfix" style="line-height: 29px;"><span class="icon-info-sign icon-2x pull-left" style="margin-right: 20px;"></span> {$TEXT_AGB_CHECKOUT}</div>{/if}
+
+  <div class="paddingbox borderbox">
+    <i class="icon icon-info-sign icon-3x fll" style="margin: 1rem"></i>
+    <p>{#text_information#|sprintf:$HEADQUARTER}</p>
+  </div>
+  <div class="divider normal trans"></div>
+
+  <div class="row">
+    {if $DELIVERY_LABEL}
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="paddingbox borderbox" style="min-height: 200px">
+          {if isset($SHIPPING_ADDRESS_EDIT)}<a class="btn btn-icon btn-default flr" style="margin-top: 7px;" href="{$SHIPPING_ADDRESS_EDIT}" title="{#text_edit#}"><span class="icon-pencil"></span></a>{/if}
+          <h4 class="nomrg-top">{#text_shipping_address#}</h4>
+          <div class="divider normal trans"></div>
+          <p>{$DELIVERY_LABEL}</p>
+        </div>
+      </div>
+    {/if}
+
+    {if $BILLING_LABEL}
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="paddingbox borderbox" style="min-height: 200px">
+          {if isset($BILLING_ADDRESS_EDIT)}<a class="btn btn-icon btn-default flr" style="margin-top: 7px;" href="{$BILLING_ADDRESS_EDIT}" title="{#text_edit#}"><span class="icon-pencil"></span></a>{/if}
+          <h4 class="nomrg-top">{#text_payment_address#}</h4>
+          <div class="divider normal trans"></div>
+          <p>{$BILLING_LABEL}</p>
+        </div>
+      </div>
+    {/if}
+
+    {if $DELIVERY_LABEL && $BILLING_LABEL}<div class="clb"></div>{/if}
+
+    {if $SHIPPING_METHOD}
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="paddingbox borderbox" style="min-height: 200px">
+          {if isset($SHIPPING_EDIT)}<a class="btn btn-icon btn-default flr" style="margin-top: 7px;" href="{$SHIPPING_EDIT}" title="{#text_edit#}"><span class="icon-pencil"></span></a>{/if}
+          <h4 class="nomrg-top">{#text_shipping_method#}</h4>
+          <div class="divider normal trans"></div>
+          <p>{$SHIPPING_METHOD}</p>
+        </div>
+      </div>
+    {/if}
+
+    {if ! $DELIVERY_LABEL && $SHIPPING_METHOD}<div class="clb"></div>{/if}
+
+    {if $PAYMENT_METHOD}
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="paddingbox borderbox" style="min-height: 200px">
+          {if isset($PAYMENT_EDIT)}<a class="btn btn-icon btn-default flr" style="margin-top: 7px;" href="{$PAYMENT_EDIT}" title="{#text_edit#}"><span class="icon-pencil"></span></a>{/if}
+          <h4 class="nomrg-top">{#text_payment_method#}</h4>
+          <div class="divider normal trans"></div>
+          <p>{$PAYMENT_METHOD}</p>
+        </div>
+      </div>
+    {/if}
+  </div>
+
+  {if isset($EXPRESS)}
+    <div class="divider normal trans"></div>
+    <h4>{#heading_checkout_express#}</h4>
+    {if isset($success_message)}
+      <div class="alert alert-success">{$success_message}</div>
+    {else}
+      {$FORM_ACTION}
+      <div class="alert alert-info">
+        {btn btntype="btn btn-sm btn-info flr" icontype="icon-chevron-right" value=IMAGE_BUTTON_UPDATE params="style='margin-top: -5px'"}
+        <strong>{#text_express_checkout_information#}</strong>{if isset($EXPRESS_LINK)}<br />{$EXPRESS_LINK}{/if}
+      </div>
+      {$FORM_END}
+    {/if}
+  {/if}
+
+  {if $ORDER_COMMENTS!=''}
+    <div class="divider normal trans"></div>
+    {if isset($PAYMENT_EDIT)}<a class="btn btn-icon btn-default flr" style="margin-top: 7px;" href="{$PAYMENT_EDIT}" title="{#text_edit#}"><span class="icon-pencil"></span></a>{/if}
+    <h4 class="nomrg-top">{#text_comments#}</h4>
+    <div class="divider normal trans"></div>
+    <div class="well well-large clearfix"><span class="icon-quote-left icon-4x pull-left icon-muted" style="color: #ddd;"></span>{$ORDER_COMMENTS}</div>
+  {/if}
+    
+  {if $PAYMENT_INFORMATION!=''}
+    <div class="divider normal trans"></div>
+    <div class="paddingbox borderbox">
+      <h4 class="nomrg-top">{#text_payment_info#}</h4>
+      {foreach name=aussen item=data from=$PAYMENT_INFORMATION}
+        {$data.title|stripslashes} {if $data.field}{$data.field|stripslashes}{else}&nbsp;{/if}
+      {/foreach}
+    </div>
+  {/if}
+
+  <div class="divider normal trans"></div>
+  {if isset($PRODUCTS_EDIT)}<a class="btn btn-icon btn-default btn-sm flr" href="{$PRODUCTS_EDIT}" title="{#text_edit#}"><span class="icon-pencil"></span></a>{/if}
+  <h4>{#text_products#}</h4>
+  <div class="paddingbox borderbox">
+      <div class="divider normal trans"></div>
+      {if $PRODUCTS_ARRAY}
+        {if $smarty.session.device != 'mobile' && $smarty.session.device != 'tablet'}
+          <table class="table table-products">
+            <tr>
+              {if $smarty.const.CHECKOUT_SHOW_PRODUCTS_IMAGES == 'true'}<th class="hidden-phone">&nbsp;</th>{/if}
+              <th>{$smarty.const.HEADER_QTY}</th>
+              <th>{$smarty.const.HEADER_ARTICLE}</th>
+              <th>{$smarty.const.HEADER_SINGLE}</th>
+              <th>{$smarty.const.HEADER_TOTAL}</th>
+            </tr>
+            {foreach name=data item=module_data from=$PRODUCTS_ARRAY} 
+              <tr>
+                {if $smarty.const.CHECKOUT_SHOW_PRODUCTS_IMAGES == 'true'}
+                  <td width="100" class="product_image hidden-phone">{$module_data.image}</td>
+                {/if}
+                <td width="30" class="product_quantity">{$module_data.qty}</td>
+                <td class="product_name">
+                  <h4>{$module_data.link}</h4>
+                  {if $module_data.model}<p><small class="nowrap">{$smarty.const.HEADER_MODEL}{$module_data.model}</small></p>{/if}
+                  {if $module_data.shipping_time}<p><small class="nowrap">{$smarty.const.SHIPPING_TIME}{$module_data.shipping_time}</small></p>{/if}
+                  {if $module_data.order_description}<p><small>{$module_data.order_description}</small></p>{/if}
+                  {if $module_data.attributes!=''}
+                    <div class="well well-small inline">
+                      {foreach key=a_data item=attrib_data from=$module_data.attributes}
+                        {if $attrib_data.value != ''}
+                          <div class="row nomrg">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 product_attribute"><small><strong>{$attrib_data.option}:</strong></small></div>
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 product_attribute_value"><small>{$attrib_data.value}</small></div>
+                          </div>
+                        {/if}
+                      {/foreach} 
+                    </div>
+                  {/if}
+                </td>
+                <td width="15%" class="product_singleprice">{$module_data.price_formated}</td>
+                <td width="15%" class="product_totalprice">{$module_data.final_price_formated}{if $ORDER_TAX_GROUPS > 1}<br />{$data.tax} %{/if}</td>
+              </tr>
+            {/foreach}
+            {if $TOTAL_BLOCK}
+              <tr>
+                <td colspan="2" class="product_subtotal">&nbsp;</td>
+                <td colspan="3" class="product_subtotal alr paddingbox large" style="border-left: 0;">
+                  <table class="table table-clean">{$TOTAL_BLOCK}</table>
+                </td>
+              </tr>
+            {/if}
+          </table>
+        {else}
+          {foreach name=data item=module_data from=$PRODUCTS_ARRAY}
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <span class="fll" style="width: 70px;">{$module_data.image|replace:'class="':'class="img-responsive '}</span>
+                <h3 class="nomrg text-primary"> <strong>{$module_data.qty} &times; {$module_data.link|replace:'class="':'class="text-primary '}</strong></h3>
+                {if $module_data.order_description}<p><small>{$module_data.order_description}</small></p>{/if}
+                <div class="clb"></div>
+              </div>
+              <div class="panel-footer">
+                {if $module_data.attributes!=''}
+                  {foreach key=a_data item=attrib_data from=$module_data.attributes}
+                    {if $attrib_data.value != ''}
+                      <strong class="col-xs-6">{$attrib_data.option}:</strong> {$attrib_data.value}<br />
+                    {/if}
+                  {/foreach}
+                  <div class="divider normal"></div>
+                {/if}
+                {if $module_data.shipping_time}<strong class="col-xs-6">{$smarty.const.SHIPPING_TIME}</strong> {$module_data.shipping_time}<div class="divider normal"></div>{/if}
+                <strong class="col-xs-6">{$smarty.const.HEADER_SINGLE}</strong> {$module_data.price_formated}
+                <div class="divider normal"></div>
+                <strong class="col-xs-6">{$smarty.const.HEADER_TOTAL}</strong> {$module_data.final_price_formated}{if $ORDER_TAX_GROUPS > 1}<br />{$data.tax} %{/if}
+              </div>
+            </div>
+          {/foreach}
+          {if $TOTAL_BLOCK}
+            <div class="divider large"></div>
+            <div class="well clearfix alr nomrg total_block"><table class="table">{$TOTAL_BLOCK}</table></div>
+          {/if}
+        {/if}
+          
+        {if "MODULE_PAYMENT_COD_TEXT_INFO"|defined}
+          <div class="well well-sm"><span class="icon-info-sign icon-2x pull-left"></span> {$smarty.const.MODULE_PAYMENT_COD_TEXT_INFO}<div class="clb"></div></div>
+        {/if}
+      {elseif $PRODUCTS_BLOCK}
+        {$PRODUCTS_BLOCK}
+        {if $TOTAL_BLOCK}<table align="right">{$TOTAL_BLOCK}</table>{/if}
+      {/if}
+      
+      {if $DELIVERY_DUTY_INFO == true}
+        <div class="divider xlarge"></div>
+        <div class="alert alert-info">{#text_duty_info#}</div>
+        <div class="divider xlarge"></div>
+      {/if}
+    </div>
+
+    <div class="divider normal trans"></div>
+    {$CHECKOUT_FORM}
+    {if $MODULE_BUTTONS!=''}{$MODULE_BUTTONS}{/if}
+    {if $smarty.session.device != 'mobile'}
+      {btn btntype="btn btn-lg btn-block btn-primary" icontype="icon-chevron-right" value=IMAGE_BUTTON_CONFIRM_ORDER}
+    {else}
+      {btn btntype="btn btn-xlarge btn-block btn-primary" icontype="icon-chevron-right" value=IMAGE_BUTTON_CONFIRM_ORDER}
+    {/if}
+  </form>
+</div>

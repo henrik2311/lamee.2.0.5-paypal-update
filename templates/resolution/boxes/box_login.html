@@ -1,0 +1,36 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="index"}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+<div id="box_login" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="loginbox_label" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon-remove"></span></button>
+        <h4 class="modal-title" id="loginbox_label">{#heading_login#}</h4>
+      </div>
+      <div class="modal-body">
+      	{$FORM_ACTION}
+          {hook key=box_login_html_top}
+          <div role="form">
+            <div class="form-group">
+              <label class="control-label" for="email_address">{#text_email#}:</label>
+              <div class="controls">{$FIELD_EMAIL|placeholder:#text_email#}</div>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="password">{#text_pwd#}:</label>
+              <div class="controls">{$FIELD_PWD|placeholder:#text_pwd#}</div>
+            </div>
+            <div class="form-group">
+              <div class="controls">
+                {btn btntype="btn-lg btn-block btn-primary" icontype="icon-lock" value=#link_login#}
+              </div>
+            </div>        
+          </div>
+          {hook key=box_login_html_bottom}
+       {$FORM_END}
+      </div>
+      <div class="modal-footer"><a class="btn btn-default btn-block pull-right" href="{$LINK_LOST_PASSWORD}">{#text_password_forgotten#}</a></div>
+    </div>
+  </div>
+</div>
+{/strip}

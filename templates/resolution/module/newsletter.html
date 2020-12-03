@@ -1,0 +1,54 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="newsletter"}
+
+{if $smarty.get.type == 'account'}
+  {*<!-- _account: newsletter subscription -->*}
+  {$FORM_ACTION|replace:'action=process':'action=process&type=account'}
+    {include file="`$smarty.const.CURRENT_TEMPLATE`/module/account_newsletter.html"}
+  {$FORM_END}
+{else}
+  {$FORM_ACTION}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="page-header"><h1>{#heading_title#}</h1></div>
+      {if $info_message!=''}<div class="alert alert-danger">{$info_message}</div>{/if}
+      
+      <div role="form">
+        
+        <div class="well clearfix">
+          <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <label class="control-label">{#text_email#}</label>
+            <div class="controls">{$INPUT_EMAIL}</div>
+          </div>
+          <div class="clb"></div>
+          {if $INPUT_CODE}
+            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <label class="control-label">&nbsp;</label>
+              <div class="controls">{$VVIMG}</div>
+            </div>
+            <div class="clb"></div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <label class="control-label">{#text_sec_code#}</label>
+              <div class="controls">{$INPUT_CODE}</div>
+            </div>
+            <div class="clb"></div>
+          {/if}
+          <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="radio">
+              <label>{$CHECK_INP} {#text_in#}</label>
+            </div>
+            <div class="radio">
+              <label>{$CHECK_DEL} {#text_out#}</label>
+            </div>
+          </div>
+            
+          <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label class="control-label">&nbsp;</label>
+            <div class="controls">{btn btntype="btn btn-lg btn-success" icontype="icon-chevron-right" value=IMAGE_BUTTON_SEND}</div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  {$FORM_END}
+{/if}
+{/strip}

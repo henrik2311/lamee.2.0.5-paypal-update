@@ -1,0 +1,80 @@
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#cboxWrapper {max-width:none;}
+#cboxOverlay{position:fixed; width:100%; height:100%;}
+#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
+#cboxContent{position:relative;}
+#cboxLoadedContent{overflow:auto; -webkit-overflow-scrolling: touch;}
+#cboxTitle{margin:0;}
+#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
+#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
+.cboxPhoto{float:left; margin:auto; border:0; display:block; max-width:none; -ms-interpolation-mode:bicubic;}
+.cboxIframe {width:100%; height:100%; display:block; border:0; padding:0; margin:0;}
+#colorbox, #cboxContent, #cboxLoadedContent{box-sizing:content-box; -moz-box-sizing:content-box; -webkit-box-sizing:content-box;}
+#cboxOverlay { background: rgba(0,0,0,0.25); }
+#colorbox { outline: 0; }
+#cboxContent{background:#ebedef; overflow:hidden;}
+.cboxIframe{background:#fff;}
+#cboxError{padding:50px; border:1px solid #ddd;}
+#cboxLoadedContent{margin-bottom:50px;background:#fff;border-bottom:10px solid #fff;}
+/* #cboxTitle{position:absolute; bottom:7px; left:0; text-align:center; width:100%; color:#444444; } */
+#cboxTitle {font-family: 'Lato', Arial, sans-serif; bottom: 0; height: 50px;line-height: 50px; left: 0; padding: 0 40%; position: absolute; text-align: center; width: 100%;}
+#cboxCurrent{position:absolute; bottom:15px; left:115px; color:#444444; font-family: 'fjallaoneregular', sans-serif; font-size:11px; }
+#cboxLoadingOverlay{background:#fff}
+#cboxLoadingGraphic{background:url(images/loading.gif) no-repeat center center;}
+#cboxPrevious, #cboxNext, #cboxSlideshow, #cboxClose {border:0; padding:0; margin:0; overflow:visible; width:auto; background:none; }
+#cboxPrevious:active, #cboxNext:active, #cboxSlideshow:active, #cboxClose:active {outline:0;}
+#cboxSlideshow{position:absolute; bottom:4px; right:30px; color: #0092ef;}
+
+#cboxPrevious,
+#cboxNext,
+#cboxClose {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    display: inline;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    line-height: normal;
+    vertical-align: baseline;
+    background-image: none;
+    background-position: 0% 0%;
+    background-repeat: repeat;
+    margin-top: 0;
+    outline: 0;
+}
+#cboxNext {
+    left: 50px;
+}
+#cboxClose {
+    right: 0;
+    left: auto;
+}
+#cboxPrevious:hover,
+#cboxNext:hover,
+#cboxClose:hover {
+    background: #1abc9c;
+    color: #fff;
+}
+#cboxPrevious:before,
+#cboxNext:before,
+#cboxClose:before {
+    font-family: 'FontAwesome';
+    width: 100%;
+    height: 100%;
+}
+#cboxPrevious:before { content: "\f053"; }
+#cboxNext:before { content: "\f054"; }
+#cboxClose:before { font-family: "Open Sans", sans-serif; font-weight: bold; font-size: 20px; content: "\00D7"; }
+
+.cboxIE #cboxTopLeft,
+.cboxIE #cboxTopCenter,
+.cboxIE #cboxTopRight,
+.cboxIE #cboxBottomLeft,
+.cboxIE #cboxBottomCenter,
+.cboxIE #cboxBottomRight,
+.cboxIE #cboxMiddleLeft,
+.cboxIE #cboxMiddleRight {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);
+}

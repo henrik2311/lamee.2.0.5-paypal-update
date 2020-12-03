@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+  <head>{$app_header}</head>
+  <body>
+    {$app_content}
+    
+    {$app_footer}
+  
+    
+    <header id="main_navigation" class="navbar navbar-fixed-top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="{link page='plugin_manager.php'}" class="navbar-brand">squidio.de | Plugin-Manager</a>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+          <ul class="nav navbar-nav" style="margin-left: 30px;">
+            <li {if $smarty.get.plg} class="active"{/if}><a href="#"><span class="icon-chevron-right"></span>&nbsp;&nbsp;Plugin-Manager</a></li>
+            <li><a href="#"><span class="icon-question-sign"></span>&nbsp;&nbsp;Template-Hilfe</a></li>
+            <li><a href="#"><span class="icon-shopping-cart"></span>&nbsp;&nbsp;Plugin-Shop</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right"><li><a href="{link page=FILENAME_DEFAULT}"><span class="icon-chevron-left"></span>&nbsp;&nbsp;Zur&uuml;ck zum Shop</a></li></ul>
+        </nav>
+      </div>
+    </header>
+    
+    {if $page_type == 'dashboard'}
+      <section id="banner_section" class="jumbotron">
+        <div class="container">
+          <h1>Plugin-Manager</h1>
+        </div>
+      </section>
+    {else}
+      <section id="plugin_topbar" class="well well-lg">
+        <div class="container">
+          <h1 class="pull-left plugin_name">{$plugin_data.title}{*<!-- <br /><small>{$plugin_data.description} || {$page_type}</small> -->*}</h1>
+          {if $plugin_data.status == '0'}
+            <span class="pull-right">
+              <a class="btn btn-danger" href="{$plugin_data.link_uninstall}" title="Deinstallieren">Daten L&ouml;schen</a>
+            </span>
+          {/if}
+          {if $plugin_data.installed}
+            <div class="pull-right">
+              <strong>Plugin-Status:</strong>
+              <div class="btn-group" id="plugin_status_switch" style="margin-right: 15px; margin-left: 5px;">
+                <a class="btn btn-default{if $plugin_data.status == '1'} active{/if} plugin_status_switch_on" href="{$plugin_data.link_status_on}"><span>An</span></a>
+                <a class="btn btn-default{if $plugin_data.status == '0'} active{/if} plugin_status_switch_off" href="{$plugin_data.link_status_off}"><span>Aus</span></a>
+              </div>
+            </div>
+          {/if}
+        </div>
+      </section>
+    {/if}
+    
+    
+    {if $page_type == 'dashboard'}
+      <section id="plugin_store_section" class="clearfix">
+        <div class="container">
+          <H2>BELIEBTE PLUGINS AUS UNSEREM STORE</H2>
+          <div class="divider divider-large divider-trans"></div>
+          
+          <div class="row">
+            <div class="col-md-3">
+              <div class="app thumbnail alc">
+                <span class="icon-info-sign icon-5x"></span>
+                <div class="divider"></div>
+                col-md-2
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="app thumbnail alc">
+                <span class="icon-info-sign icon-5x"></span>
+                <div class="divider"></div>
+                col-md-2
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="app thumbnail alc">
+                <span class="icon-info-sign icon-5x"></span>
+                <div class="divider"></div>
+                col-md-2
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="app thumbnail alc">
+                <span class="icon-info-sign icon-5x"></span>
+                <div class="divider"></div>
+                col-md-2
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    {/if}
+    <section id="main_section" class="clearfix">
+      <div class="container">
+        <div class="row">
+          <div id="sidebar" class="col-md-3 clearfix">
+            <div class="hidden-print" role="complementary" id="plugin_navi">
+              <ul class="nav">
+                {foreach name=menu item=menu_data from=$menu_data}
+                  <li{if $menu_data.active} class="active"{/if}>
+                    <a href="{$menu_data.link}" title="{$menu_data.description}">
+                      {*if $plugin.installed}
+                        <span class="icon-chevron-right"></span>
+                      {else}
+                        <span class="icon-chevron-right"></span>
+                      {/if*}
+                      {$menu_data.title}
+                    </a>
+                  </li>
+                {/foreach}
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-9">
+            {if $page_type == 'dashboard'}
+            
+              {*<!--  ------------------------  ---->*}
+              {*<!--  	  D A S H B O A R D 	  ---->*}
+              {*<!--  ------------------------  ---->*}
+              
+              
+              <!-- start page title -->
+              {if $plugin_messages}
+                {if $plugin_messages.success}
+                  <div class="alert alert-success">{$plugin_messages.success} <a href="#" class="close tips" original-title="Schlie&szlig;en">Schlie&szlig;en</a></div>
+                {/if}
+                {if $plugin_messages.info}
+                  <div class="alert alert-info">{$plugin_messages.info} <a href="#" class="close tips" original-title="Schlie&szlig;en">Schlie&szlig;en</a></div>
+                {/if}
+                {if $plugin_messages.error}
+                  <div class="alert alert-danger">{$plugin_messages.error} <a href="#" class="close tips" original-title="Schlie&szlig;en">Schlie&szlig;en</a></div>
+                {/if}
+              {/if}
+              
+              <h3>Vorhandene Plugins:</h3>
+              <div class="divider"></div>
+              
+              <dir class="well">
+                <div class="borderbox">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Beschreibung</th>
+                        <th>Plugin-ID</th>
+                        <th align="right">Aktionen</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {foreach name=plugins item=plugin from=$plugin_data}
+                      <tr class="{if $plugin_data.installed}success{/if}">
+                        <td nowrap="nowrap"><strong>{$plugin.title|escape:'htmlall'}</strong></td>
+                        <td><small>{$plugin.description|escape:'htmlall'}</small></td>
+                        <td>{$plugin.id}</td>
+                        <td align="right">
+                          {if $plugin.installed}
+                            <a class="btn btn-danger btn-sm" href="{$plugin.link_uninstall}" title="Deinstallieren"><span class="icon-trash"></span>&nbsp;&nbsp;deinstallieren!</a>
+                          {else}
+                            <a class="btn btn-success btn-sm" href="{$plugin.link_install}"><span class="icon-cog"></span>&nbsp;&nbsp;Installieren</a>
+                          {/if}
+                        </td>
+                      </tr>
+                    {/foreach}
+                    </tbody>
+                  </table>
+                </dir>
+              </dir>
+              <div class="clear"></div>
+              
+              
+            {elseif $page_type == 'install'}
+              
+              {*<!--  ------------------------  ---->*}
+              {*<!--  	     I N S T A L L  	  ---->*}
+              {*<!--  ------------------------  ---->*}
+                
+              
+              <!-- start page title -->
+              <h3>Plugin: &quot;{$plugin_data.title|escape:'htmlall'}&quot; installieren!</h3>
+              <div class="divider"></div>
+              {if $plugin_messages}
+                {if $plugin_messages.success}
+                  <div class="alert alert-success">{$plugin_messages.success} <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a></div>
+                {/if}
+                {if $plugin_messages.info}
+                  <div class="alert alert-info">{$plugin_messages.info} <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a></div>
+                {/if}
+                {if $plugin_messages.error}
+                  <div class="alert alert-danger">{$plugin_messages.error} <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a></div>
+                {/if}
+              {/if}
+              <!-- end page title --> 
+              
+              <!-- START CONTENT -->
+              <div class="well">
+                <div class="borderbox">
+                  <table class="table">
+                    <tbody>
+                      <tr> <td style="width: 300px;">Plugin-Name:</td> <td><strong>{$plugin_data.title|escape:'htmlall'}</strong></td> </tr>
+                      <tr> <td>Plugin-Beschreibung:</td> <td><strong>{$plugin_data.description|escape:'htmlall'}</strong></td> </tr>
+                      <tr> <td>Plugin-Version:</td> <td><strong>{$plugin_data.version}</strong></td> </tr>
+                      <tr> <td>Plugin-Id:</td> <td><strong>{$plugin_data.id}</strong></td> </tr>
+                      <tr> <td>Plugin-Copyright:</td> <td><strong>{$plugin_data.copyright}</strong></td> </tr>
+                    </tbody>
+                  </table>
+                  <div class="divider divider-large"></div>
+                  <a href="{$plugin_data.link_install}" class="btn btn-success install-button button-left" title="Plugin {$plugin_data.title} Installieren"><span class="icon-refresh"></span>&nbsp;&nbsp;Installieren</a>
+                </div>
+              </div>
+            {elseif $page_type == 'panel'}
+              {hook key=plugin_manager_index_html_panel_top}
+              
+              {*<!--  ------------------------  ---->*}
+              {*<!--  	      P A N E L     	  ---->*}
+              {*<!--  ------------------------  ---->*}
+              
+                
+                <!-- START CONTENT -->
+                <div class="content">
+                  {if $plugin_messages}
+                    {if $plugin_messages.success}
+                      <div class="alert alert-success">{$plugin_messages.success} <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a></div>
+                    {/if}
+                    {if $plugin_messages.info}
+                      <div class="alert alert-info">{$plugin_messages.info} <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a></div>
+                    {/if}
+                    {if $plugin_messages.error}
+                      <div class="alert alert-danger">{$plugin_messages.error} <a class="close" data-dismiss="alert" href="#" aria-hidden="true">&times;</a></div>
+                    {/if}
+                  {/if}
+                  
+                  {$panel}
+                  <div class="clear"></div>
+                </div>
+                 
+                  
+              {hook key=plugin_manager_index_html_panel_bottom}
+            {/if}
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    {hook key=plugin_manager_index_html_bottom}
+    
+    <script src="{$ws}editor/editor_code.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="{$ws}editor/editor_config.js"></script>
+    <script src="{$ws}javascript.js"></script>
+  </body>
+</html>

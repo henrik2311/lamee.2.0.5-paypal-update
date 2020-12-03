@@ -1,0 +1,27 @@
+{if $options != ''}
+{strip}
+  {foreach name=outer item=options_data from=$options}
+    <table class="table table-striped">
+      <caption class="all"><strong>{$options_data.NAME}:</strong><div class="divider trans normal"></div></caption>
+      <tbody>
+        {foreach name=inner key=key_data item=item_data from=$options_data.DATA}
+          <tr>
+            <td width="30">
+              <input type="radio" name="id[{$options_data.ID}]" value="{$item_data.ID}" id="rdb_{$item_data.ID}"{if $item_data.CHECKED == '1'} checked="checked"{/if} />
+            </td>
+            <td class="nowrap"><label for="{$item_data.ID}">{$item_data.TEXT}</label></td>
+            {if $item_data.MODEL}<td class="nowrap" width="150"><label for="{$item_data.ID}">ArtNr.: {$item_data.MODEL}</label></td>{/if}
+            {if $item_data.FULL_PRICE || $item_data.PRICE}
+              <td class="alr nowrap" width="1">
+                <label for="{$item_data.ID}">
+                  <strong>{if $item_data.FULL_PRICE}{$item_data.FULL_PRICE}{elseif $item_data.PRICE}{$item_data.PREFIX}{$item_data.PRICE}{/if}</strong>
+                </label>
+              </td>
+            {/if}
+          </tr>
+        {/foreach}
+      </tbody>
+    </table>
+  {/foreach}
+{/strip}
+{/if}

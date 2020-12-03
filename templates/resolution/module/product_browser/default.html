@@ -1,0 +1,65 @@
+{strip}
+{*<!-- Startseite > Neue Artikel -->*}
+{if $content.status}
+	{if $content.error}{$content.error}{/if}
+  
+  {if $content.heading}<h3>{$content.heading}</h3>{/if}
+  
+  {*<!-- list settings --------------->*}
+  {assign var=items_per_row value=$items_per_row}
+  
+  <div class="productlist product_grid_{$items_per_row}">
+    <div class="product_row equalize row">
+      {foreach name=aussen item=module_data from=$content.data}
+        
+        {*<!-- check for special-price -->*}
+        {productData pid=$module_data.PRODUCTS_ID function=isSpecial assign=is_special}
+
+        <div class="col-lg-{math equation="12/$items_per_row"} col-md-{math equation="12/$items_per_row"} col-sm-4  col-xs-12">
+          <div class="thumbnail product{if $is_special && $smarty.const.product_listing_mark_specials} product_special{/if}">
+            
+            {if $is_special && $smarty.const.product_listing_mark_specials}<span class="badge badge-warning specials_marker">%</span>{/if}
+            
+            <div class="helper_equalize">
+              {if $module_data.PRODUCTS_IMAGE!=''}
+                <a class="product_image" href="{$module_data.PRODUCTS_LINK}">
+                  <img src="{$module_data.PRODUCTS_IMAGE}" alt="{$module_data.PRODUCTS_NAME|onlytext}" class="productImageBorder" />
+                </a>
+              {/if}
+              
+              <div class="caption product_text">
+                <h3 class="product_name"><a href="{$module_data.PRODUCTS_LINK}">{$module_data.PRODUCTS_NAME}</a></h3>
+                {if $smarty.const.product_listing_show_descripion!='false' && $module_data.PRODUCTS_SHORT_DESCRIPTION != ''}
+                  <p class="product_description hidden-xs">{$module_data.PRODUCTS_SHORT_DESCRIPTION|truncate:'100':''|strip_tags}</p>
+                {/if} 
+              </div>
+              
+              <div class="caption product_buy">
+                <div class="product_price">{$module_data.PRODUCTS_PRICE}</div>
+                {if $module_data.PRODUCTS_VPE}<small class="product_vpe">{$module_data.PRODUCTS_VPE}</small>{/if}
+                <div class="product_tax_info">{$module_data.PRODUCTS_TAX_INFO}{$module_data.PRODUCTS_SHIPPING_LINK}</div>
+              </div>
+            </div>
+            
+            {if $smarty.const.product_listing_show_reviews!='false' || $smarty.const.product_listing_show_deliverytime!='false'}
+              <div class="clb"></div>
+              <div class="caption product_module">
+                {if $smarty.const.product_listing_show_deliverytime!='false'}
+                  <span class="icon-time"></span><span class="product_shippingtime_text"> {#text_shippingtime#}</span> {if $module_data.PRODUCTS_SHIPPING_NAME_LINK}{$module_data.PRODUCTS_SHIPPING_NAME_LINK}{else}{$module_data.PRODUCTS_SHIPPING_NAME}{/if}
+                {/if}
+                {if $smarty.const.product_listing_show_reviews!='false'}
+                  <div class="product_rating_stars">
+                    <div class="product_rating_percentage" style="width: {productData pid=$module_data.PRODUCTS_ID function=getReviews}%;"></div>
+                  </div>
+                {/if}
+                <div class="clb"></div>
+              </div>
+            {/if}
+          </div>
+        </div>
+      {/foreach} 
+      <div class="clb"></div>
+    </div>
+  </div>
+{/if}
+{/strip}

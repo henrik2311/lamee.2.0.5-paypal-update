@@ -1,0 +1,220 @@
+{*<!--[[[[[[[[[[[[[     ]]]]]]]]]]]]]]]]]]]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[::::::[[[[[[[[[[[[     ]]]]]]]]]]]]::::::]
+[:::::[                             ]:::::]
+[:::::[          SQUIDIO.DE         ]:::::]
+[:::::[      http://squidio.de      ]:::::]
+[:::::[                             ]:::::]
+[::::::[[[[[[[[[[[[     ]]]]]]]]]]]]::::::]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[:::::::::::::::::[     ]:::::::::::::::::]
+[[[[[[[[[[[[[[[[[[[     ]]]]]]]]]]]]]]-->*}
+
+
+
+
+<section id="main_section" class="clearfix">
+  <div class="container">
+  
+    {if $plugin_data.required}
+      <div class="alert alert-warning">
+        <span class="icon-exclamation-sign icon-3x pull-left"></span> 
+        <strong>{$smarty.const.text_attention}</strong>
+        <p>{$smarty.const.text_info_required_plugin}</p>
+      </div>
+    {/if}
+    
+    {$panel_content}
+    
+    {*<!-- 
+    <script type="text/javascript">
+    
+      $('#plugin_tabs a').click(function (e) {literal}{{/literal}
+        e.preventDefault()
+        $(this).tab('show')
+      {literal}}{/literal})
+    
+    </script>
+    
+    <section class="tab-section">
+      <ul class="nav nav-tabs nav-justified" id="plugin_tabs">
+        <li{if $plugin_data|@count gt 0} class="active"{/if}><a href="#plugins_installed" data-toggle="tab">{$smarty.const.heading_installed_plugins}</a></li>
+        <li{if $plugin_data|@count lt 1} class="active"{/if}><a href="#plugins_not_installed" data-toggle="tab">{$smarty.const.heading_not_installed_plugins}</a></li>
+      </ul>
+      
+      <div class="tab-content">
+        
+        <div class="tab-pane{if $plugin_data|@count gt 0} active{/if}" id="plugins_installed">
+          {if $plugin_data|@count gt 0}
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 50%;">{$smarty.const.text_name} &amp; {$smarty.const.text_description}</th>
+                  <th>{$smarty.const.text_plugin_id}</th>
+                  <th align="right">{$smarty.const.text_action}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {foreach name=plugins item=plugin from=$plugin_data}
+                  <tr{if $plugin_data.installed} class="success"{/if}>
+                    <td>
+                      <h4><strong>{$plugin.title|escape:'htmlall'}</strong></h4>
+                      <p class="text-muted">{$plugin.description|escape:'htmlall'}</p>
+                    </td>
+                    <td>{$plugin.id}</td>
+                    <td align="right">
+                      <a class="btn btn-default btn-block" href="{$plugin.link_config_panel}"><span class="icon-cog"></span> {$smarty.const.text_configure}</a>
+                      {if $plugin.installed}
+                        <a class="btn btn-danger btn-block" href="{$plugin.link_uninstall}" title="{$smarty.const.warning_plugin_uninstall}"><span class="icon-trash"></span> {$smarty.const.text_plugin_uninstall}!</a>
+                      {else}
+                        <a class="btn btn-success btn-block" href="{$plugin.link_install}"><span class="icon-cog"></span> {$smarty.const.text_plugin_install}</a>
+                      {/if}
+                      <div class="divider trans"></div>
+                    </td>
+                  </tr>
+                {/foreach}
+              </tbody>
+            </table>
+          {else}
+            <div class="alert alert-warning">
+              <span class="icon-exclamation-sign icon-3x pull-left"></span> 
+              <strong>{$smarty.const.text_attention}</strong>
+              <p>{$smarty.const.warning_no_installed_plugins}</p>
+            </div>
+          {/if}
+        </div>
+        
+        <div class="tab-pane{if $plugin_data|@count lt 1} active{/if}" id="plugins_not_installed">
+          <div class="alert alert-warning">
+            <span class="icon-exclamation-sign icon-3x pull-left"></span> 
+            <strong>{$smarty.const.text_attention}</strong>
+            <p>{$smarty.const.warning_no_not_installed_plugins}</p>
+          </div>
+        </div>
+        
+      </div> 
+    </section> 
+ -->*}    
+    
+    
+    
+    {*<!--
+    <div class="row">
+      
+      <div class="col-md-6">
+        <div class="panel panel-success">
+          <div class="panel-heading">{$smarty.const.heading_installed_plugins}</div>
+          <div class="panel-body">
+            <div class="alert alert-warning">
+              <span class="icon-exclamation-sign icon-3x pull-left"></span> 
+              <strong>{$smarty.const.heading_installed_plugins}</strong>
+              <p>{$smarty.const.text_info_required_plugins}</p>
+            </div>
+            <table class="table table-hover">
+              <tr>
+                <th>Name</th>
+                <th>Beschreibung</th>
+                <th>Plugin-ID</th>
+                <th align="right">Aktionen</th>
+              </tr>
+              {foreach name=plugins item=plugin from=$plugin_data}
+                <tr{if $plugin_data.installed} class="success"{/if}>
+                  <td nowrap="nowrap"><strong>{$plugin.title|escape:'htmlall'}</strong></td>
+                  <td><small>{$plugin.description|escape:'htmlall'}</small></td>
+                  <td>{$plugin.id}</td>
+                  <td align="right">
+                    {if $plugin.installed}
+                      <a class="btn btn-danger btn-sm" href="{$plugin.link_uninstall}" title="Deinstallieren"><span class="icon-trash"></span>&nbsp;&nbsp;deinstallieren!</a>
+                    {else}
+                      <a class="btn btn-success btn-sm" href="{$plugin.link_install}"><span class="icon-cog"></span>&nbsp;&nbsp;Installieren</a>
+                    {/if}
+                  </td>
+                </tr>
+              {/foreach}
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">{$smarty.const.heading_not_installed_plugins}</div>
+          <div class="panel-body">
+            Panel content
+          </div>
+        </div>
+      </div>
+      
+      -->*}
+      {*<!-- 
+      <div id="sidebar" class="col-md-3 clearfix">
+        <div class="hidden-print" role="complementary" id="plugin_navi">
+          <ul class="nav">
+            {foreach name=menu item=menu_data from=$menu_data}
+              <li{if $menu_data.active} class="active"{/if}>
+                <a href="{$menu_data.link}" title="{$menu_data.description}">
+                  {if $plugin.installed}
+                    <span class="icon-chevron-right"></span>
+                  {else}
+                    <span class="icon-chevron-right"></span>
+                  {/if}
+                  {$menu_data.title}
+                </a>
+              </li>
+            {/foreach}
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-9">
+        {if $plugin_messages}
+          {if $plugin_messages.success}
+            <div class="alert alert-success">{$plugin_messages.success} <a href="#" class="close tips" original-title="Schlie&szlig;en">Schlie&szlig;en</a></div>
+          {/if}
+          {if $plugin_messages.info}
+            <div class="alert alert-info">{$plugin_messages.info} <a href="#" class="close tips" original-title="Schlie&szlig;en">Schlie&szlig;en</a></div>
+          {/if}
+          {if $plugin_messages.error}
+            <div class="alert alert-danger">{$plugin_messages.error} <a href="#" class="close tips" original-title="Schlie&szlig;en">Schlie&szlig;en</a></div>
+          {/if}
+        {/if}
+        
+        <h3>Vorhandene Plugins:</h3>
+        <div class="divider"></div>
+        
+        <dir class="well">
+          <div class="borderbox">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Beschreibung</th>
+                  <th>Plugin-ID</th>
+                  <th align="right">Aktionen</th>
+                </tr>
+              </thead>
+              <tbody>
+              {foreach name=plugins item=plugin from=$plugin_data}
+                <tr class="{if $plugin_data.installed}success{/if}">
+                  <td nowrap="nowrap"><strong>{$plugin.title|escape:'htmlall'}</strong></td>
+                  <td><small>{$plugin.description|escape:'htmlall'}</small></td>
+                  <td>{$plugin.id}</td>
+                  <td align="right">
+                    {if $plugin.installed}
+                      <a class="btn btn-danger btn-sm" href="{$plugin.link_uninstall}" title="Deinstallieren"><span class="icon-trash"></span>&nbsp;&nbsp;deinstallieren!</a>
+                    {else}
+                      <a class="btn btn-success btn-sm" href="{$plugin.link_install}"><span class="icon-cog"></span>&nbsp;&nbsp;Installieren</a>
+                    {/if}
+                  </td>
+                </tr>
+              {/foreach}
+              </tbody>
+            </table>
+          </dir>
+        </dir>
+        <div class="clear"></div>
+      </div>
+    </div>
+       -->*}
+  </div>
+</section>

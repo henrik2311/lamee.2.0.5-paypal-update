@@ -1,0 +1,32 @@
+{config_load file="$language/lang_$language.conf" section="sitemap"}
+{config_load file="lang_`$language`.custom"}
+{if isset($herror)}<div class="errormessage">{$herror}</div>{/if}
+{assign var=items_per_row value=3}
+{assign var=items_per_row_xs value=2}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="sitemap row">
+    {foreach name=aussen item=module_data from=$module_content}
+      <div class="col-sm-4 col-xs-6">
+        <ul class="list-group nocolumnbreak cf">
+          <li class="list-group-item sitemap_header">
+            <a href="{$module_data.CAT_LINK}"><h5 class="nomrg nopadd">{$module_data.CAT_NAME}</h5></a>
+            {if $module_data.SCATS|@sizeof!=0}
+              <div class="divider normal"></div>
+              <ul class="list-group nomrg">
+                {foreach key=key_data item=item_data from=$module_data.SCATS}
+                  <li class="list-group-item"><a href="{$item_data.link}">{$item_data.text}</a></li>
+                {/foreach}
+              </ul>
+            {/if}
+          </li>
+        </ul>
+      </div>
+
+      {if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}
+        <div class="clb hidden-xs"></div>
+      {/if}
+      {if $smarty.foreach.aussen.iteration%$items_per_row_xs==iteration/$items_per_row_xs && !$smarty.foreach.aussen.last}
+        <div class="clb visible-xs"></div>
+      {/if}
+    {/foreach}
+  </div>

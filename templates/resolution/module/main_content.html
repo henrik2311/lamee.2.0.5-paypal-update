@@ -1,0 +1,31 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="index"}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+{$MODULE_error}
+
+{hook key=main_content_html_module_top}
+
+{*<!--#########################################################################
+#### 
+#### Platzieren Sie das Templates-Tag nach diesem kommentar wenn Sie 
+#### einen Slider auf der Startseite unterhalb der Navigation anzeigen wollen.
+#### 
+##########################################################################-->*}
+
+{hook key=main_content_html_main_slider_bottom}
+
+<div class="bestsellers_product_list">
+  {productbrowser type=topproducts show=4 template="default.html" items_per_row=4 heading=#heading_whatsnew#}
+  <div class="divider large nomrg-top"></div>
+</div>
+{hook key=main_content_html_bestsellers_bottom}
+
+<div class="page-header"><h1>{$title}</h1></div>
+{$text}
+{hook key=main_content_html_text_bottom}
+
+{if $smarty.session.device != 'mobile'}
+  {if $MODULE_upcoming_products}<div class="divider large"></div>{$MODULE_upcoming_products}{/if}
+{/if}
+{hook key=main_content_html_module_bottom}
+{/strip}

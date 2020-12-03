@@ -1,0 +1,86 @@
+{config_load file="$language/lang_$language.conf" section="address_book_process"}
+
+<div class="profile_content">
+  
+  <legend>{#title_address#} <small>({#text_must#})</small></legend>
+  {if $gender=='1'}
+    <div class="form-group">
+      <label class="control-label">{#text_gender#}</label>
+      <div class="controls">
+        <label class="radio-inline">{$INPUT_MALE}</label>
+        <label class="radio-inline">{$INPUT_FEMALE}</label>
+      </div>
+    </div>
+  {/if}
+  
+  <div class="form-group">
+    <label class="control-label">{#text_firstname#}</label>
+    <div class="controls">{$INPUT_FIRSTNAME}</div>
+  </div>
+  
+  <div class="form-group">
+    <label class="control-label">{#text_lastname#}</label>
+    <div class="controls">{$INPUT_LASTNAME}</div>
+  </div>
+  
+  {if $company=='1'}
+    <div class="form-group">
+      <label class="control-label">{#text_company#}</label>
+      <div class="controls">{$INPUT_COMPANY}</div>
+    </div>
+  {/if}
+
+  <div class="form-group">
+    <label class="control-label">{#text_street#}</label>
+    <div class="controls">{$INPUT_STREET}</div>
+  </div>
+  
+  {if $suburb=='1'}
+    <div class="form-group">
+      <label class="control-label">{#text_suburb#}</label>
+      <div class="controls">{$INPUT_SUBURB}</div>
+    </div>
+  {/if}
+  
+  <div class="form-group">
+    <label class="control-label">{#text_code#}</label>
+    <div class="controls">{$INPUT_CODE}</div>
+  </div>
+  
+  <div class="form-group">
+    <label class="control-label">{#text_city#}</label>
+    <div class="controls">{$INPUT_CITY}</div>
+  </div>
+  
+  {if $state=='1'}
+    <div class="form-group">
+      <label class="control-label">{#text_state#}</label>
+      <div class="controls">{$INPUT_STATE}</div>
+    </div>
+  {/if}
+
+  <div class="form-group">
+    <label class="control-label">{#text_country#}</label>
+    <div class="controls">{$SELECT_COUNTRY}</div>
+  </div>
+  
+  {if $new=='1'}
+    <div class="form-group">
+      <label class="control-label">&nbsp;</label>
+      <div class="controls"><label class="checkbox">{$CHECKBOX_PRIMARY} {#text_standard#}</label></div>
+    </div>
+  {/if}
+
+  {if $new=='1'}
+    <div class="form-group">
+      <label class="control-label">&nbsp;</label>
+      <div class="controls">{btn btntype="btn btn-lg btn-success" icontype="icon-chevron-right" value=IMAGE_BUTTON_CONTINUE}</div>
+    </div>
+  {else}
+    <div class="form-group">
+      <label class="control-label">&nbsp;</label>
+      <div class="controls">{btn btntype="btn btn-lg btn-success" icontype="icon-refresh" value=IMAGE_BUTTON_UPDATE}</div>
+    </div>
+  {/if}
+
+</div>

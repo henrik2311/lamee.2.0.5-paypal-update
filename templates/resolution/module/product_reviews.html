@@ -1,0 +1,47 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="reviews"}
+
+{*<!-- _reviews: list overview > one product -->*}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="page-header">
+  	<h1>{#heading_reviews#} &quot;{$PRODUCTS_NAME}&quot;</h1>
+  </div>
+
+  {if $error != ''}<div class="alert alert-danger">{$error}</div>{/if}
+
+  {if isset($MODULE_TS_PRODUCT_STICKER)}
+    {$MODULE_TS_PRODUCT_STICKER}
+  {else}
+    <div class="reviwslist">
+      <div class="row">
+        {*<!-- reviews list settings --------->*}
+        {*<!-- number of items in the list --->*}
+        {assign var=items_per_row value=2}
+        {foreach name=aussen item=module_data from=$module_content}
+          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="reviws_data">
+                  <strong>{#text_author#}</strong><br />
+                  {$module_data.AUTHOR}
+                  <div class="divider small trans"></div>
+                  <strong>{#text_rating#}</strong><br />
+                  {$module_data.RATING}
+                </div>
+              </div>
+              <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 reviws_text">
+                <strong>{#text_text#}</strong> {$module_data.TEXT}
+              </div>
+            </div>
+          </div>
+          {if $smarty.foreach.aussen.iteration%$items_per_row==iteration/$items_per_row && !$smarty.foreach.aussen.last}</div><div class="divider large trans"></div><div class="row">{/if}
+        {/foreach}
+        <div class="clb"></div>
+        <div class="divider large"></div>
+        <div class="muted paddingbox large">{$NAVBAR}</div>
+      </div>
+    </div>
+  {/if}
+</div>
+{/strip}

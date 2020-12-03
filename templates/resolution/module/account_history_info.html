@@ -1,0 +1,120 @@
+{config_load file="$language/lang_$language.conf" section="account_history_info"}
+{config_load file="$language/lang_$language.conf" section="print_order"}
+{config_load file="$language/lang_$language.conf" section="product_info"}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="profile">
+    <div class="profile_header">
+      <div class="profile_name">{$smarty.session.customer_first_name} {$smarty.session.customer_last_name}</div>
+      <div class="profile_title"><span class="icon-chevron-right"></span> {#heading_history_info#}</div>
+    </div>
+    <div class="contents row">
+      <div class="profile_navi col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        {include file="`$smarty.const.CURRENT_TEMPLATE`/module/navigation/accountnavi.html"}
+      </div>
+      <div class="profile_body col-lg-9 col-md-9 col-sm-9 col-xs-12 borderleft">
+        <h3>{#text_oid#}{$ORDER_NUMBER}&nbsp;&nbsp;&nbsp;&nbsp;<small>{#text_date#} {$ORDER_DATE}&nbsp;&nbsp;&nbsp;({$ORDER_STATUS})</small></h3>
+
+        {if $info_message != ''}<div class="alert alert-danger">{$info_message}</div>{/if}
+        {if $success_message != ''}<div class="alert alert-success">{$success_message}</div>{/if}
+
+        <div class="profile_content">
+          <div class="row">
+            <div class="{if $BILLING_LABEL}col-lg-6 col-md-6 col-sm-6 col-xs-12{else}col-lg-12 col-md-12 col-sm-12 col-xs-12{/if}">
+              <h4>{#text_shipping_address#}</h4>
+              {$DELIVERY_LABEL}
+            </div>
+            {if $BILLING_LABEL}
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <h4>{#text_shipping_address#}</h4>
+                {$DELIVERY_LABEL}
+              </div>
+            {/if}
+          </div>
+        </div>
+        
+        {if $SHIPPING_METHOD!=''}
+          <h3>{#text_shipping_method#}</h3>
+          <div class="profile_content">{$SHIPPING_METHOD}</div>
+        {/if}
+        
+        {if $PAYMENT_METHOD!=''}
+          <h3>{#text_payment_method#}</h3>
+          <div class="profile_content">{$PAYMENT_METHOD}</div>
+        {/if}
+        
+        {if $ORDER_COMMENTS!=''}
+          <h3>{#text_comments#}</h3>
+          <div class="profile_content">{$ORDER_COMMENTS}</div>
+        {/if}
+        
+        {if $PAYMENT_INFORMATION!=''}
+          <h3>{#text_comments#}</h3>
+          <div class="profile_content">{$PAYMENT_INFORMATION}</div>
+        {/if}
+        
+        <h3>{#title_history#}</h3>
+        <div class="profile_content">{$HISTORY_BLOCK}</div>
+        
+        <h3>{#text_products#}</h3>
+        <div class="profile_content">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>{#head_units#}</th>
+                <th>{#head_products#}</th>
+                <th>{#head_artnr#}</th>
+                <th>{#head_single_price#}</th>
+                <th>{#head_price#}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {foreach name=aussen item=order_values from=$order_data}
+                <tr>
+                  <td style="width: 1%;">{$order_values.PRODUCTS_QTY}&nbsp;x</td>
+                  <td>
+                    <strong>{$order_values.PRODUCTS_NAME}</strong>
+                    <em>{$order_values.PRODUCTS_ATTRIBUTES}</em>
+                    {if $order_values.PRODUCTS_SHIPPING_TIME neq ''}<br />{#text_shippingtime#} {$order_values.PRODUCTS_SHIPPING_TIME}<br />{/if}
+                  </td>
+                  <td>{$order_values.PRODUCTS_MODEL}<em>{$order_values.PRODUCTS_ATTRIBUTES_MODEL}</em></td>
+                  <td>{$order_values.PRODUCTS_SINGLE_PRICE}</td>
+                  <td>{$order_values.PRODUCTS_PRICE}</td>
+                </tr>
+              {/foreach}
+            </tbody>
+          </table>
+          {foreach name=aussen item=order_total_values from=$order_total}
+            <div class="alr row">
+              <div class="col-lg-9 col-md-9 col-sm-8 col-xs-12">{$order_total_values.TITLE}</div>
+              <strong class="col-lg-2 col-md-2 col-sm-3 col-xs-12">{$order_total_values.TEXT}</strong>
+            </div>
+          {/foreach}
+        </div>
+        
+        {if $PAYPAL_LINK}<div class="profile_content">{$PAYPAL_LINK}</div>{/if}
+        
+        <div class="profile_content">
+          {$TOTAL_BLOCK}
+        	{if $downloads_content neq ''}
+            <div class="divider normal"></div>
+          	<p>{$downloads_content}</p>
+        	{/if}
+        </div>
+        
+        {if $text_print!=''}
+          <h3>{#title_print#}</h3>
+          <div class="profile_content">{#text_print#}</div> 
+        {/if}
+        
+        <div class="profile_content">
+          <div class="divider large"></div>
+          {$BUTTON_PRINT|btn:'btn btn-default btn-lg flr':'icon-print'}
+          {$BUTTON_BACK|btn:'btn btn-default btn-lg':'icon-chevron-left'}
+        </div>
+        
+      </div>
+        
+    </div>
+  </div>
+</div>

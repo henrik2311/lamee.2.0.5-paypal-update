@@ -1,0 +1,14 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="logoff"} 
+<div class="col-lg-12 col-md-12">
+  <div class="page-header">
+  	<h1>{#heading_logoff#}!</h1>
+  </div>
+
+  {if $info_message != ''}<div class="alert alert-danger">{$info_message}</div>{/if}
+  {if $success_message != ''}<div class="alert alert-success">{$success_message}</div>{/if}
+
+  <div class="alert alert-success paddingbox large"><span class="icon-ok icon-large pull-left"></span> {#text_logoff#}</div>
+  {$BUTTON_CONTINUE|btn:'btn btn-default btn-lg':'icon-chevron-right'}
+</div>
+{/strip}

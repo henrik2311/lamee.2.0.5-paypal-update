@@ -1,0 +1,31 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="reviews"}
+
+{*<!-- _review: single -->*}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="page-header">
+  	<a class="btn btn-large flr" href="{$PRODUCTS_LINK}">{$PRODUCTS_NAME}</a>
+  	<h1>{#heading_product_reviews#} {$PRODUCTS_NAME}</h1>
+  </div>
+  
+  <div class="reviwslist paddingbox large">
+    <div class="row">
+      <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+        <div class="reviws_data">
+          <strong>{#text_author#}</strong><br />
+          {$AUTHOR}
+          <div class="divider small trans"></div>
+          <strong>{#text_rating#}</strong><br />
+          {$RATING}
+        </div>
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12 reviws_text">
+        <strong>{$DATE}</strong><br /> {$REVIEWS_TEXT}
+      </div>
+    </div>
+    <div class="divider large"></div>
+    {$BUTTON_BUY_NOW|btn:'btn btn-large btn-primary flr':'icon-shopping-cart'}
+    {$BUTTON_BACK|btn:'btn btn-large':'icon-chevron-left'}
+  </div>
+</div>
+{/strip}

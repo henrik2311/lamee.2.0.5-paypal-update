@@ -1,0 +1,10 @@
+{strip}
+{*<!-- _shopnavi: standard -->*}
+{assign var=current_path value=$smarty.server.PHP_SELF}
+
+<div id="shopnavi" class="flr">
+  <ul class="nav nav-pills">
+    {hook key=shopnavi_html_items}
+  </ul>
+</div>
+{/strip}

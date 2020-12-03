@@ -1,0 +1,45 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="gift_cart"}
+{if $ACTIVATE_GIFT=='true'}
+  <div class="divider large trans"></div>
+  <div class="well well-lg clearfix">
+    {$FORM_ACTION|replace:'>':'class="nomrg" >'}
+      {if $GV_AMOUNT neq ''}
+        <h4>{#title#}</h4>
+        <p>{#text_info#}</p>
+        <p>{#voucher_balance#} <strong>{$GV_AMOUNT}</strong></p>
+        <p class="nomrg">{#text_send_to_friend#} <a href="{$GV_SEND_TO_FRIEND_LINK}">{#box_send_to_friend#}</a></p>
+      {/if}
+      {if $COUPON_AMOUNT2 neq ''}
+        <h4>{#title#}</h4>
+        <p>{#voucher_redeemed#}</p>
+        <p class="nomrg">{$COUPON_AMOUNT2}</p>
+      {/if}
+      {if $C_FLAG == 'true'}<div class="divider large"></div>{/if}
+      {if $COUPON_HELP_LINK neq ''}
+        <h4>{#title#}</h4>
+        <p class="nomrg">{#cart_coupon#} {$COUPON_HELP_LINK} {#cart_coupon_info#}</a></p>
+      {else}
+        {if $C_FLAG == 'true'}
+          <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12">
+            <span class="icon-info-sign icon-3x pull-left"></span>
+            <h5 class="nomrg">{#title#}</h5>
+            <p class="nomrg">{#text_gift#}</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-5 col-xs-12">
+            <div class="input-group large nomrg flr">
+              {$INPUT_CODE|placeholder:#text_code#|replace:'type':'class="form-control" type'}
+              <span class="input-group-btn">{btn btntype="btn btn-default btn-icon btn-inverse" icontype="icon-chevron-right"}</span>
+            </div>
+          </div>
+        {else}
+          <h4>{#title#}</h4>
+          <p>{#create_account#}</p>
+          <div class="divider normal trans"></div>
+          <a class="btn btn-default btn-inverse nomrg" href="{$LINK_ACCOUNT}"><span class="icon-user"></span>{#text_create_account#|replace:'&raquo;':''}</a>
+        {/if}
+      {/if}
+    {$FORM_END}
+  </div>
+{/if}
+{/strip}

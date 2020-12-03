@@ -1,0 +1,9 @@
+{strip}
+{config_load file="$language/lang_$language.conf" section="boxes"}
+{hook key=box_languages_html_top}
+<span id="box_languages">
+  <a href="#" class="toggle"><span class="current">{$curr_lng_icon}</span> <span class="icon-angle-down"></span></a>
+  <span class="dropdown"><span class="linkbox">{$BOX_CONTENT}</span></span>
+</span>
+{hook key=box_languages_html_bottom}
+{/strip}

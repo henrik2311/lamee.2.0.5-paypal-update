@@ -1,0 +1,46 @@
+{config_load file="$language/lang_$language.conf" section="checkout_shipping_address"}
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+  <div class="page-header alc">
+    <h1>{#heading_address#}</h1>
+  </div>
+  {if $error != ''}<div class="alert alert-danger">{$error}</div>{/if}
+  
+  {$FORM_ACTION}
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="panel panel-warning">
+        <div class="panel-heading"><h3 class="panel-title"><span class="icon-info-sign"></span>&nbsp;&nbsp;{#title_current_address#}</h3></div>
+        <div class="panel-body">
+          <p class="text-muted">{#text_current_address#}</p>
+          {$BUTTON_ADDRESS|btn:'btn btn-default flr':'icon-pencil'}
+          {$ADDRESS_LABEL}
+        </div>
+      </div>
+      <div class="clb"></div>
+    </div>
+    
+    {if $MODULE_new_address}
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        {$MODULE_new_address}
+      </div>
+    {/if}
+    
+    {if $BLOCK_ADDRESS}
+      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="panel panel-default">
+          <div class="panel-heading"><h3 class="panel-title"><span class="icon-paperclip"></span>&nbsp;&nbsp;{#title_old_addresses#}</h3></div>
+          <div class="panel-body">
+            <p class="text-muted">{#text_old_addresses#}</p>
+            <div class="checkout_address_chooser">{$BLOCK_ADDRESS}</div>
+            <div class="form-group">
+              <label class="control-label">&nbsp;</label>
+              <div class="controls">{btn btntype="btn btn-lg btn-primary" icontype="icon-ok icon-large" value=IMAGE_BUTTON_CHANGE_ADDRESS}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clb"></div>
+    {/if}
+    
+    <div class="hidden">{$BUTTON_CONTINUE}</div>
+  {$FORM_END}
+</div>

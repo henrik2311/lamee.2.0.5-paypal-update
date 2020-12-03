@@ -1,0 +1,77 @@
+<form method="post" action="{$form_action}" class="form-horizontal">
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3>{$smarty.const.text_new_snippet}:</h3></div>
+    <div class="panel-body">
+      
+      {*<!-- config_key -->*}
+      <div class="form-group clearfix">
+        <label class="col-lg-2 col-md-2 control-label" for="config_key">{$smarty.const.global_reuired} {$smarty.const.text_key}:</label>
+        <div class="col-lg-9 col-md-9">
+          <input name="config_key" type="text" class="col-lg-9 form-control" id="config_key" placeholder="Schl&uuml;ssel eigeben..." value="{$smarty.post.config_key|escape}" />
+        </div>
+        <div class="col-lg-1 col-md-1">
+          <a class="add_popover btn btn-block btn-link nopad" data-toggle="popover" data-trigger="hover" data-placement="top" title="{$smarty.const.help_key_heading}:" data-content="{$smarty.const.help_key_content}"><span class="icon-info-sign icon-2x"></span></a>
+        </div>
+      </div>
+      
+      {*<!-- config_notes -->*}
+      <div class="form-group clearfix">
+        <label class="col-lg-2 col-md-2 control-label" for="config_notes">{$smarty.const.text_description}:</label>
+        <div class="col-lg-9 col-md-9">
+          <input name="config_notes" type="text" class="form-control" id="config_notes" placeholder="{$smarty.const.placeholder_add_description}" value="{$smarty.post.config_notes|escape}" />
+        </div>
+        <div class="col-lg-1 col-md-1">
+          <a class="add_popover btn btn-block btn-link nopad" data-toggle="popover" data-trigger="hover" data-placement="top" title="{$smarty.const.help_description_heading}:" data-content="{$smarty.const.help_description_content}"><span class="icon-info-sign icon-2x"></span></a>
+        </div>
+      </div>
+      
+      {*<!-- config_group -->*}
+      <div class="form-group clearfix">
+        <label class="col-lg-2 col-md-2 control-label" for="config_group">{$smarty.const.text_group}:</label>
+        <div class="col-lg-4 col-md-4">
+          <select name="config_group_selected" class="form-control">
+            <option value="nogroup">{$smarty.const.placeholder_choose_group}</option>
+            {foreach name=groups item=groups_data from=$tplData.groups}
+              {if $groups_data != $smarty.const.system_snippet_group}
+                <option value="{$groups_data}" {if $groups_data == $tplData.config_group}selected{/if}>{$groups_data}</option>
+              {/if}
+            {/foreach}
+          </select>
+        </div>
+        <div class="col-lg-1 col-md-1 alc" style="line-height: 34px;"><strong class="text-muted">{$smarty.const.text_or}</strong></div>
+        <div class="col-lg-4 col-md-4"><input name="config_group" type="text" class="col-lg-4 form-control" id="config_group" placeholder="{$smarty.const.placeholder_add_new_group}" /></div>
+          <div class="col-lg-1 col-md-1"><a class="add_popover btn btn-block btn-link nopad" data-toggle="popover" data-trigger="hover" data-placement="top" title="{$smarty.const.help_group_heading}:" data-content="{$smarty.const.help_group_content}"><span class="icon-info-sign icon-2x"></span></a></div>
+      </div>
+      <div class="divider divider-trans divider-large"></div>
+      
+      {*<!-- language related content -->*}
+      <div class="well" id="lang_tabs">
+        <ul class="nav nav-tabs">
+          {foreach name=language_tabs item=language_tabs_data from=$tplData.lang_data}
+            <li{if $smarty.foreach.language_tabs.first} class="active"{/if}>
+              <a data-toggle="tab" href="#tabs-{$smarty.foreach.language_tabs.iteration}"><span>{$language_tabs_data.language_icon}</span> {$language_tabs_data.language_name}</a>
+            </li>
+          {/foreach}
+        </ul>
+        <div class="tab-content tabcontents">
+          {foreach name=language_content item=language_content_data from=$tplData.lang_data}
+            <div class="tab-pane{if $smarty.foreach.language_content.first} active{/if}" id="tabs-{$smarty.foreach.language_content.iteration}">
+              
+              {*<!-- language_content -->*}
+              <div class="form-group clearfix">
+                <label class="col-lg-2 col-md-2 control-label" for="language_content[{$language_content_data.language_code}]">{$language_content_data.language_icon}&nbsp;&nbsp;{$smarty.const.text_text}:</label>
+                <div class="col-lg-10 col-md-10">
+                  <textarea name="language_content[{$language_content_data.language_code}]" class="form-control" id="language_content[{$language_content_data.language_code}]" placeholder="{$smarty.const.placeholder_add_text} ({$language_content_data.language_name})" rows="5" style="height: 160px;">{$smarty.post.language_content[$language_content_data.language_code]|escape}</textarea>
+                </div>
+              </div>
+              
+            </div>
+          {/foreach}
+      </div>
+    </div>
+    <div class="panel-bottom">
+      <button type="submit" class="btn btn-lg btn-success"><span class="icon-ok"></span> {$smarty.const.text_save}</button>
+      <a href="#" class="btn btn-lg btn-default btn-cancel">{$smarty.const.text_cancel}</a>
+    </div>
+  </div>
+</form>

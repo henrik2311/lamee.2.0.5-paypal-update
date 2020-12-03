@@ -1,0 +1,13 @@
+<ul class="nav navtype_default" id="subnavi">
+  <li class="level_1{if $smarty.foreach.aussen.last} last{/if}">
+    <a class="level_1 active" href="{$parent_content.CONTENT_LINK}"><i class="icon-angle-down"></i> {$parent_content.CONTENT_TITLE}</a>
+    <ul>
+      {foreach name=aussen item=content_data from=$sub_content}
+        <li class="level_2{if $smarty.foreach.aussen.last} last{/if}">
+          <a class="level_2" href="{$content_data.CONTENT_LINK}"><i class="icon-angle-right"></i> {$content_data.CONTENT_TITLE}</a>
+        </li>
+      {/foreach}
+    </ul>
+  </li>
+</ul>
+
