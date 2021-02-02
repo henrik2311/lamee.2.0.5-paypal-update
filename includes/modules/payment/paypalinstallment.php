@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: paypalinstallment.php 11037 2017-12-16 08:08:01Z GTB $
+   $Id: paypalinstallment.php 12721 2020-04-22 15:08:24Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -56,22 +56,24 @@ class paypalinstallment extends PayPalPayment {
       $this->enabled = false;
     }
     
+    if ($this->enabled === true
+        && ($order->content_type == 'virtual' 
+            || $order->content_type == 'virtual_weight'
+            || $_SESSION['cart']->count_contents_virtual() == 0
+            )
+        )
+    {
+      $this->enabled = false;
+    }
+    
     if ($this->enabled === true) {
-      if (!class_exists('order_total')) {
-        require_once(DIR_WS_CLASSES.'order_total.php');
-      }
-      $order_total_modules = new order_total();
-      $order_totals = $order_total_modules->process();
-      
-      $this->total_amount = 0;
-      for ($i=0, $n=count($order_totals); $i<$n; $i++) {
-        if ($order_totals[$i]['code'] == 'ot_total') {
-          $this->total_amount = $order_totals[$i]['value'];
+      $this->total_amount = $this->calculate_total();
+      if ($this->total_amount > $this->get_min_installment_amount()) {
+        $this->presentment_array = $this->get_presentment($this->total_amount, $order->info['currency'], $order->billing['country']['iso_code_2']);
+        if (count($this->presentment_array) < 1) {
+          $this->enabled = false;
         }
-      }
-      
-      $this->presentment_array = $this->get_presentment($this->total_amount, $order->info['currency'], $order->billing['country']['iso_code_2']);
-      if (count($this->presentment_array) < 1) {
+      } else {
         $this->enabled = false;
       }
     }
@@ -81,9 +83,12 @@ class paypalinstallment extends PayPalPayment {
   function selection() {
     global $order, $request_type;
     
-    $presentment = $this->get_presentment_details($this->total_amount, $order->info['currency'], $order->billing['country']['iso_code_2'], 'payment');
-    $presentment .= '<br/><br/><input type="checkbox" value="pp_conditions" name="pp_conditions" id="pp_conditions" />&nbsp;<strong><label for="pp_conditions">'.MODULE_PAYMENT_PAYPALINSTALLMENT_TEXT_CHECKBOX.'</label></strong>';
-
+    $presentment = '';
+    if ($this->total_amount > 0) {
+      $presentment .= $this->get_presentment_details($this->total_amount, $order->info['currency'], $order->billing['country']['iso_code_2'], 'payment');
+      $presentment .= '<br/><br/><input type="checkbox" value="pp_conditions" name="pp_conditions" id="pp_conditions" />&nbsp;<strong><label for="pp_conditions">'.MODULE_PAYMENT_PAYPALINSTALLMENT_TEXT_CHECKBOX.'</label></strong>';
+    }
+    
     return array(
       'id' => $this->code, 
       'module' => $this->title, 
@@ -152,6 +157,7 @@ class paypalinstallment extends PayPalPayment {
     );
 	  $this->status_install($stati);
 	  
+    include_once(DIR_FS_LANGUAGES.$_SESSION['language'].'/modules/order_total/ot_paypalinstallment_fee.php');
 	  require_once(DIR_FS_CATALOG.'includes/modules/order_total/ot_paypalinstallment_fee.php');
 	  $pp_fee = new ot_paypalinstallment_fee();
 	  if ($pp_fee->check() != 1) {

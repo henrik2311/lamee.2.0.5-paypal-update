@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: paypal_module.php 11028 2017-12-07 08:12:10Z GTB $
+   $Id: paypal_module.php 11714 2019-04-04 12:29:09Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -69,7 +69,6 @@ $payment_disallowed_array = array(
   'billpaydebit',
   'billpaypaylater',
   'billpaytransactioncredit',
-  'billsafe_2',
   'payone_installment',
   'payone_otrans',
 );
@@ -137,6 +136,7 @@ if (isset($_GET['action'])) {
 
     case 'install':
       if (in_array($_GET['module'], $payment_array)) {                  
+        include_once(DIR_FS_LANGUAGES.$_SESSION['language'].'/modules/payment/'.$_GET['module'].'.php');
         require_once(DIR_FS_CATALOG.'includes/modules/payment/'.$_GET['module'].'.php');
         $module = new $_GET['module']();
         $module->install();
@@ -202,7 +202,7 @@ require (DIR_WS_INCLUDES.'head.php');
                   $mInfo = new objectInfo($module_info);
 
                   reset($mInfo->keys);
-                  while (list($key, $value) = each($mInfo->keys)) {
+                  foreach ($mInfo->keys as $key => $value) {
                     ?>
                     <tr>
                       <td class="dataTableConfig col-left"><?php echo $value['title']; ?></td>
@@ -303,7 +303,7 @@ require (DIR_WS_INCLUDES.'head.php');
                     </tr>
                     <?php
                     if (xtc_not_null(MODULE_PAYMENT_INSTALLED)) {
-                      $thirdparty_module = explode(';', MODULE_PAYMENT_PAYPAL_PLUS_THIRDPARTY_PAYMENT);
+                      $thirdparty_module = explode(';', ((defined('MODULE_PAYMENT_PAYPAL_PLUS_THIRDPARTY_PAYMENT')) ? MODULE_PAYMENT_PAYPAL_PLUS_THIRDPARTY_PAYMENT : ''));
                       $module_array = explode(';', MODULE_PAYMENT_INSTALLED);
                       
                       $thirdparty_exists = false;

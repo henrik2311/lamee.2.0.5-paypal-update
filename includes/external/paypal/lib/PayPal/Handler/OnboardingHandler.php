@@ -1,6 +1,6 @@
 <?php
 /**
- * API handler for OAuth Token Request REST API calls
+ * API handler for OnboardingHandler REST API calls
  */
 
 namespace PayPal\Handler;
@@ -13,9 +13,9 @@ use PayPal\Exception\PayPalInvalidCredentialException;
 use PayPal\Exception\PayPalMissingCredentialException;
 
 /**
- * Class OauthHandler
+ * Class OnboardingHandler
  */
-class OauthHandler implements IPayPalHandler
+class OnboardingHandler implements IPayPalHandler
 {
     /**
      * Private Variable
@@ -54,9 +54,17 @@ class OauthHandler implements IPayPalHandler
 
         $headers = array(
             "User-Agent"    => PayPalUserAgent::getValue(PayPalConstants::SDK_NAME, PayPalConstants::SDK_VERSION),
-            "Authorization" => "Basic " . base64_encode($options['clientId'] . ":" . $options['clientSecret']),
             "Accept"        => "*/*"
         );
+        
+        if (isset($options['sharedId'])) {
+            $headers["Authorization"] = "Basic " . base64_encode($options['sharedId']);
+        }
+
+        if (isset($options['access_token'])) {
+            $headers["Authorization"] = "Bearer " . $options['access_token'];
+        }
+
         $httpConfig->setHeaders($headers);
 
         // Add any additional Headers that they may have provided
@@ -67,37 +75,32 @@ class OauthHandler implements IPayPalHandler
     }
 
     /**
-     * Get HttpConfiguration object for OAuth API
+     * End Point
      *
      * @param array $config
      *
-     * @return PayPalHttpConfig
+     * @return string
      * @throws \PayPal\Exception\PayPalConfigurationException
      */
-    private static function _getEndpoint($config)
+    private function _getEndpoint($config)
     {
-        if (isset($config['oauth.EndPoint'])) {
-            $baseEndpoint = $config['oauth.EndPoint'];
-        } elseif (isset($config['service.EndPoint'])) {
-            $baseEndpoint = $config['service.EndPoint'];
+        if (isset($config['service.EndPoint'])) {
+            return $config['service.EndPoint'];
         } elseif (isset($config['mode'])) {
             switch (strtoupper($config['mode'])) {
                 case 'SANDBOX':
-                    $baseEndpoint = PayPalConstants::REST_SANDBOX_ENDPOINT;
+                    return PayPalConstants::REST_SANDBOX_ENDPOINT;
                     break;
                 case 'LIVE':
-                    $baseEndpoint = PayPalConstants::REST_LIVE_ENDPOINT;
+                    return PayPalConstants::REST_LIVE_ENDPOINT;
                     break;
                 default:
                     throw new PayPalConfigurationException('The mode config parameter must be set to either sandbox/live');
+                    break;
             }
         } else {
             // Defaulting to Sandbox
-            $baseEndpoint = PayPalConstants::REST_SANDBOX_ENDPOINT;
+            return PayPalConstants::REST_SANDBOX_ENDPOINT;
         }
-
-        $baseEndpoint = rtrim(trim($baseEndpoint), '/') . "/v1/oauth2/token";
-
-        return $baseEndpoint;
     }
 }

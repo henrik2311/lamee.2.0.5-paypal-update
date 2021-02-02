@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: paypalcart.php 11142 2018-05-29 11:46:26Z GTB $
+   $Id: paypalcart.php 12657 2020-03-23 16:57:52Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -84,36 +84,24 @@ class paypalcart extends PayPalPayment {
     global $order, $smarty, $xtPrice, $main, $messageStack, $total_weight, $total_count, $free_shipping;
         
     if (isset($_GET['conditions_message']) && $this->messageStack === false) {
-      $message_condition = str_replace('\n', '', ERROR_CONDITIONS_NOT_ACCEPTED);
-      $message_address = str_replace('\n', '', ERROR_ADDRESS_NOT_ACCEPTED);
-      switch($_GET['conditions_message']) {
-        case "1":
-          $messageStack->add('checkout_confirmation', $message_condition);
-          break;
-        case "13":
-          $messageStack->add('checkout_confirmation', $message_condition);
-          $messageStack->add('checkout_confirmation', ERROR_CHECKOUT_SHIPPING_NO_METHOD);
-          break;
-        case "2":
-          $messageStack->add('checkout_confirmation', $message_address);
-          break;
-        case "23":
-          $messageStack->add('checkout_confirmation', $message_address);
-          $messageStack->add('checkout_confirmation', ERROR_CHECKOUT_SHIPPING_NO_METHOD);
-          break;
-        case "12":
-          $messageStack->add('checkout_confirmation', $message_condition);
-          $messageStack->add('checkout_confirmation', $message_address);
-          break;
-        case "123":
-          $messageStack->add('checkout_confirmation', $message_condition);
-          $messageStack->add('checkout_confirmation', $message_address);
-          $messageStack->add('checkout_confirmation', ERROR_CHECKOUT_SHIPPING_NO_METHOD);
-          break;
-        case "3":
-          $messageStack->add('checkout_confirmation', ERROR_CHECKOUT_SHIPPING_NO_METHOD);
-          break;
+      $error_mess = explode(',', $_GET['conditions_message']);
+      
+      if (in_array('1', $error_mess)) {
+        $messageStack->add('checkout_confirmation', str_replace('\n', '', ERROR_CONDITIONS_NOT_ACCEPTED));
       }
+      if (in_array('2', $error_mess)) {
+        $messageStack->add('checkout_confirmation', str_replace('\n', '', ERROR_ADDRESS_NOT_ACCEPTED));
+      }
+      if (in_array('3', $error_mess)) {
+        $messageStack->add('checkout_confirmation', ERROR_CHECKOUT_SHIPPING_NO_METHOD);
+      }
+      if (in_array('4', $error_mess)) {
+        $messageStack->add('checkout_confirmation', str_replace('\n', '', ERROR_REVOCATION_NOT_ACCEPTED));
+      }
+      if (in_array('5', $error_mess)) {
+        $messageStack->add('checkout_confirmation', str_replace('\n', '', ERROR_PRIVACY_NOTICE_NOT_ACCEPTED));
+      }
+      
       $this->messageStack = true;
     }
 
@@ -152,6 +140,7 @@ class paypalcart extends PayPalPayment {
     }
     
     $free_shipping = $this->free_shipping;
+    $ot_shipping = $this->ot_shipping;
     
     if ($no_shipping === true) $_SESSION['shipping'] = false;
 
@@ -162,7 +151,7 @@ class paypalcart extends PayPalPayment {
     // if the modules status was changed when none were available, to save on implementing
     // a javascript force-selection method, also automatically select the cheapest shipping
     // method if more than one module is now enabled
-    if ((!isset($_SESSION['shipping']) && CHECK_CHEAPEST_SHIPPING_MODUL == 'true') || (isset($_SESSION['shipping']) && ($_SESSION['shipping'] == false) && (xtc_count_shipping_modules() > 1))) {
+    if ((!isset($_SESSION['shipping']) && CHECK_CHEAPEST_SHIPPING_MODUL == 'true') || (isset($_SESSION['shipping']) && ($_SESSION['shipping'] == false) && (xtc_count_shipping_modules() == 1))) {
       $_SESSION['shipping'] = $shipping_modules->cheapest();
       $order = new order();
     }
@@ -172,8 +161,30 @@ class paypalcart extends PayPalPayment {
     if (defined('SHOW_SELFPICKUP_FREE') && SHOW_SELFPICKUP_FREE == 'true') {
       if ($free_shipping == true) {
         $free_shipping = false;
+    
+        $quotes_array = $ot_shipping->quote();
+        for ($i = 0, $n = sizeof($quotes); $i < $n; $i ++) {
+          if (isset($GLOBALS[$quotes[$i]['id']])
+              && is_object($GLOBALS[$quotes[$i]['id']])
+              && method_exists($GLOBALS[$quotes[$i]['id']], 'display_free')
+              )
+          {
+            if ($GLOBALS[$quotes[$i]['id']]->display_free() === true) {
+              $quotes_array = array_merge($quotes_array, $shipping_modules->quote($quotes[$i]['id'], $quotes[$i]['methods'][0]['id']));
+            }
+          } elseif ($quotes[$i]['id'] == 'selfpickup') {
+            $quotes_array = array_merge($quotes_array, $shipping_modules->quote($quotes[$i]['id'], $quotes[$i]['methods'][0]['id']));
+          }
+        }
+        $quotes = $quotes_array;
+      }
+    }
+
+    if (defined('SHOW_SELFPICKUP_FREE') && SHOW_SELFPICKUP_FREE == 'true') {
+      if ($free_shipping == true) {
+        $free_shipping = false;
         $quotes = array_merge($this->ot_shipping->quote(), $shipping_modules->quote('selfpickup', 'selfpickup'));
-      }                    
+      }
     }
 
     // build shipping block
@@ -185,7 +196,9 @@ class paypalcart extends PayPalPayment {
       $shipping_found = false;
       for ($i = 0, $n = sizeof($quotes); $i < $n; $i ++) {
         for ($j = 0, $n2 = sizeof($quotes[$i]['methods']); $j < $n2; $j ++) {
-          if (isset($_SESSION['shipping']['id']) 
+          if (isset($_SESSION['shipping']) 
+              && is_array($_SESSION['shipping']) 
+              && array_key_exists('id', $_SESSION['shipping'])
               && $quotes[$i]['id'].'_'.$quotes[$i]['methods'][$j]['id'] == $_SESSION['shipping']['id']
               )
           {
@@ -202,7 +215,9 @@ class paypalcart extends PayPalPayment {
         }
         */
       }
-      $module_smarty->assign('BUTTON_CONTINUE', xtc_image_submit('button_confirm.gif', IMAGE_BUTTON_CONFIRM));
+      if (xtc_count_shipping_modules() > 1) {
+        $module_smarty->assign('BUTTON_CONTINUE', xtc_image_submit('button_confirm.gif', IMAGE_BUTTON_CONFIRM));
+      }
       $module_smarty->assign('FORM_END', '</form>');
     
       if ($no_shipping === false) {
@@ -211,7 +226,12 @@ class paypalcart extends PayPalPayment {
       
       $module_smarty->assign('language', $_SESSION['language']);
       $module_smarty->caching = 0;
-      $shipping_method = $module_smarty->fetch(DIR_FS_EXTERNAL.'/paypal/templates/shipping_block.html');
+
+      $tpl_file = DIR_FS_EXTERNAL.'paypal/templates/shipping_block.html';
+      if (is_file(DIR_FS_CATALOG.'templates/'.CURRENT_TEMPLATE.'/module/paypal/shipping_block.html')) {
+        $tpl_file = DIR_FS_CATALOG.'templates/'.CURRENT_TEMPLATE.'/module/paypal/shipping_block.html';
+      }
+      $shipping_method = $module_smarty->fetch($tpl_file);
     
       $smarty->assign('SHIPPING_METHOD', $shipping_method);
     }
@@ -240,7 +260,12 @@ class paypalcart extends PayPalPayment {
       $shop_content_data = $main->getContentData(3);
       $module_smarty->assign('AGB_TITLE', $shop_content_data['content_heading']);
       $module_smarty->assign('AGB_LINK', $main->getContentLink(3, MORE_INFO,'SSL'));
-      $module_smarty->assign('TEXT_AGB_CHECKOUT', sprintf(TEXT_AGB_CHECKOUT,$main->getContentLink(3, MORE_INFO,'SSL') , $main->getContentLink(REVOCATION_ID, MORE_INFO,'SSL')));
+      $module_smarty->assign('TEXT_AGB_CHECKOUT', sprintf(TEXT_AGB_CHECKOUT, $main->getContentLink(3, MORE_INFO,'SSL'), $main->getContentLink(REVOCATION_ID, MORE_INFO,'SSL'), $main->getContentLink(2, MORE_INFO,'SSL')));
+      //privacy
+      $shop_content_data = $main->getContentData(2);
+      $module_smarty->assign('PRIVACY', $shop_content_data['content_heading']);
+      $module_smarty->assign('PRIVACY_TITLE', $shop_content_data['content_heading']);
+      $module_smarty->assign('PRIVACY_LINK', $main->getContentLink(2, MORE_INFO,'SSL'));
     }
 
     //check if display conditions on checkout page is true
@@ -248,7 +273,28 @@ class paypalcart extends PayPalPayment {
       $shop_content_data = $main->getContentData(3);
       $module_smarty->assign('AGB', '<div class="agbframe">' . $shop_content_data['content_text'] . '</div>');
       $module_smarty->assign('AGB_LINK', $main->getContentLink(3, MORE_INFO,'SSL'));
-      $module_smarty->assign('AGB_checkbox', '<input type="checkbox" value="conditions" name="conditions" id="conditions"'.(isset($_GET['step']) && $_GET['step'] == 'step2' ? ' checked="checked"' : '').' />');
+      if ((defined('SIGN_CONDITIONS_ON_CHECKOUT') && SIGN_CONDITIONS_ON_CHECKOUT == 'true') || (!defined('SIGN_CONDITIONS_ON_CHECKOUT') && DISPLAY_CONDITIONS_ON_CHECKOUT == 'true')) {
+        $module_smarty->assign('AGB_checkbox', '<input type="checkbox" value="conditions" name="conditions" id="conditions"'.(isset($_GET['step']) && $_GET['step'] == 'step2' ? ' checked="checked"' : '').' />');
+      }
+    }
+
+    if (defined('DISPLAY_REVOCATION_VIRTUAL_ON_CHECKOUT')
+        && DISPLAY_REVOCATION_VIRTUAL_ON_CHECKOUT == 'true'
+        && ($_SESSION['cart']->content_type == 'virtual'
+            || $_SESSION['cart']->content_type == 'mixed')
+        )
+    {
+      $shop_content_data = $main->getContentData(REVOCATION_ID);
+      $module_smarty->assign('REVOCATION', '<div class="agbframe">' . $shop_content_data['content_text'] . '</div>');
+      $module_smarty->assign('REVOCATION_LINK', $main->getContentLink(REVOCATION_ID, MORE_INFO,'SSL'));
+      $module_smarty->assign('REVOCATION_checkbox', '<input type="checkbox" value="revocation" name="revocation" id="revocation"'.(isset($_GET['step']) && $_GET['step'] == 'step2' ? ' checked="checked"' : '').' />');
+    }
+
+    if (defined('DISPLAY_PRIVACY_ON_CHECKOUT') && DISPLAY_PRIVACY_ON_CHECKOUT == 'true') {
+      $shop_content_data = $main->getContentData(2);
+      $module_smarty->assign('PRIVACY', '<div class="agbframe">' . $shop_content_data['content_text'] . '</div>');
+      $module_smarty->assign('PRIVACY_LINK', $main->getContentLink(2, MORE_INFO,'SSL'));
+      $module_smarty->assign('PRIVACY_checkbox', '<input type="checkbox" value="privacy" name="privacy" id="privacy"'.(isset($_GET['step']) && $_GET['step'] == 'step2' ? ' checked="checked"' : '').' />');
     }
 
     $module_smarty->assign('COMMENTS', xtc_draw_textarea_field('comments', 'soft', '60', '5', isset($_SESSION['comments'])?$_SESSION['comments']:'') . xtc_draw_hidden_field('comments_added', 'YES')); //Dokuman - 2012-05-31 - fix paypal_checkout notices
@@ -266,36 +312,58 @@ class paypalcart extends PayPalPayment {
 
     $module_smarty->assign('language', $_SESSION['language']);
     $module_smarty->caching = 0;
-    $process_button = $module_smarty->fetch(DIR_FS_EXTERNAL.'/paypal/templates/comments_block.html');
     
+    $tpl_file = DIR_FS_EXTERNAL.'paypal/templates/comments_block.html';
+    if (is_file(DIR_FS_CATALOG.'templates/'.CURRENT_TEMPLATE.'/module/paypal/comments_block.html')) {
+      $tpl_file = DIR_FS_CATALOG.'templates/'.CURRENT_TEMPLATE.'/module/paypal/comments_block.html';
+    }
+    $process_button = $module_smarty->fetch($tpl_file);
+
     return $process_button;
   }
   
 
   function before_process() {
-    if (isset($_SESSION['payment']) && $_SESSION['payment'] == $this->code) {
+    if (isset($_SESSION['payment']) 
+        && $_SESSION['payment'] == $this->code
+        && !isset($_SESSION['paypal']['process'])
+        )
+    {
       if (isset($_SESSION['paypal']['paymentId'])) {
         if ($_POST['comments_added'] != '') {
           $_SESSION['comments'] = xtc_db_prepare_input($_POST['comments']);
         }
-        $error_mess  = '';
-        if (DISPLAY_CONDITIONS_ON_CHECKOUT == 'true' && $_POST['conditions'] != 'conditions') {
-          $error_mess = '1';
+        $error_mess  = array();
+        if (((defined('SIGN_CONDITIONS_ON_CHECKOUT') && SIGN_CONDITIONS_ON_CHECKOUT == 'true')
+            || (!defined('SIGN_CONDITIONS_ON_CHECKOUT') && DISPLAY_CONDITIONS_ON_CHECKOUT == 'true')
+            ) && $_POST['conditions'] != 'conditions') {
+          $error_mess[] = '1';
         }
         if ($_POST['check_address'] != 'address') {
-          $error_mess .= '2';
+          $error_mess[] = '2';
         }
         if (!isset($_SESSION['shipping']) 
             || ($_SESSION['shipping'] !== false && !is_array($_SESSION['shipping']))
             ) 
         {
-          $error_mess .= '3';
+          $error_mess[] = '3';
         }
-        if($error_mess != '') {
-          xtc_redirect(xtc_href_link(FILENAME_CHECKOUT_CONFIRMATION, xtc_get_all_get_params(array('conditions_message')).'conditions=true&conditions_message='.$error_mess, 'SSL', true, false));
+        if (defined('DISPLAY_REVOCATION_VIRTUAL_ON_CHECKOUT') && DISPLAY_REVOCATION_VIRTUAL_ON_CHECKOUT == 'true' && $_POST['revocation'] != 'revocation') {
+          $error_mess[] = '4';
+        }
+        if (defined('DISPLAY_PRIVACY_ON_CHECKOUT') && DISPLAY_PRIVACY_ON_CHECKOUT == 'true' && $_POST['privacy'] != 'privacy') {
+          $error_mess[] = '5';
+        }
+        
+        if (count($error_mess) > 0) {
+          xtc_redirect(xtc_href_link(FILENAME_CHECKOUT_CONFIRMATION, xtc_get_all_get_params(array('conditions_message')).'conditions=true&conditions_message='.implode(',', $error_mess), 'SSL', true, false));
         }
       }
+    } elseif (isset($_SESSION['paypal']['process'])) {
+      xtc_redirect(xtc_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
     }
+    
+    $_SESSION['paypal']['process'] = true;
   }
 
 

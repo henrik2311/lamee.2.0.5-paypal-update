@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: orders_paypal_data.php 11178 2018-05-31 09:30:20Z GTB $
+   $Id: orders_paypal_data.php 12652 2020-03-19 07:40:19Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -43,6 +43,10 @@ if (isset($order) && is_object($order)) {
                 <dd><?php echo $admin_info_array['payment_method']; ?></dd>
               </dl>
               <dl class="pp_transaction">
+                <dt><?php echo TEXT_PAYPAL_TRANSACTION_ACCOUNT_OWNER; ?></dt>
+                <dd><?php echo $admin_info_array['address']['name']; ?></dd>
+              </dl>
+              <dl class="pp_transaction">
                 <dt><?php echo TEXT_PAYPAL_TRANSACTION_EMAIL; ?></dt>
                 <dd><?php echo $admin_info_array['email_address']; ?></dd>
               </dl>
@@ -69,11 +73,16 @@ if (isset($order) && is_object($order)) {
               <?php
               $status_array = array();
               $type_array = array();
+              $amount_array = array();
+              
               for ($t=0, $z=count($admin_info_array['transactions']); $t<$z; $t++) {
                 for ($i=0, $n=count($admin_info_array['transactions'][$t]['relatedResource']); $i<$n; $i++) {
                   $status_array[] = $admin_info_array['transactions'][$t]['relatedResource'][$i]['state'];
                   $type_array[] = $admin_info_array['transactions'][$t]['relatedResource'][$i]['type'];
-                
+                  
+                  if (!isset($amount_array[$admin_info_array['transactions'][$t]['relatedResource'][$i]['type']])) {
+                    $amount_array[$admin_info_array['transactions'][$t]['relatedResource'][$i]['type']] = 0;
+                  }
                   $amount_array[$admin_info_array['transactions'][$t]['relatedResource'][$i]['type']] += (($admin_info_array['transactions'][$t]['relatedResource'][$i]['total'] < 0) ? ($admin_info_array['transactions'][$t]['relatedResource'][$i]['total'] * (-1)) : $admin_info_array['transactions'][$t]['relatedResource'][$i]['total']);
                   ?>
                   <div class="pp_txstatus">
@@ -168,18 +177,22 @@ if (isset($order) && is_object($order)) {
             }
 
             $count = array_count_values($type_array);
-            if ($admin_info_array['intent'] == 'authorize' && $admin_info_array['total'] > $amount_array['capture']) {
+            if (!isset($count['capture'])) $count['capture'] = 0;
+            if (!isset($count['refund'])) $count['refund'] = 0;
+            
+            if ($admin_info_array['intent'] == 'authorize' 
+                && (!isset($amount_array['capture'])
+                    || $admin_info_array['total'] > $amount_array['capture']
+                    )
+                )
+            {
               ?>
               <div class="pp_capture pp_box">
                 <div class="pp_boxheading"><?php echo TEXT_PAYPAL_CAPTURE; ?></div>
                 <?php 
-                  if (defined('RUN_MODE_ADMIN')) {
-                    echo xtc_draw_form('capture', FILENAME_ORDERS, xtc_get_all_get_params(array('action','subaction')).'action=custom&subaction=paypalaction');
-                  } else {
-                    echo xtc_draw_form('capture', xtc_href_link(FILENAME_ORDERS, xtc_get_all_get_params(array('action','subaction', 'ext')).'action=custom&subaction=paypalaction', 'NONSSL'), 'post');
-                    if (CSRF_TOKEN_SYSTEM == 'true' && isset($_SESSION['CSRFToken']) && isset($_SESSION['CSRFName'])) {
-                      echo xtc_draw_hidden_field($_SESSION['CSRFName'], $_SESSION['CSRFToken']);
-                    }
+                  echo xtc_draw_form('capture', xtc_href_link(FILENAME_ORDERS, xtc_get_all_get_params(array('action','subaction', 'ext', 'sec')).'action=custom&subaction=paypalaction', 'NONSSL'), 'post');
+                  if (CSRF_TOKEN_SYSTEM == 'true' && isset($_SESSION['CSRFToken']) && isset($_SESSION['CSRFName'])) {
+                    echo xtc_draw_hidden_field($_SESSION['CSRFName'], $_SESSION['CSRFToken']);
                   }
                   echo xtc_draw_hidden_field('cmd', 'capture');
 
@@ -202,20 +215,18 @@ if (isset($order) && is_object($order)) {
 
             if ((in_array('captured', $status_array)
                  || in_array('completed', $status_array)
-                 ) && $admin_info_array['total'] > $amount_array['refund']
+                 ) && (!isset($amount_array['refund'])
+                       || $admin_info_array['total'] > $amount_array['refund']
+                       )
                 )
             {
               ?>
               <div class="pp_capture pp_box">
                 <div class="pp_boxheading"><?php echo TEXT_PAYPAL_REFUND; ?></div>
                 <?php 
-                  if (defined('RUN_MODE_ADMIN')) {
-                    echo xtc_draw_form('capture', FILENAME_ORDERS, xtc_get_all_get_params(array('action','subaction')).'action=custom&subaction=paypalaction');
-                  } else {
-                    echo xtc_draw_form('capture', xtc_href_link(FILENAME_ORDERS, xtc_get_all_get_params(array('action','subaction', 'ext')).'action=custom&subaction=paypalaction', 'NONSSL'), 'post');
-                    if (CSRF_TOKEN_SYSTEM == 'true' && isset($_SESSION['CSRFToken']) && isset($_SESSION['CSRFName'])) {
-                      echo xtc_draw_hidden_field($_SESSION['CSRFName'], $_SESSION['CSRFToken']);
-                    }
+                  echo xtc_draw_form('capture', xtc_href_link(FILENAME_ORDERS, xtc_get_all_get_params(array('action','subaction', 'ext', 'sec')).'action=custom&subaction=paypalaction', 'NONSSL'), 'post');
+                  if (CSRF_TOKEN_SYSTEM == 'true' && isset($_SESSION['CSRFToken']) && isset($_SESSION['CSRFName'])) {
+                    echo xtc_draw_hidden_field($_SESSION['CSRFName'], $_SESSION['CSRFToken']);
                   }
                   echo xtc_draw_hidden_field('cmd', 'refund');
 
@@ -252,7 +263,6 @@ if (isset($order) && is_object($order)) {
     <?php
     }
   }
-  if (is_file(DIR_FS_CATALOG.'includes/extra/ajax/get_paypal_data.php')) {
   ?>
   <script type="text/javascript">
     $(function() {
@@ -269,7 +279,6 @@ if (isset($order) && is_object($order)) {
       });
     });
   </script>
-  <?php
-  }
+<?php
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: paypal_config.php 11017 2017-12-06 13:31:32Z GTB $
+   $Id: paypal_config.php 12529 2020-01-17 14:08:03Z Tomcraft $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -14,17 +14,16 @@
 $lang_array = array(
   'TEXT_PAYPAL_CONFIG_HEADING_TITLE' => 'PayPal Konfiguration',
 
-  'TEXT_PAYPAL_CONFIG_CLIENT_LIVE' => 'Client ID Live:',
-  'TEXT_PAYPAL_CONFIG_CLIENT_LIVE_INFO' => 'Erstellen Sie in Ihrem PayPal Account eine neue App f&uuml;r diese Daten.',
-
   'TEXT_PAYPAL_CONFIG_SECRET_LIVE' => 'Secret Live:',
-  'TEXT_PAYPAL_CONFIG_SECRET_LIVE_INFO' => 'Erstellen Sie in Ihrem PayPal Account eine neue App f&uuml;r diese Daten.',
-
-  'TEXT_PAYPAL_CONFIG_CLIENT_SANDBOX' => 'Client ID Sandbox:',
-  'TEXT_PAYPAL_CONFIG_CLIENT_SANDBOX_INFO' => 'Erstellen Sie in Ihrem PayPal Account eine neue App f&uuml;r diese Daten.',
+  'TEXT_PAYPAL_CONFIG_CLIENT_LIVE' => 'Client ID Live:',
+  'TEXT_PAYPAL_CONFIG_CLIENT_LIVE_INFO' => 'Tragen Sie Ihre PayPal APP Daten ein oder fordern Sie diese neu an.',
 
   'TEXT_PAYPAL_CONFIG_SECRET_SANDBOX' => 'Secret Sandbox:',
-  'TEXT_PAYPAL_CONFIG_SECRET_SANDBOX_INFO' => 'Erstellen Sie in Ihrem PayPal Account eine neue App f&uuml;r diese Daten.',
+  'TEXT_PAYPAL_CONFIG_CLIENT_SANDBOX' => 'Client ID Sandbox:',
+  'TEXT_PAYPAL_CONFIG_CLIENT_SANDBOX_INFO' => 'Tragen Sie Ihre PayPal APP Daten ein oder fordern Sie diese neu an.',
+
+  'TEXT_PAYPAL_APPINATOR_LIVE' => 'Live Daten anfordern',
+  'TEXT_PAYPAL_APPINATOR_SANDBOX' => 'Sandbox Daten anfordern',
 
   'TEXT_PAYPAL_CONFIG_MODE' => 'Modus:',
   'TEXT_PAYPAL_CONFIG_MODE_INFO' => '',
@@ -40,6 +39,12 @@ $lang_array = array(
 
   'TEXT_PAYPAL_CONFIG_CART' => 'Warenkorb:',
   'TEXT_PAYPAL_CONFIG_CART_INFO' => 'Soll der Warenkorb zu PayPal &uuml;bertragen werden?<br/><br/><b>Hinweis:</b> Diese Einstellung kann Probleme bei der Verwendung von ot-Modulen unter "Module" -> "Zusammenfassung" mit sich bringen, die einen Rabatt oder Aufschlag gew&auml;hren ("Rabatt [ot_discount]", "Rabatt Coupons [ot_coupon]", "Gutscheine [ot_gv]", "Rabatt &amp; Zuschlag auf Zahlungsarten [ot_payment]", etc.).<br/>Empfohlene Einstellung: "Nein"',
+
+  'TEXT_PAYPAL_INSTALLMENT_BANNER_DISPLAY' => 'Ratenzahlung Banner:',
+  'TEXT_PAYPAL_INSTALLMENT_BANNER_DISPLAY_INFO' => 'Soll das Banner f&uuml;r Ratenzahlung angezeigt werden?<br/><br/><b>Hinweis:</b> PayPal Ratenzahlung ist nur verf&uuml;gbar, sofern Ihr PayPal Konto daf&uuml;r freigeschaltet ist.',
+
+  'TEXT_PAYPAL_INSTALLMENT_BANNER_COLOR' => 'Banner Farbe:',
+  'TEXT_PAYPAL_INSTALLMENT_BANNER_COLOR_INFO' => 'W&auml;hlen Sie die Farbe f&uuml;r das Banner aus.',
 
   'TEXT_PAYPAL_CONFIG_STATE_SUCCESS' => 'Status Erfolg:',
   'TEXT_PAYPAL_CONFIG_STATE_SUCCESS_INFO' => 'Status bei erfolgreicher Bestellung',
@@ -63,7 +68,7 @@ $lang_array = array(
   'TEXT_PAYPAL_CONFIG_LOG_INFO' => 'Soll ein Log geschrieben werden?',
 
   'TEXT_PAYPAL_CONFIG_LOG_LEVEL' => 'Log Level:',
-  'TEXT_PAYPAL_CONFIG_LOG_LEVEL_INFO' => '<b>Hinweis:</b> Im Livebetrieb wird nur bis Level FINE geloggt.',
+  'TEXT_PAYPAL_CONFIG_LOG_LEVEL_INFO' => '<b>Hinweis:</b> Im Livebetrieb wird nur bis Level INFO geloggt.',
   
   'BUTTON_PAYPAL_STATUS_INSTALL' => 'Bestellstatus installieren',
 );

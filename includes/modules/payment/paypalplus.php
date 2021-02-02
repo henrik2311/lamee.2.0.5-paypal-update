@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: paypalplus.php 11037 2017-12-16 08:08:01Z GTB $
+   $Id: paypalplus.php 12214 2019-09-29 07:36:22Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -59,7 +59,7 @@ class paypalplus extends PayPalPayment {
     if ($_SESSION['paypal']['approval'] == '') {
       $GLOBALS['paypalplus']->enabled = false;
     } else {
-      $description = '<div id="ppp_result"></div>
+      $description = '<div id="ppp_result" style="position:relative;"></div>
       <script type="text/javascript">
         (function() {
           var pp = document . createElement(\'script\');
@@ -69,16 +69,13 @@ class paypalplus extends PayPalPayment {
           var s = document.getElementsByTagName(\'script\')[0];
           s . parentNode . insertBefore(pp, s);
         })();
-        $(window).on(\'load\',function() {
+        window.onload = function() {
           '.((count($payments) > 0) ? '
           if ($(\'input[name="payment"]:checked\', \'#checkout_payment\').val() == "'.$this->code.'") {
             $("#continueButton").attr("onclick", "ppp.doContinue(); return false;");
           }
           ' : '').'
           $("#checkout_payment").attr("name", "checkout_payment");        
-          $.get("'.xtc_href_link('callback/paypal/paypalplus.php', '', 'SSL').'", function(data) {
-            $("#ppp_result").html(data);
-          });
           '.(($this->get_config('MODULE_PAYMENT_'.strtoupper($this->code).'_USE_TABS') == '1' || count($payments) > 0) ? '
           $("[id*=\"rd\"]").click(function(e) {
             if ($(\'input[name="payment"]:checked\', \'#checkout_payment\').val() == "'.$this->code.'") {
@@ -94,8 +91,19 @@ class paypalplus extends PayPalPayment {
             } else {
               '.((count($payments) > 0) ? '$("#continueButton").removeAttr("onclick");' : '').'
             }
-          });' : '').'
-        });
+          });
+          $(document).ready(function() {
+            if($(":radio[value=paypalplus]:checked").length > 0) {
+              $.get("'.xtc_href_link('callback/paypal/paypalplus.php', '', 'SSL').'", function(data) {
+                $("#ppp_result").html(data);
+              });
+            }
+          });' : '
+          $.get("'.xtc_href_link('callback/paypal/paypalplus.php', '', 'SSL').'", function(data) {
+            $("#ppp_result").html(data);
+          });
+          ').'          
+        };
       </script>';
     
       $smarty->assign('BUTTON_CONTINUE', xtc_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE, 'id="continueButton"'));
@@ -132,7 +140,7 @@ class paypalplus extends PayPalPayment {
  		  $this->patch_payment_paypalplus();
 		}
 		
-    return $description;
+    return false;
   }
 
 
@@ -167,6 +175,7 @@ class paypalplus extends PayPalPayment {
 	function install() {
 	  parent::install();
 	  
+    include_once(DIR_FS_LANGUAGES.$_SESSION['language'].'/modules/payment/paypalcart.php');
 	  require_once(DIR_FS_CATALOG.'includes/modules/payment/paypalcart.php');
 	  $paypalcart = new paypalcart();
 	  if ($paypalcart->check() != 1) {

@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: german.php 10832 2017-07-05 14:03:53Z Tomcraft $
+   $Id: german.php 12534 2020-01-22 09:08:03Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -17,7 +17,8 @@ $lang_array = array(
   
   // transaction
   'TEXT_PAYPAL_TRANSACTION' => 'Zahlungsdetails',
-  'TEXT_PAYPAL_TRANSACTION_ADDRESS' => 'Adresse:',
+  'TEXT_PAYPAL_TRANSACTION_ACCOUNT_OWNER' => 'Kontoinhaber:',
+  'TEXT_PAYPAL_TRANSACTION_ADDRESS' => 'Versandadresse:',
   'TEXT_PAYPAL_TRANSACTION_METHOD' => 'Zahlart:',
   'TEXT_PAYPAL_TRANSACTION_EMAIL' => 'E-Mail Adresse:',
   'TEXT_PAYPAL_TRANSACTION_ACCOUNT_STATE' => 'Account Status:',
@@ -67,6 +68,7 @@ $lang_array = array(
   
   // error
   'TEXT_PAYPAL_ERROR_AMOUNT' => 'Bitte geben Sie einen Betrag ein.',
+  'TEXT_PAYPAL_ERROR_ALREADY_PAID' => 'Wir haben Ihre Zahlung bereits erhalten. Vielen Dank!',
   
   
   // diverse

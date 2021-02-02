@@ -1,6 +1,6 @@
 <?php
 /* -----------------------------------------------------------------------------------------
-   $Id: PayPalCommon.php 11169 2018-05-30 13:57:32Z GTB $
+   $Id: PayPalCommon.php 12722 2020-04-22 15:08:30Z GTB $
 
    modified eCommerce Shopsoftware
    http://www.modified-shop.org
@@ -107,12 +107,24 @@ class PayPalCommon extends PayPalAuth {
 
 
   function get_config($config_key) {
-    $config_query = xtc_db_query("SELECT config_value 
-                                    FROM ".TABLE_PAYPAL_CONFIG." 
-                                   WHERE config_key = '".xtc_db_input($config_key)."'");
-    $config = xtc_db_fetch_array($config_query);
+    static $config_array;
     
-    return $config['config_value'];
+    if (!is_array($config_array)) {
+      $config_array = array();
+    }
+    
+    if (!isset($config_array[$config_key])) {
+      $config_array[$config_key] = '';
+      $config_query = xtDBquery("SELECT config_value 
+                                   FROM ".TABLE_PAYPAL_CONFIG." 
+                                  WHERE config_key = '".xtc_db_input($config_key)."'");
+      if (xtc_db_num_rows($config_query, true) > 0) {
+        $config = xtc_db_fetch_array($config_query, true);
+        $config_array[$config_key] = $config['config_value'];
+      }
+    }
+    
+    return $config_array[$config_key];
   }
 
 
@@ -162,7 +174,7 @@ class PayPalCommon extends PayPalAuth {
     $total = $this->calc_total();
     $amount_total = $this->amount->getTotal();
 
-    if ($calc_total === true) {
+    if ($calc_total === true && $this->details->getSubtotal() > 0) {
       $this->amount->setTotal($total);
     } elseif ($_SESSION['customers_status']['customers_status_show_price_tax'] == 0 
         && $_SESSION['customers_status']['customers_status_add_tax_ot'] == 1
@@ -243,6 +255,81 @@ class PayPalCommon extends PayPalAuth {
   }
 
 
+  function calculate_total($plain = true) {
+    global $order;
+    
+    $order_backup = $order;
+    
+    if (isset($_SESSION['shipping'])) {
+      if (!class_exists('shipping')) {
+        require_once (DIR_WS_CLASSES . 'shipping.php');
+      }
+      $shipping_modules = new shipping($_SESSION['shipping']);
+    }
+    
+    if (!class_exists('order')) {
+      require_once (DIR_WS_CLASSES . 'order.php');
+    }
+    $order = new order();
+    
+    if (!class_exists('order_total')) {
+      require_once (DIR_WS_CLASSES . 'order_total.php');
+    }
+    $order_total_modules = new order_total();
+    $order_total = $order_total_modules->process();
+    
+    $total = $order->info['total'];
+
+    $order = $order_backup;
+    
+    if ($plain === false) {
+      return $order_total;
+    }
+    
+    return $total;
+  }
+
+  
+  function get_payment_profile_data() {
+    $address_override = false;
+    $profile_id = $this->get_config('PAYPAL_'.strtoupper($this->code.'_'.$_SESSION['language_code']).'_PROFILE');
+    
+    if ($profile_id == '') {
+      $profile_id = $this->get_config('PAYPAL_STANDARD_PROFILE');
+    }
+    
+    if ($profile_id != '') {
+      if ($this->get_config(strtoupper($profile_id).'_TIME') < (time() - (3600 * 24))) {
+        $profile = $this->get_profile($profile_id);
+        
+        if (count($profile) > 0) {
+          $sql_data_array = array(
+            array(
+              'config_key' => strtoupper($profile_id).'_TIME', 
+              'config_value' => time(),
+            ),
+            array(
+              'config_key' => strtoupper($profile_id).'_ADDRESS', 
+              'config_value' => $profile[0]['input_fields']['address_override'],
+            ),
+          );
+          $this->save_config($sql_data_array);
+          $address_override = (($profile[0]['input_fields']['address_override'] == '0') ? true : false);
+        } else {
+          $profile_id = $this->delete_profile($profile_id);
+        }
+      } else {
+        $address_override = (($this->get_config(strtoupper($profile_id).'_ADDRESS') == '0') ? true : false);
+      }
+    }
+    
+    return array(
+      'profile_id' => $profile_id,
+      'address_override' => $address_override,
+    );
+  }
+  
+  
   function get_profile($id) {
   
     // auth
@@ -255,7 +342,7 @@ class PayPalCommon extends PayPalAuth {
       $webProfileList = $webProfile->get($id, $apiContext);
       $valid = true;
     } catch (Exception $ex) {
-      $this->LoggingManager->log(print_r($ex, true), 'DEBUG');
+      $this->LoggingManager->log('DEBUG', 'Profile', array('exception' => $ex));
       $valid = false;
     }
   
@@ -292,8 +379,31 @@ class PayPalCommon extends PayPalAuth {
   }
 
 
+  function delete_profile($id) {
+
+    // auth
+    $apiContext = $this->apiContext();
+
+    // set WebProfile
+    $webProfile = new WebProfile();
+    $webProfile->setId($id);
+
+    try {
+      $webProfile->delete($apiContext);
+    } catch (Exception $ex) {
+      $this->LoggingManager->log('DEBUG', 'Profile', array('exception' => $ex));
+    }
+    
+    if ($id == $this->get_config('PAYPAL_STANDARD_PROFILE')) {
+      $this->delete_config('PAYPAL_STANDARD_PROFILE');
+    }
+
+    $this->delete_config($id, 'config_value');
+  }
+
+
   function login_customer($customer) {
-    global $econda;
+    global $econda, $messageStack;
     
     // include needed function
     require_once (DIR_FS_INC.'xtc_write_user_info.inc.php');
@@ -306,7 +416,8 @@ class PayPalCommon extends PayPalAuth {
                                                  customers_gender, 
                                                  customers_password, 
                                                  customers_email_address, 
-                                                 customers_default_address_id
+                                                 customers_default_address_id,
+                                                 account_type
                                             FROM ".TABLE_CUSTOMERS." 
                                            WHERE customers_email_address = '".xtc_db_input($customer['info']['email_address'])."' 
                                              AND account_type = '0'");
@@ -334,6 +445,7 @@ class PayPalCommon extends PayPalAuth {
 			$_SESSION['customer_default_address_id'] = $check_customer['customers_default_address_id'];
 			$_SESSION['customer_country_id'] = $check_country['entry_country_id'];
 			$_SESSION['customer_zone_id'] = $check_country['entry_zone_id'];
+			$_SESSION['account_type'] = $check_customer['account_type'];
 
 			xtc_db_query("UPDATE ".TABLE_CUSTOMERS_INFO." 
 			                 SET customers_info_date_of_last_logon = now(), 
@@ -358,7 +470,9 @@ class PayPalCommon extends PayPalAuth {
       if ($_SESSION['old_customers_basket_cart'] === true) {
         unset($_SESSION['old_customers_basket_cart']);
         unset($_SESSION['paypal']);
-        xtc_redirect(xtc_href_link(FILENAME_SHOPPING_CART, 'info_message_3='.strtolower('TEXT_SAVED_BASKET')),'NONSSL'); 
+        
+        $messageStack->add_session('info_message_3', TEXT_SAVED_BASKET);
+        xtc_redirect(xtc_href_link(FILENAME_SHOPPING_CART, ''), 'NONSSL'); 
       }
     }
      
@@ -407,7 +521,9 @@ class PayPalCommon extends PayPalAuth {
     
     $sql_data_array = array('customers_info_id' => (int)$customer_id,
                             'customers_info_number_of_logons' => '1',
-                            'customers_info_date_account_created' => 'now()');
+                            'customers_info_date_account_created' => 'now()',
+                            'customers_info_date_of_last_logon' => 'now()'
+                            );
     xtc_db_perform(TABLE_CUSTOMERS_INFO, $sql_data_array);
     
     // send password with order mail
@@ -558,7 +674,12 @@ class PayPalCommon extends PayPalAuth {
     }
 
     $pp_smarty->assign('language', $_SESSION['language']);
-    $presentment = $pp_smarty->fetch(DIR_FS_EXTERNAL.'paypal/templates/presentment_info.html');
+
+    $tpl_file = DIR_FS_EXTERNAL.'paypal/templates/presentment_info.html';
+    if (is_file(DIR_FS_CATALOG.'templates/'.CURRENT_TEMPLATE.'/module/paypal/presentment_info.html')) {
+      $tpl_file = DIR_FS_CATALOG.'templates/'.CURRENT_TEMPLATE.'/module/paypal/presentment_info.html';
+    }
+    $presentment = $pp_smarty->fetch($tpl_file);
     
     return $presentment;
   }
